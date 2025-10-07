@@ -1,142 +1,275 @@
 @import "tailwindcss";
+/* =========================
+   IMPORT FONTS
+   ========================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
 
+/* =========================
+   THEME VARIABLES
+   ========================= */
+@theme {
+  /* Background / Foreground */
+  --color-background: #1E1E1E;
+  --color-foreground: #D4D4D4;
+  --color-card: #252526;
+  --color-card-foreground: #D4D4D4;
+  --color-popover: #2D2D30;
+  --color-popover-foreground: #D4D4D4;
+  --color-muted: #3E3E42;
+  --color-muted-foreground: #858585;
 
-/* ───────────────────────────────
-   🌙 VS Code-Inspired Global Theme
-   ─────────────────────────────── */
-@layer base {
-  :root {
-    /* 🎨 Colors */
-    --color-border: #2d2d2d;
-    --color-input: #1e1e1e;
-    --color-ring: #007acc;
-    --color-background: #1e1e1e;
-    --color-foreground: #d4d4d4;
+  /* Primary / Secondary / Accent */
+  --color-primary: #007ACC;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #569CD6;
+  --color-secondary-foreground: #FFFFFF;
+  --color-accent: #4EC9B0;
+  --color-accent-foreground: #1E1E1E;
 
-    --color-primary: #007acc;
-    --color-primary-foreground: #ffffff;
+  /* State Colors */
+  --color-success: #4EC9B0;
+  --color-success-foreground: #1E1E1E;
+  --color-warning: #FFCC02;
+  --color-warning-foreground: #1E1E1E;
+  --color-error: #F44747;
+  --color-error-foreground: #FFFFFF;
+  --color-destructive: #F44747;
+  --color-destructive-foreground: #FFFFFF;
 
-    --color-secondary: #569cd6;
-    --color-secondary-foreground: #ffffff;
+  /* UI Elements */
+  --color-border: #333333;
+  --color-input: #3C3C3C;
+  --color-ring: #007ACC;
 
-    --color-destructive: #f44747;
-    --color-destructive-foreground: #ffffff;
+  /* Border Radius */
+  --radius: 8px;
 
-    --color-muted: #2d2d2d;
-    --color-muted-foreground: #9ca3af;
+  /* Fonts */
+  --font-sans: 'Inter, system-ui, sans-serif';
+  --font-mono: 'Fira Code, Monaco, monospace';
 
-    --color-accent: #4ec9b0;
-    --color-accent-foreground: #1e1e1e;
-
-    --color-popover: #252526;
-    --color-popover-foreground: #d4d4d4;
-
-    --color-card: #252526;
-    --color-card-foreground: #d4d4d4;
-
-    --color-success: #4ec9b0;
-    --color-success-foreground: #1e1e1e;
-
-    --color-warning: #ffcc00;
-    --color-warning-foreground: #1e1e1e;
-
-    --color-error: #f44747;
-    --color-error-foreground: #ffffff;
-
-    /* 🔘 Radius */
-    --radius: 0.5rem;
-
-    /* ✍️ Fonts */
-    --font-sans: 'Inter', system-ui, sans-serif;
-    --font-mono: 'Fira Code', Monaco, 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro', 'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
-
-    /* 📏 Spacing */
-    --space-18: 4.5rem;
-    --space-88: 22rem;
-
-    /* 💫 Shadows */
-    --shadow-vs-code: 0 2px 8px rgba(0,0,0,0.3);
-    --shadow-vs-code-lg: 0 4px 16px rgba(0,0,0,0.4);
-
-    /* 🎛 Blur */
-    --blur-vs: 8px;
-
-    /* ⏩ Transition */
-    --ease-vs-code: cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* 🧩 Layout */
-    --grid-editor: 240px 1fr 300px;
-    --grid-editor-mobile: 1fr;
-
-    /* 🪄 Z-index */
-    --z-modal: 1000;
-    --z-dropdown: 1001;
-    --z-tooltip: 1002;
-  }
-
-  /* 🌒 Dark Mode */
-  .dark {
-    --color-background: #0d1117;
-    --color-foreground: #e6edf3;
-  }
-
-  /* 🧠 Base styles */
-  html, body {
-    @apply font-sans bg-[var(--color-background)] text-[var(--color-foreground)] antialiased;
-  }
-
-  code {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    line-height: 1.5;
-  }
+  /* Custom spacing */
+  --spacing-18: 4.5rem;
+  --spacing-88: 22rem;
 }
 
-/* ───────────────────────────────
-   💫 Animations & Utilities
-   ─────────────────────────────── */
-@layer utilities {
-  @keyframes accordion-down {
-    from { height: 0; }
-    to { height: var(--radix-accordion-content-height); }
-  }
-  @keyframes accordion-up {
-    from { height: var(--radix-accordion-content-height); }
-    to { height: 0; }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes slideIn {
-    from { transform: translateX(-100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-  }
-  @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-  }
-
-  /* 🎞 Animation classes */
-  .animate-accordion-down { animation: accordion-down 0.2s ease-out; }
-  .animate-accordion-up { animation: accordion-up 0.2s ease-out; }
-  .animate-fade-in { animation: fadeIn 0.2s ease-out; }
-  .animate-slide-in { animation: slideIn 0.3s ease-out; }
-  .animate-typing { animation: typing 2s steps(20) infinite; }
-  .animate-blink { animation: blink 1s infinite; }
-
-  /* 🪩 Shadow Utilities */
-  .shadow-vs-code { box-shadow: var(--shadow-vs-code); }
-  .shadow-vs-code-lg { box-shadow: var(--shadow-vs-code-lg); }
-
-  /* 🧊 Blur Utility */
-  .backdrop-blur-vs { backdrop-filter: blur(var(--blur-vs)); }
-
-  /* 🧭 Custom Grids */
-  .grid-editor { grid-template-columns: var(--grid-editor); }
-  .grid-editor-mobile { grid-template-columns: var(--grid-editor-mobile); }
+/* =========================
+   BASE STYLES
+   ========================= */
+* {
+  border-color: var(--color-border);
 }
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 7px;
+  border: 3px solid var(--color-background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4F4F4F;
+}
+
+/* Text selection */
+::selection {
+  background: rgba(0, 122, 204, 0.3);
+}
+
+/* Code editor */
+.code-editor {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* VS Code panels / layout */
+.status-bar {
+  height: 22px;
+}
+
+.file-explorer {
+  width: 240px;
+}
+
+.preview-panel {
+  width: 300px;
+}
+
+/* =========================
+   COMPONENTS
+   ========================= */
+.vs-code-panel {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+}
+
+.vs-code-tab {
+  background-color: var(--color-card);
+  color: var(--color-foreground);
+  border-right: 1px solid var(--color-border);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.vs-code-tab:hover {
+  background-color: var(--color-muted);
+}
+
+.vs-code-tab.active {
+  background-color: var(--color-background);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.file-tree-item {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: var(--color-foreground);
+  transition: background-color 0.2s;
+}
+
+.file-tree-item:hover {
+  background-color: var(--color-muted);
+}
+
+.file-tree-item.active {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+.command-palette {
+  background-color: var(--color-popover);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-indicator.available {
+  background-color: var(--color-success);
+  color: var(--color-success-foreground);
+}
+
+.status-indicator.busy {
+  background-color: var(--color-warning);
+  color: var(--color-warning-foreground);
+}
+
+.status-indicator.offline {
+  background-color: var(--color-muted);
+  color: var(--color-muted-foreground);
+}
+
+/* Typing animation */
+.typing-animation {
+  position: relative;
+}
+
+.typing-animation::after {
+  content: '|';
+  color: var(--color-primary);
+  animation: blink 1s infinite;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus ring */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-ring);
+}
+
+/* =========================
+   LAYOUT & UTILITIES
+   ========================= */
+.editor-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr 300px;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+}
+
+.editor-layout-mobile {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+}
+
+/* Animations */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
+
+/* Utility classes for CSS variables */
+.bg-primary { background-color: var(--color-primary); }
+.text-primary-foreground { color: var(--color-primary-foreground); }
+.bg-secondary { background-color: var(--color-secondary); }
+.text-secondary-foreground { color: var(--color-secondary-foreground); }
+.bg-accent { background-color: var(--color-accent); }
+.text-accent-foreground { color: var(--color-accent-foreground); }
+.bg-success { background-color: var(--color-success); }
+.text-success-foreground { color: var(--color-success-foreground); }
+.bg-warning { background-color: var(--color-warning); }
+.text-warning-foreground { color: var(--color-warning-foreground); }
+.bg-error { background-color: var(--color-error); }
+.text-error-foreground { color: var(--color-error-foreground); }
+.bg-muted { background-color: var(--color-muted); }
+.text-muted-foreground { color: var(--color-muted-foreground); }
+.bg-card { background-color: var(--color-card); }
+.text-card-foreground { color: var(--color-card-foreground); }
+.bg-popover { background-color: var(--color-popover); }
+.text-popover-foreground { color: var(--color-popover-foreground); }
+.border-border { border-color: var(--color-border); }
+.rounded-lg { border-radius: var(--radius); }
