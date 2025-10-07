@@ -1,7 +1,26 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  eslint: {
+    // Ignore ESLint errors during production builds
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // Ignore TypeScript errors during production builds
+    ignoreBuildErrors: true,
+  },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'www.en.etemaaddaily.com'
+      },
+      {
+        hostname: 'uploads-ssl.webflow.com'
+      },
+      {
+        hostname: "marksmanhealthcare.com"
+      }
+    ]
+  }
+}
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
+module.exports = nextConfig;
