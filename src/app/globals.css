@@ -1,9 +1,12 @@
 @import "tailwindcss";
 
 
-/* 🌙 VS Code-inspired theme variables */
+/* ───────────────────────────────
+   🌙 VS Code-Inspired Global Theme
+   ─────────────────────────────── */
 @layer base {
   :root {
+    /* 🎨 Colors */
     --color-border: #2d2d2d;
     --color-input: #1e1e1e;
     --color-ring: #007acc;
@@ -40,55 +43,100 @@
     --color-error: #f44747;
     --color-error-foreground: #ffffff;
 
+    /* 🔘 Radius */
     --radius: 0.5rem;
+
+    /* ✍️ Fonts */
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'Fira Code', Monaco, 'Cascadia Code', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro', 'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+
+    /* 📏 Spacing */
+    --space-18: 4.5rem;
+    --space-88: 22rem;
+
+    /* 💫 Shadows */
+    --shadow-vs-code: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-vs-code-lg: 0 4px 16px rgba(0,0,0,0.4);
+
+    /* 🎛 Blur */
+    --blur-vs: 8px;
+
+    /* ⏩ Transition */
+    --ease-vs-code: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* 🧩 Layout */
+    --grid-editor: 240px 1fr 300px;
+    --grid-editor-mobile: 1fr;
+
+    /* 🪄 Z-index */
+    --z-modal: 1000;
+    --z-dropdown: 1001;
+    --z-tooltip: 1002;
   }
 
+  /* 🌒 Dark Mode */
   .dark {
     --color-background: #0d1117;
     --color-foreground: #e6edf3;
   }
 
-  body {
-    @apply bg-[var(--color-background)] text-[var(--color-foreground)] font-sans;
+  /* 🧠 Base styles */
+  html, body {
+    @apply font-sans bg-[var(--color-background)] text-[var(--color-foreground)] antialiased;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.5;
   }
 }
 
-/* 🪄 Animations */
+/* ───────────────────────────────
+   💫 Animations & Utilities
+   ─────────────────────────────── */
 @layer utilities {
   @keyframes accordion-down {
     from { height: 0; }
     to { height: var(--radix-accordion-content-height); }
   }
-
   @keyframes accordion-up {
     from { height: var(--radix-accordion-content-height); }
     to { height: 0; }
   }
-
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
   @keyframes slideIn {
     from { transform: translateX(-100%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
   }
-
   @keyframes typing {
     from { width: 0; }
     to { width: 100%; }
   }
-
   @keyframes blink {
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0; }
   }
 
+  /* 🎞 Animation classes */
   .animate-accordion-down { animation: accordion-down 0.2s ease-out; }
   .animate-accordion-up { animation: accordion-up 0.2s ease-out; }
   .animate-fade-in { animation: fadeIn 0.2s ease-out; }
   .animate-slide-in { animation: slideIn 0.3s ease-out; }
   .animate-typing { animation: typing 2s steps(20) infinite; }
   .animate-blink { animation: blink 1s infinite; }
+
+  /* 🪩 Shadow Utilities */
+  .shadow-vs-code { box-shadow: var(--shadow-vs-code); }
+  .shadow-vs-code-lg { box-shadow: var(--shadow-vs-code-lg); }
+
+  /* 🧊 Blur Utility */
+  .backdrop-blur-vs { backdrop-filter: blur(var(--blur-vs)); }
+
+  /* 🧭 Custom Grids */
+  .grid-editor { grid-template-columns: var(--grid-editor); }
+  .grid-editor-mobile { grid-template-columns: var(--grid-editor-mobile); }
 }
