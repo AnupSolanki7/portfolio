@@ -1,3 +1,94 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+
+/* 🌙 VS Code-inspired theme variables */
+@layer base {
+  :root {
+    --color-border: #2d2d2d;
+    --color-input: #1e1e1e;
+    --color-ring: #007acc;
+    --color-background: #1e1e1e;
+    --color-foreground: #d4d4d4;
+
+    --color-primary: #007acc;
+    --color-primary-foreground: #ffffff;
+
+    --color-secondary: #569cd6;
+    --color-secondary-foreground: #ffffff;
+
+    --color-destructive: #f44747;
+    --color-destructive-foreground: #ffffff;
+
+    --color-muted: #2d2d2d;
+    --color-muted-foreground: #9ca3af;
+
+    --color-accent: #4ec9b0;
+    --color-accent-foreground: #1e1e1e;
+
+    --color-popover: #252526;
+    --color-popover-foreground: #d4d4d4;
+
+    --color-card: #252526;
+    --color-card-foreground: #d4d4d4;
+
+    --color-success: #4ec9b0;
+    --color-success-foreground: #1e1e1e;
+
+    --color-warning: #ffcc00;
+    --color-warning-foreground: #1e1e1e;
+
+    --color-error: #f44747;
+    --color-error-foreground: #ffffff;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --color-background: #0d1117;
+    --color-foreground: #e6edf3;
+  }
+
+  body {
+    @apply bg-[var(--color-background)] text-[var(--color-foreground)] font-sans;
+  }
+}
+
+/* 🪄 Animations */
+@layer utilities {
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  .animate-accordion-down { animation: accordion-down 0.2s ease-out; }
+  .animate-accordion-up { animation: accordion-up 0.2s ease-out; }
+  .animate-fade-in { animation: fadeIn 0.2s ease-out; }
+  .animate-slide-in { animation: slideIn 0.3s ease-out; }
+  .animate-typing { animation: typing 2s steps(20) infinite; }
+  .animate-blink { animation: blink 1s infinite; }
+}
