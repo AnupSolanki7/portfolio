@@ -63,42 +63,42 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle }) => {
               type: 'file',
               name: 'index.js',
               icon: 'FileText',
-              path: '/homepage-main-editor-interface',
+              path: '/',
               description: 'Main editor interface'
             },
             {
               type: 'file',
               name: 'about.js',
               icon: 'User',
-              path: '/about-about-js',
+              path: '/about',
               description: 'About page'
             },
             {
               type: 'file',
               name: 'projects.js',
               icon: 'FolderOpen',
-              path: '/projects-projects-js',
+              path: '/projects',
               description: 'Projects showcase'
             },
             {
               type: 'file',
               name: 'skills.js',
               icon: 'Code',
-              path: '/skills-skills-js',
+              path: '/skills',
               description: 'Technical skills'
             },
             {
               type: 'file',
               name: 'experience.js',
               icon: 'Briefcase',
-              path: '/experience-experience-js',
+              path: '/experience',
               description: 'Work experience'
             },
             {
               type: 'file',
               name: 'preview.js',
               icon: 'Eye',
-              path: '/preview-panel',
+              path: '/preview',
               description: 'Live preview'
             }
           ]

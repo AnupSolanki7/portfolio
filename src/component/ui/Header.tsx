@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Icon from "../AppIcon";
 import Button from "./Button";
@@ -14,18 +14,21 @@ interface NavItem {
 
 const Header: React.FC = () => {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const router = useRouter();
   const pathname = usePathname();
+  const moreMenuRef = useRef<HTMLDivElement>(null);
+  const moreButtonRef = useRef<HTMLButtonElement>(null);
 
   const navigationItems: NavItem[] = [
-    { path: "/homepage-main-editor-interface", label: "Home", icon: "Home", file: "index.js" },
-    { path: "/about-about-js", label: "About", icon: "User", file: "about.js" },
-    { path: "/projects-projects-js", label: "Projects", icon: "FolderOpen", file: "projects.js" },
-    { path: "/skills-skills-js", label: "Skills", icon: "Code", file: "skills.js" },
-    { path: "/experience-experience-js", label: "Experience", icon: "Briefcase", file: "experience.js" },
+    { path: "/", label: "Home", icon: "Home", file: "index.js" },
+    { path: "/about", label: "About", icon: "User", file: "about.js" },
+    { path: "/projects", label: "Projects", icon: "FolderOpen", file: "projects.js" },
+    { path: "/skills", label: "Skills", icon: "Code", file: "skills.js" },
+    { path: "/experience", label: "Experience", icon: "Briefcase", file: "experience.js" },
   ];
 
   const filteredItems = navigationItems.filter(
@@ -33,6 +36,36 @@ const Header: React.FC = () => {
       item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.file.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        moreMenuRef.current && 
+        !moreMenuRef.current.contains(event.target as Node) &&
+        moreButtonRef.current &&
+        !moreButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsMoreOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close dropdown when scrolling (optional)
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsMoreOpen(false);
+    };
+
+    if (isMoreOpen) {
+      window.addEventListener("scroll", handleScroll, true);
+    }
+    
+    return () => window.removeEventListener("scroll", handleScroll, true);
+  }, [isMoreOpen]);
 
   // 🕒 Clock
   useEffect(() => {
@@ -47,25 +80,41 @@ const Header: React.FC = () => {
         e.preventDefault();
         setIsCommandPaletteOpen(true);
       }
-      if (e.key === "Escape" && isCommandPaletteOpen) {
-        setIsCommandPaletteOpen(false);
-        setSearchQuery("");
+      if (e.key === "Escape") {
+        if (isCommandPaletteOpen) {
+          setIsCommandPaletteOpen(false);
+          setSearchQuery("");
+        }
+        if (isMoreOpen) {
+          setIsMoreOpen(false);
+        }
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isCommandPaletteOpen]);
+  }, [isCommandPaletteOpen, isMoreOpen]);
 
   const handleNavigation = useCallback(
     (path: string) => {
       router.push(path);
       setIsCommandPaletteOpen(false);
+      setIsMoreOpen(false);
       setSearchQuery("");
     },
     [router]
   );
 
+  const handleCloseTab = useCallback((e: React.MouseEvent, path: string) => {
+    e.stopPropagation();
+    // Add your close tab logic here
+    console.log("Close tab:", path);
+  }, []);
+
   const activeTab = navigationItems.find((item) => item.path === pathname) ?? navigationItems[0];
+
+  // Items to show in main tabs vs dropdown
+  const mainTabs = navigationItems.slice(0, 4);
+  const dropdownItems = navigationItems.slice(4);
 
   return (
     <>
@@ -80,48 +129,77 @@ const Header: React.FC = () => {
         </div>
 
         {/* Center: File Tabs */}
-        <div className="flex-1 flex items-center h-full overflow-x-auto">
-          {navigationItems.slice(0, 4).map((item) => (
+        <div className="flex-1 flex items-center h-max overflow-x-auto overflow-y-hidden relative">
+          {/* Main Tabs */}
+          {mainTabs.map((item) => (
             <button
               key={item.path}
               onClick={() => handleNavigation(item.path)}
-              className={`vs-code-tab flex items-center space-x-2 px-3 ${
+              className={`vs-code-tab flex items-center space-x-2 px-3 flex-shrink-0 ${
                 pathname === item.path ? "active" : ""
               }`}
             >
               <Icon name={item.icon} size={14} />
               <span className="text-xs truncate">{item.file}</span>
               {pathname === item.path && (
-                <button className="ml-1 hover:bg-muted rounded p-0.5">
+                <div 
+                  className="ml-1 hover:bg-muted rounded p-0.5 transition-colors"
+                  onClick={(e) => handleCloseTab(e, item.path)}
+                >
                   <Icon name="X" size={12} />
-                </button>
+                </div>
               )}
             </button>
           ))}
 
-          {/* “More” Menu */}
-          <div className="relative group">
-            <button className="vs-code-tab flex items-center space-x-1 px-3">
-              <Icon name="MoreHorizontal" size={14} />
-              <span className="text-xs">More</span>
-            </button>
-            <div className="absolute top-full left-0 bg-popover border border-border rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
-              <button
-                onClick={() => handleNavigation("/experience-experience-js")}
-                className="w-full flex items-center space-x-2 px-3 py-2 text-sm hover:bg-muted"
+          {/* "More" Dropdown */}
+          {dropdownItems.length > 0 && (
+            <div className="relative flex-shrink-0" ref={moreMenuRef}>
+              <button 
+                ref={moreButtonRef}
+                className={`vs-code-tab flex items-center space-x-1 px-3 ${
+                  isMoreOpen ? "bg-muted" : ""
+                }`}
+                onClick={() => setIsMoreOpen(!isMoreOpen)}
               >
-                <Icon name="Briefcase" size={14} />
-                <span>experience.js</span>
+                <Icon name="MoreHorizontal" size={14} />
+                <span className="text-xs">More</span>
+                <Icon 
+                  name="ChevronDown" 
+                  size={12} 
+                  className={`transition-transform duration-200 ${
+                    isMoreOpen ? "rotate-180" : ""
+                  }`}
+                />
               </button>
-              <button
-                onClick={() => handleNavigation("/preview-panel")}
-                className="w-full flex items-center space-x-2 px-3 py-2 text-sm hover:bg-muted"
-              >
-                <Icon name="Eye" size={14} />
-                <span>preview.js</span>
-              </button>
+              
+              {/* Dropdown Menu - positioned outside the scrolling container */}
+              {isMoreOpen && (
+                <div className="fixed bg-popover border border-border rounded-md shadow-lg z-50 min-w-48 py-1 mt-1"
+                  style={{
+                    top: moreButtonRef.current ? moreButtonRef.current.getBoundingClientRect().bottom + window.scrollY : 0,
+                    left: moreButtonRef.current ? moreButtonRef.current.getBoundingClientRect().left + window.scrollX : 0,
+                  }}
+                >
+                  {dropdownItems.map((item) => (
+                    <button
+                      key={item.path}
+                      onClick={() => handleNavigation(item.path)}
+                      className={`w-full flex items-center space-x-2 px-3 py-2 text-sm hover:bg-muted transition-colors ${
+                        pathname === item.path ? "bg-muted" : ""
+                      }`}
+                    >
+                      <Icon name={item.icon} size={14} />
+                      <span className="flex-1 text-left">{item.file}</span>
+                      {pathname === item.path && (
+                        <Icon name="Check" size={12} className="text-primary" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
 
         {/* Right: Search + Status + Contact */}

@@ -2,55 +2,46 @@ import React from "react";
 import * as LucideIcons from "lucide-react";
 import { HelpCircle } from "lucide-react";
 
-// Define specific icons you want to support (adjust as needed)
-const SUPPORTED_ICONS = [
-  'HelpCircle', 'Home', 'Settings', 'User', 'Search', 
-  'ArrowLeft', 'ArrowRight', 'Plus', 'Minus', 'X'
-] as const;
+// Get all valid Lucide icon names
+type IconName = keyof typeof LucideIcons;
 
-type SupportedIconName = typeof SUPPORTED_ICONS[number];
-type IconName = SupportedIconName | (string & {});
-
-interface IconProps extends Omit<React.SVGProps<SVGSVGElement>, 'ref'> {
-  name: IconName;
-  size?: number | string;
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  /** Icon name from lucide-react (type-safe, with autocomplete) */
+  name: IconName | string;
+  /** Icon size in px */
+  size?: number;
+  /** Icon color */
   color?: string;
-  strokeWidth?: number;
+  /** Custom CSS class */
   className?: string;
+  /** Stroke width for icon lines */
+  strokeWidth?: number;
 }
 
 const Icon: React.FC<IconProps> = ({
   name,
   size = 24,
   color = "currentColor",
-  strokeWidth = 2,
   className = "",
+  strokeWidth = 2,
   ...props
 }) => {
-  const IconComponent:any = React.useMemo(() => {
-    if (typeof name === "string" && name in LucideIcons) {
-      const potentialIcon = LucideIcons[name as keyof typeof LucideIcons];
-      return typeof potentialIcon === 'function' ? potentialIcon : undefined;
-    }
-    return undefined;
-  }, [name]);
+  // Safely access the icon from the LucideIcons object
+  const IconComponent =
+    (LucideIcons as unknown as Record<string, React.FC<React.SVGProps<SVGSVGElement>>>)[
+      name
+    ] || HelpCircle;
 
-  if (!IconComponent) {
-    return (
-      <HelpCircle
-        size={size}
-        color="gray"
-        strokeWidth={strokeWidth}
-        className={className}
-        {...props}
-      />
-    );
+  // Optional: Warn if the icon name is invalid
+  if (!LucideIcons[name as IconName]) {
+    console.warn(`⚠️ [Icon]: "${name}" is not a valid Lucide icon name.`);
   }
 
   return (
     <IconComponent
-      size={size}
-      color={color}
+      width={size}
+      height={size}
+      color={IconComponent === HelpCircle ? "gray" : color}
       strokeWidth={strokeWidth}
       className={className}
       {...props}
