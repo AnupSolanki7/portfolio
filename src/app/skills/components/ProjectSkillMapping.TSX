@@ -21,7 +21,7 @@ interface SkillData {
 
 type SkillProjects = Record<string, SkillData>;
 
-type ComplexityLevel = 'Advanced' | 'Intermediate' | 'Emerging';
+type ComplexityLevel = 'Advanced' | 'Intermediate' | 'Emerging' ;
 
 // Component
 const ProjectSkillMapping: React.FC = () => {
