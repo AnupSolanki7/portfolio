@@ -1,6 +1,7 @@
 import Icon from '@/component/AppIcon';
-import Image from '@/component/AppImage';
+import Profile from "../../../../public/profile.jpg"
 import React from 'react';
+import Image from 'next/image';
 
 const PersonalStory = () => {
   const personalInfo = {
@@ -8,7 +9,7 @@ const PersonalStory = () => {
     title: "Senior Frontend Developer",
     location: "Ahmedabad, India",
     experience: "2+ Years",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    avatar: Profile,
     bio: `I'm a passionate frontend developer who believes that great code is not just about functionality—it's about crafting digital experiences that solve real business problems. My journey in web development has been driven by curiosity, continuous learning, and a deep appreciation for clean, maintainable code.\n\nWhat sets me apart is my ability to bridge the gap between technical excellence and business impact. I don't just write React components; I architect solutions that scale, perform, and delight users while driving measurable business results.`,
     philosophy: `My development philosophy centers around three core principles: **User-Centric Design**, **Technical Excellence**, and **Continuous Innovation**. I believe that the best applications are born from understanding user needs deeply, implementing them with robust technical solutions, and constantly evolving with emerging technologies.\n\nEvery line of code I write is an opportunity to create something meaningful—whether it's improving user experience, optimizing performance, or solving complex business challenges.`,
     values: [
