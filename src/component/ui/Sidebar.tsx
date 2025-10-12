@@ -43,8 +43,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle }) => {
     assets: false
   });
   const [isVisible, setIsVisible] = useState(!isCollapsed);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+
+  // Responsive breakpoint detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const fileStructure: FileStructureItem[] = [
     {
@@ -94,13 +106,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle }) => {
               path: '/experience',
               description: 'Work experience'
             },
-            // {
-            //   type: 'file',
-            //   name: 'preview.js',
-            //   icon: 'Eye',
-            //   path: '/preview',
-            //   description: 'Live preview'
-            // }
           ]
         },
         {
@@ -175,6 +180,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle }) => {
     setIsVisible(!isCollapsed);
   }, [isCollapsed]);
 
+  // Auto-close sidebar on mobile when navigating
+  useEffect(() => {
+    if (isMobile && isVisible) {
+      onToggle();
+    }
+  }, [pathname, isMobile]);
+
   const toggleFolder = (folderName: string): void => {
     setExpandedFolders(prev => ({
       ...prev,
@@ -205,7 +217,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle }) => {
               ? 'bg-primary/10 text-primary border-r-2 border-primary' 
               : 'text-foreground'
           }`}
-          style={{ paddingLeft: `${level * 12 + 8}px` }}
+          style={{ paddingLeft: `${level * (isMobile ? 10 : 12) + 8}px` }}
           onClick={() => {
             if (isFileItemFolder(item)) {
               toggleFolder(item.name);
@@ -218,8 +230,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle }) => {
             {isFileItemFolder(item) && (
               <Icon
                 name="ChevronRight"
-                size={12}
-                className={`transition-transform duration-200 ${
+                size={isMobile ? 10 : 12}
+                className={`transition-transform duration-200 flex-shrink-0 ${
                   item.expanded ? 'rotate-90' : ''
                 }`}
               />
@@ -230,16 +242,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle }) => {
                   ? (item.expanded ? 'FolderOpen' : 'Folder') 
                   : item.icon
               }
-              size={14}
-              className={`${
+              size={isMobile ? 12 : 14}
+              className={`flex-shrink-0 ${
                 isFileItemFolder(item) ? 'text-accent' : 'text-muted-foreground'
               }`}
             />
-            <span className="truncate text-sm">{item.name}</span>
+            <span className={`truncate ${isMobile ? 'text-xs' : 'text-sm'}`}>
+              {item.name}
+            </span>
           </div>
           
           {isFileItemFile(item) && item.path === pathname && (
-            <div className="w-1 h-4 bg-primary rounded-full ml-2"></div>
+            <div className="w-1 h-4 bg-primary rounded-full ml-2 flex-shrink-0"></div>
           )}
         </div>
         
@@ -252,89 +266,144 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle }) => {
     ));
   };
 
+  // Sidebar width based on device
+  const getSidebarWidth = () => {
+    if (isMobile) {
+      return isVisible ? 'w-64' : 'w-0';
+    }
+    return isVisible ? 'w-60' : 'w-0 lg:w-12';
+  };
+
   return (
     <>
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-12 bottom-6 bg-card border-r border-border z-40 transition-all duration-300 ${
-          isVisible ? 'w-60' : 'w-0'
-        } overflow-hidden lg:relative lg:top-0 lg:bottom-0`}
+        className={`fixed left-0 top-12 bottom-6 bg-card border-r border-border z-40 transition-all duration-300 overflow-hidden lg:relative lg:top-0 lg:bottom-0 ${
+          getSidebarWidth()
+        }`}
       >
         <div className="h-full flex flex-col">
           {/* Sidebar Header */}
-          <div className="flex items-center justify-between p-3 border-b border-border">
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              Explorer
-            </span>
-            <div className="flex items-center space-x-1">
-              <button
-                className="p-1 hover:bg-muted rounded transition-colors duration-200"
-                title="New File"
-                type="button"
-              >
-                <Icon name="FilePlus" size={14} />
-              </button>
-              <button
-                className="p-1 hover:bg-muted rounded transition-colors duration-200"
-                title="New Folder"
-                type="button"
-              >
-                <Icon name="FolderPlus" size={14} />
-              </button>
-              <button
-                className="p-1 hover:bg-muted rounded transition-colors duration-200"
-                title="Refresh"
-                type="button"
-              >
-                <Icon name="RotateCcw" size={14} />
-              </button>
+          <div className={`flex items-center justify-between p-3 border-b border-border ${
+            !isVisible && 'lg:justify-center'
+          }`}>
+            {isVisible ? (
+              <>
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  Explorer
+                </span>
+                <div className="flex items-center space-x-1">
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200"
+                    title="New File"
+                    type="button"
+                  >
+                    <Icon name="FilePlus" size={14} />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200"
+                    title="New Folder"
+                    type="button"
+                  >
+                    <Icon name="FolderPlus" size={14} />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200 lg:hidden"
+                    title="Refresh"
+                    type="button"
+                  >
+                    <Icon name="RotateCcw" size={14} />
+                  </button>
+                  <button
+                    onClick={onToggle}
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200"
+                    title="Collapse"
+                    type="button"
+                  >
+                    <Icon name="PanelLeftClose" size={14} />
+                  </button>
+                </div>
+              </>
+            ) : (
               <button
                 onClick={onToggle}
-                className="p-1 hover:bg-muted rounded transition-colors duration-200 lg:hidden"
-                title="Collapse"
+                className="p-1 hover:bg-muted rounded transition-colors duration-200"
+                title="Expand Sidebar"
                 type="button"
               >
-                <Icon name="PanelLeftClose" size={14} />
+                <Icon name="PanelLeftOpen" size={14} />
               </button>
-            </div>
+            )}
           </div>
 
           {/* File Tree */}
-          <div className="flex-1 overflow-y-auto py-2">
-            <div className="px-2">
-              <div className="text-xs font-medium text-muted-foreground mb-2 px-2">
-                CODEFOLIO STUDIO
+          {isVisible && (
+            <div className="flex-1 overflow-y-auto py-2">
+              <div className="px-2">
+                <div className="text-xs font-medium text-muted-foreground mb-2 px-2">
+                  CODEFOLIO STUDIO
+                </div>
+                {renderFileTree(fileStructure)}
               </div>
-              {renderFileTree(fileStructure)}
             </div>
-          </div>
+          )}
 
           {/* Sidebar Footer */}
-          <div className="border-t border-border p-3">
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>Ready</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Icon name="GitBranch" size={12} />
-                <span>main</span>
+          {isVisible && (
+            <div className="border-t border-border p-3">
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Ready</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Icon name="GitBranch" size={12} />
+                  <span>main</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Collapsed State - Mini Navigation */}
+          {!isVisible && (
+            <div className="flex-1 flex flex-col items-center py-4 space-y-4">
+              {fileStructure.slice(0, 3).map((item, index) => (
+                <button
+                  key={index}
+                  className="p-2 hover:bg-muted rounded transition-colors duration-200"
+                  title={item.name}
+                  onClick={() => {
+                    if (isFileItemFile(item) && item.path) {
+                      handleFileClick(item);
+                    } else if (isFileItemFolder(item)) {
+                      toggleFolder(item.name);
+                      onToggle(); // Expand sidebar when clicking folders
+                    }
+                  }}
+                  type="button"
+                >
+                  <Icon
+                    name={isFileItemFolder(item) ? 'Folder' : item.icon}
+                    size={16}
+                    className="text-muted-foreground"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </aside>
 
       {/* Mobile Overlay */}
-      {isVisible && (
+      {isVisible && isMobile && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
           onClick={onToggle}
         />
       )}
 
-      {/* Toggle Button for Mobile */}
-      {!isVisible && (
+      {/* Toggle Button for Mobile - Only show when sidebar is hidden on mobile */}
+      {!isVisible && isMobile && (
         <button
           onClick={onToggle}
           className="fixed top-16 left-4 z-50 p-2 bg-card border border-border rounded-md shadow-lg lg:hidden"

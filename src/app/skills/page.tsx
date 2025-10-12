@@ -97,22 +97,7 @@ const SkillsPage = () => {
     { id: 'certifications', label: 'Certifications', icon: 'Award' }
   ];
 
-  const getStatusColor = (status: string) => {
-    return status === 'completed' ? 'text-success' : 'text-muted-foreground';
-  };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <Icon name="Code" size={24} className="text-primary" />
-          </div>
-          <p className="text-muted-foreground">Loading skills...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">
