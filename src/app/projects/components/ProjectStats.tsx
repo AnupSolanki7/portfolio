@@ -8,8 +8,6 @@ interface ProjectStatsProps {
     liveProjects?: number;
     technologiesUsed?: number;
     totalUsers?: string;
-    avgPerformance?: number;
-    clientSatisfaction?: number;
   };
 }
 
@@ -17,87 +15,57 @@ const ProjectStats: React.FC<ProjectStatsProps> = ({ stats }) => {
   const statItems = [
     {
       icon: 'FolderOpen',
-      label: 'Total Projects',
+      label: 'Projects',
       value: stats?.totalProjects,
-      color: 'text-primary',
-      bgColor: 'bg-primary/10'
+      color: 'text-primary'
     },
     {
       icon: 'ExternalLink',
-      label: 'Live Projects',
+      label: 'Live',
       value: stats?.liveProjects,
-      color: 'text-success',
-      bgColor: 'bg-success/10'
+      color: 'text-success'
     },
     {
       icon: 'Code',
-      label: 'Technologies Used',
+      label: 'Technologies',
       value: stats?.technologiesUsed,
-      color: 'text-accent',
-      bgColor: 'bg-accent/10'
+      color: 'text-accent'
     },
     {
       icon: 'Users',
-      label: 'Total Users Impacted',
+      label: 'Users',
       value: stats?.totalUsers,
-      color: 'text-secondary',
-      bgColor: 'bg-secondary/10'
-    },
-    {
-      icon: 'TrendingUp',
-      label: 'Avg Performance Score',
-      value: `${stats?.avgPerformance}/100`,
-      color: 'text-warning',
-      bgColor: 'bg-warning/10'
-    },
-    {
-      icon: 'Star',
-      label: 'Client Satisfaction',
-      value: `${stats?.clientSatisfaction}/5`,
-      color: 'text-warning',
-      bgColor: 'bg-warning/10'
+      color: 'text-secondary'
     }
   ];
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6 mb-8">
-      <div className="flex items-center space-x-2 mb-6">
-        <Icon name="BarChart3" size={20} className="text-primary" />
-        <h2 className="text-lg font-semibold text-foreground">Project Statistics</h2>
+    <div className="text-center space-y-6 mb-8">
+      <div className="flex items-center justify-center gap-2 text-muted-foreground">
+        <Icon name="BarChart3" size={18} />
+        <span className="text-sm font-medium">Project Overview</span>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {statItems?.map((item, index) => (
           <motion.div
             key={item?.label}
-            className="text-center"
+            className="bg-card/50 border border-border rounded-xl p-4 group hover:bg-card/80 transition-colors duration-300"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: index * 0.1 }}
           >
-            <div className={`w-12 h-12 ${item?.bgColor} rounded-lg flex items-center justify-center mx-auto mb-3`}>
-              <Icon name={item?.icon} size={20} className={item?.color} />
+            <div className="space-y-2">
+              <div className={`text-2xl font-bold ${item?.color} group-hover:scale-110 transition-transform duration-300`}>
+                {item?.value}
+              </div>
+              <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+                <Icon name={item?.icon} size={14} />
+                <span>{item?.label}</span>
+              </div>
             </div>
-            <div className="text-xl font-bold text-foreground mb-1">{item?.value}</div>
-            <div className="text-xs text-muted-foreground">{item?.label}</div>
           </motion.div>
         ))}
-      </div>
-      {/* Additional Insights */}
-      <div className="mt-6 pt-6 border-t border-border">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center">
-            <div className="text-sm text-muted-foreground mb-1">Most Used Technology</div>
-            <div className="text-lg font-semibold text-foreground">React.js</div>
-          </div>
-          <div className="text-center">
-            <div className="text-sm text-muted-foreground mb-1">Average Project Duration</div>
-            <div className="text-lg font-semibold text-foreground">3-6 months</div>
-          </div>
-          <div className="text-center">
-            <div className="text-sm text-muted-foreground mb-1">Success Rate</div>
-            <div className="text-lg font-semibold text-success">100%</div>
-          </div>
-        </div>
       </div>
     </div>
   );

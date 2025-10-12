@@ -94,13 +94,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle }) => {
               path: '/experience',
               description: 'Work experience'
             },
-            {
-              type: 'file',
-              name: 'preview.js',
-              icon: 'Eye',
-              path: '/preview',
-              description: 'Live preview'
-            }
+            // {
+            //   type: 'file',
+            //   name: 'preview.js',
+            //   icon: 'Eye',
+            //   path: '/preview',
+            //   description: 'Live preview'
+            // }
           ]
         },
         {

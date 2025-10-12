@@ -12,9 +12,10 @@ const Image: React.FC<ImageProps> = ({
   className = "",
   ...props
 }) => {
+  
   const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const target = e.currentTarget;
-    target.src = "/assets/images/no_image.png";
+    target.src = "/images/no_image.png";
   };
 
   return (

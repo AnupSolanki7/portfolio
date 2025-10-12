@@ -1,17 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import Icon from '../AppIcon';
+"use client";
 
-// Type definitions
-interface CodeExample {
-  title: string;
-  language: string;
-  code: string;
-}
-
-interface CodeExamples {
-  [key: string]: CodeExample;
-}
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Icon from "../AppIcon";
 
 interface Tab {
   id: string;
@@ -20,157 +11,111 @@ interface Tab {
 }
 
 const CodePreview: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('component');
+  const [activeTab, setActiveTab] = useState<string>("about");
   const [isTyping, setIsTyping] = useState<boolean>(true);
 
-  const codeExamples: CodeExamples = {
-    component: {
-      title: 'React Component',
-      language: 'jsx',
-      code: `import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-
-const InteractiveCard = ({ title, description }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount(prev => prev + 1);
-    }, 1000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <motion.div
-      className="p-6 bg-card rounded-lg border"
-      whileHover={{ scale: 1.02 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-muted-foreground mb-4">{description}</p>
-      <div className="flex items-center justify-between">
-        <span className="text-sm">Active: {count}s</span>
-        <button 
-          className={isHovered ? 'text-primary' : 'text-muted-foreground'}
-        >
-          Learn More →
-        </button>
-      </div>
-    </motion.div>
-  );
-};
-
-export default InteractiveCard;`
-    },
-    hook: {
-      title: 'Custom Hook',
-      language: 'jsx',
-      code: `import { useState, useEffect, useCallback } from 'react';
-
-const useLocalStorage = (key, initialValue) => {
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.error('Error reading localStorage:', error);
-      return initialValue;
-    }
-  });
-
-  const setValue = useCallback((value) => {
-    try {
-      const valueToStore = value instanceof Function 
-        ? value(storedValue) 
-        : value;
-      
-      setStoredValue(valueToStore);
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-    } catch (error) {
-      console.error('Error setting localStorage:', error);
-    }
-  }, [key, storedValue]);
-
-  return [storedValue, setValue];
-};
-
-export default useLocalStorage;`
-    },
-    api: {
-      title: 'API Integration',
-      language: 'jsx',
-      code: `import axios from 'axios';
-import { useState, useEffect } from 'react';
-
-const useApiData = (endpoint, options = {}) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        const response = await axios.get(endpoint, {
-          timeout: 10000,
-          ...options
-        });
-        
-        setData(response.data);
-      } catch (err) {
-        setError(err.response?.data?.message || err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (endpoint) {
-      fetchData();
-    }
-  }, [endpoint]);
-
-  const refetch = () => {
-    if (endpoint) fetchData();
-  };
-
-  return { data, loading, error, refetch };
-};
-
-export default useApiData;`
-    }
+  const codeExamples: Record<string, string> = {
+    about: `const aboutMe = {
+  name: "Anup Solanki",
+  role: "Frontend Developer",
+  experience: 2,
+  company: "Solguruz",
+  specialties: ["React.js", "Next.js", "Tailwind CSS", "AI Integration"],
+  achievements: ["Rising Star Award 🏆", "Led Frontend Projects", "30+ Interviews Conducted"],
+  location: "India",
+  mindset: "Building beautiful, high-performing UIs that feel alive."
+};`,
+    skills: `const skills = {
+  frontend: ["React.js", "Next.js", "TypeScript", "Tailwind CSS", "Redux", "Framer Motion"],
+  backend: ["Node.js", "Express.js", "MongoDB"],
+  tools: ["Git", "VS Code", "Postman", "Figma", "Vercel"],
+  focus: "Modern, scalable, and visually engaging web applications."
+};`,
+    projects: `const projects = [
+  {
+    name: "Property Dollar",
+    description: "Manages property loans, insurance, and admin operations.",
+    tech: ["React", "Redux", "Node", "MUI"],
+  },
+  {
+    name: "iManagify",
+    description: "Hotel management system for bookings and staff workflow.",
+    tech: ["React", "Tailwind", "Express", "MongoDB"],
+  },
+  {
+    name: "Messenger & Expense Tracker",
+    description: "Personal projects showcasing real-time chat and smart finance tracking.",
+    tech: ["React", "Firebase", "Chart.js"],
+  },
+  {
+    name: "SEO-Optimized Website",
+    description: "A website ranking on Google for client niche keywords.",
+    tech: ["Next.js", "Framer Motion", "Vercel"],
+  }
+];`,
+    contact: `const contact = {
+  email: "anupsolanki.dev@gmail.com",
+  github: "github.com/anupsolanki",
+  linkedin: "linkedin.com/in/anupsolanki",
+  portfolio: "anupsolanki.dev",
+  message: "Let's collaborate to build something amazing!"
+};`,
   };
 
   const tabs: Tab[] = [
-    { id: 'component', label: 'Component.jsx', icon: 'FileText' },
-    { id: 'hook', label: 'useHook.js', icon: 'Zap' },
-    { id: 'api', label: 'api.js', icon: 'Globe' }
+    { id: "about", label: "about.js", icon: "User" },
+    { id: "skills", label: "skills.js", icon: "Zap" },
+    { id: "projects", label: "projects.js", icon: "Folder" },
+    { id: "contact", label: "contact.js", icon: "Mail" },
   ];
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsTyping(false);
-    }, 2000);
+    const timer = setTimeout(() => setIsTyping(false), 1800);
     return () => clearTimeout(timer);
   }, [activeTab]);
 
-  const renderCodeWithHighlighting = (code: string): React.ReactNode => {
-    const lines = code.split('\n');
-    const keywords = ['import', 'export', 'const', 'let', 'var', 'function', 'return', 'if', 'else', 'try', 'catch', 'async', 'await'];
-    
-    return lines.map((line, index) => (
-      <div key={index} className="flex">
+  const highlightSyntax = (code: string): React.ReactNode => {
+    const keywords = [
+      "const",
+      "let",
+      "var",
+      "import",
+      "from",
+      "export",
+      "return",
+      "if",
+      "else",
+      "function",
+      "new",
+      "true",
+      "false",
+    ];
+
+    return code.split("\n").map((line, i) => (
+      <div key={i} className="flex">
         <span className="text-muted-foreground text-xs w-8 text-right pr-2 select-none">
-          {index + 1}
+          {i + 1}
         </span>
         <span className="flex-1">
-          {line.split(/(\b\w+\b)/).map((part, i) => {
+          {line.split(/(\b\w+\b)/).map((part, j) => {
             if (keywords.includes(part)) {
-              return <span key={i} className="text-blue-400 dark:text-blue-300">{part}</span>;
+              return (
+                <span key={j} className="text-blue-400">
+                  {part}
+                </span>
+              );
+            } else if (/["'].*["']/.test(part)) {
+              return (
+                <span key={j} className="text-green-400">
+                  {part}
+                </span>
+              );
+            } else if (/:/.test(part)) {
+              return (
+                <span key={j} className="text-pink-400">
+                  {part}
+                </span>
+              );
             }
             return part;
           })}
@@ -179,26 +124,20 @@ export default useApiData;`
     ));
   };
 
-  const handleTabClick = (tabId: string): void => {
-    setActiveTab(tabId);
+  const handleTabClick = (id: string) => {
+    setActiveTab(id);
     setIsTyping(true);
     setTimeout(() => setIsTyping(false), 1500);
   };
 
-  const handleCloseTab = (e: React.MouseEvent, tabId: string): void => {
-    e.stopPropagation();
-    // Optional: Add logic to handle tab closing
-    console.log(`Closing tab: ${tabId}`);
-  };
-
   return (
-    <motion.div 
-      className="w-full max-w-2xl bg-card border border-border rounded-lg overflow-hidden"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
+    <motion.div
+      className="w-[550px] max-w-3xl bg-card border border-border rounded-lg overflow-hidden"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
     >
-      {/* Code Editor Header */}
+      {/* Header */}
       <div className="flex items-center justify-between bg-muted px-4 py-2 border-b border-border">
         <div className="flex items-center space-x-2">
           <div className="flex space-x-1">
@@ -207,7 +146,7 @@ export default useApiData;`
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
           </div>
           <span className="text-xs text-muted-foreground ml-4">
-            ~/portfolio/src/components/
+            ~/anupsolanki/portfolio/
           </span>
         </div>
         <div className="flex items-center space-x-2">
@@ -216,49 +155,30 @@ export default useApiData;`
         </div>
       </div>
 
-      {/* File Tabs */}
-      <div className="flex bg-card border-b border-border">
+      {/* Tabs */}
+      <div className="flex bg-card border-b border-border overflow-x-auto">
         {tabs.map((tab) => (
-            <div
+          <div
             key={tab.id}
-            className={`flex items-center space-x-2 px-4 py-2 text-sm border-r border-border transition-colors duration-200 cursor-pointer ${
+            className={`flex items-center space-x-2 px-4 py-2 text-sm border-r border-border cursor-pointer transition-colors duration-200 ${
               activeTab === tab.id
-              ? 'bg-background text-foreground border-b-2 border-primary'
-              : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                ? "bg-background text-foreground border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
             }`}
             onClick={() => handleTabClick(tab.id)}
-            role="tab"
-            aria-selected={activeTab === tab.id}
-            tabIndex={0}
-            onKeyPress={e => {
-              if (e.key === 'Enter' || e.key === ' ') handleTabClick(tab.id);
-            }}
-            >
+          >
             <Icon name={tab.icon} size={14} />
             <span>{tab.label}</span>
-            {activeTab === tab.id && (
-              <button 
-              className="ml-2 hover:bg-muted rounded p-0.5"
-              onClick={e => handleCloseTab(e, tab.id)}
-              type="button"
-              tabIndex={-1}
-              >
-              <Icon name="X" size={10} />
-              </button>
-            )}
-            </div>
+          </div>
         ))}
       </div>
 
-      {/* Code Content */}
+      {/* Code Body */}
       <div className="relative">
-        <div className="p-4 bg-background font-mono text-sm overflow-x-auto max-h-96 overflow-y-auto">
-          <div className="text-foreground leading-relaxed">
-            {renderCodeWithHighlighting(codeExamples[activeTab]?.code)}
-          </div>
+        <div className="p-4 bg-background font-mono text-sm overflow-x-auto h-96 overflow-y-auto leading-relaxed">
+          {highlightSyntax(codeExamples[activeTab])}
         </div>
-        
-        {/* Typing Indicator */}
+
         {isTyping && (
           <div className="absolute bottom-4 right-4 flex items-center space-x-2 bg-card px-3 py-1 rounded border border-border">
             <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
@@ -280,7 +200,7 @@ export default useApiData;`
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <span>{codeExamples[activeTab]?.language?.toUpperCase()}</span>
+          <span>JS</span>
           <span>UTF-8</span>
           <span>LF</span>
         </div>

@@ -2,16 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import SkillRadarChart from './components/SkillRadarChart';
-import TechnologyTimeline from './components/TechnologyTimeline';
-import CertificationBadges from './components/CertificationBadges';
-import ProjectSkillMapping from './components/ProjectSkillMapping';
-import LearningResources from './components/LearningResources';
-import SkillEndorsements from './components/SkillEndorsements';
 import Sidebar from '@/component/ui/Sidebar';
 import Header from '@/component/ui/Header';
 import Icon from '@/component/AppIcon';
-import Button from '@/component/ui/Button';
+import Image from '@/component/AppImage';
 
 const SkillsPage = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -19,74 +13,102 @@ const SkillsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading time for realistic experience
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
-
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
-  const skillOverview = {
-    totalSkills: 24,
-    yearsExperience: 2.5,
-    certifications: 6,
-    projectsCompleted: 15,
-    currentFocus: 'AI Integration & Advanced React Patterns',
-    nextGoal: 'Full-Stack Architecture & System Design'
-  };
-
-  const quickStats = [
+  const skillAreas = [
     {
-      label: 'Frontend Mastery',
-      value: '95%',
       icon: 'Monitor',
-      color: 'text-success',
-      description: 'React, JavaScript, TypeScript'
+      title: 'Frontend',
+      skills: ['React', 'TypeScript', 'Next.js', 'Tailwind'],
+      level: 'Expert'
     },
     {
-      label: 'Backend Proficiency',
-      value: '75%',
       icon: 'Server',
-      color: 'text-warning',
-      description: 'Node.js, APIs, Databases'
+      title: 'Backend', 
+      skills: ['Node.js', 'Express', 'MongoDB', 'PostgreSQL'],
+      level: 'Proficient'
     },
     {
-      label: 'AI Integration',
-      value: '70%',
-      icon: 'Brain',
-      color: 'text-error',
-      description: 'OpenAI, ML Models, Intelligent UIs'
+      icon: 'Smartphone',
+      title: 'Mobile',
+      skills: ['React Native', 'Expo', 'Mobile UI'],
+      level: 'Intermediate'
     },
     {
-      label: 'DevOps Knowledge',
-      value: '65%',
       icon: 'Cloud',
-      color: 'text-primary',
-      description: 'Docker, AWS, CI/CD'
+      title: 'DevOps',
+      skills: ['AWS', 'Docker', 'Vercel', 'CI/CD'],
+      level: 'Learning'
+    }
+  ];
+
+  const certifications = [
+    {
+      id: 1,
+      title: 'React Developer Certification',
+      issuer: 'Meta',
+      date: '2023',
+      category: 'frontend',
+      status: 'completed',
+      image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=100&h=100&fit=crop',
+      skills: ['React.js', 'Hooks', 'State Management']
+    },
+    {
+      id: 2,
+      title: 'JavaScript Algorithms',
+      issuer: 'freeCodeCamp',
+      date: '2023',
+      category: 'programming',
+      status: 'completed',
+      image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=100&h=100&fit=crop',
+      skills: ['JavaScript', 'Algorithms', 'Data Structures']
+    },
+    {
+      id: 3,
+      title: 'AWS Cloud Practitioner',
+      issuer: 'Amazon Web Services',
+      date: '2024',
+      category: 'cloud',
+      status: 'completed',
+      image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=100&h=100&fit=crop',
+      skills: ['AWS', 'Cloud Computing', 'DevOps']
+    },
+    {
+      id: 4,
+      title: 'Advanced TypeScript',
+      issuer: 'Microsoft',
+      date: '2024',
+      category: 'programming',
+      status: 'completed',
+      image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=100&h=100&fit=crop',
+      skills: ['TypeScript', 'Type Safety', 'Generics']
     }
   ];
 
   const navigationSections = [
-    { id: 'overview', label: 'Skills Overview', icon: 'BarChart3' },
-    { id: 'proficiency', label: 'Proficiency Matrix', icon: 'Target' },
-    { id: 'timeline', label: 'Learning Journey', icon: 'Clock' },
-    { id: 'certifications', label: 'Certifications', icon: 'Award' },
-    { id: 'projects', label: 'Skills in Action', icon: 'GitBranch' },
-    { id: 'resources', label: 'Learning Resources', icon: 'GraduationCap' },
-    { id: 'endorsements', label: 'Endorsements', icon: 'Users' }
+    { id: 'overview', label: 'Overview', icon: 'Grid3X3' },
+    { id: 'frontend', label: 'Frontend', icon: 'Monitor' },
+    { id: 'backend', label: 'Backend', icon: 'Server' },
+    { id: 'tools', label: 'Tools', icon: 'Settings' },
+    { id: 'certifications', label: 'Certifications', icon: 'Award' }
   ];
 
-  const handleSectionChange = (sectionId: React.SetStateAction<string>) => {
-    setActiveSection(sectionId);
+  const getStatusColor = (status: string) => {
+    return status === 'completed' ? 'text-success' : 'text-muted-foreground';
   };
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading skills.js...</p>
+          <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <Icon name="Code" size={24} className="text-primary" />
+          </div>
+          <p className="text-muted-foreground">Loading skills...</p>
         </div>
       </div>
     );
@@ -101,200 +123,173 @@ const SkillsPage = () => {
           onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)} 
         />
         
-        <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'ml-0' : 'ml-0 lg:ml-60'}`}>
-          {/* Code Editor Header */}
-          <div className="bg-card border-b border-border p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Icon name="Code" size={16} className="text-primary" />
-                  <span className="text-sm text-muted-foreground">src/pages/</span>
-                  <span className="text-sm font-medium text-foreground">skills.js</span>
-                </div>
-                <div className="flex items-center space-x-1 text-xs text-muted-foreground">
-                  <Icon name="Circle" size={8} className="text-success" />
-                  <span>Saved</span>
-                </div>
+        <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'ml-0' : 'ml-0 lg:ml-0'}`}>
+          <div className="max-w-6xl mx-auto px-6 py-8">
+            {/* Header */}
+            <div className="text-center space-y-4 mb-12">
+              <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto">
+                <Icon name="Code" size={24} className="text-primary" />
               </div>
-              
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  iconName="Download"
-                  iconPosition="left"
-                >
-                  Export Skills
-                </Button>
-                <Button
-                  variant="default"
-                  size="sm"
-                  iconName="Share"
-                  iconPosition="left"
-                >
-                  Share Profile
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-6">
-            {/* Page Header */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h1 className="text-3xl font-bold text-foreground mb-2">
-                    Technical Skills & Expertise
-                  </h1>
-                  <p className="text-muted-foreground max-w-2xl">
-                    Interactive skill matrix showcasing proficiency levels, learning journey, and real-world application. 
-                    Building the future of web applications with React and AI integration.
-                  </p>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-primary">{skillOverview?.totalSkills}</div>
-                  <div className="text-sm text-muted-foreground">Total Skills</div>
-                </div>
-              </div>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                {quickStats?.map((stat, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="p-4 bg-card border border-border rounded-lg hover:bg-muted transition-colors duration-200"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <Icon name={stat?.icon} size={20} className={stat?.color} />
-                      <span className={`text-lg font-bold ${stat?.color}`}>{stat?.value}</span>
-                    </div>
-                    <h3 className="font-medium text-foreground text-sm mb-1">{stat?.label}</h3>
-                    <p className="text-xs text-muted-foreground">{stat?.description}</p>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Current Focus */}
-              <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                <div className="flex items-start space-x-3">
-                  <Icon name="Target" size={20} className="text-primary mt-0.5" />
-                  <div>
-                    <h3 className="font-medium text-foreground mb-1">Current Focus</h3>
-                    <p className="text-sm text-muted-foreground mb-2">{skillOverview?.currentFocus}</p>
-                    <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                      <span>Next Goal: {skillOverview?.nextGoal}</span>
-                      <span>•</span>
-                      <span>{skillOverview?.yearsExperience} years experience</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Navigation Tabs */}
-            <div className="flex flex-wrap gap-2 mb-6 p-1 bg-muted rounded-lg">
-              {navigationSections?.map((section) => (
-                <button
-                  key={section?.id}
-                  onClick={() => handleSectionChange(section?.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm transition-all duration-200 ${
-                    activeSection === section?.id
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-background'
-                  }`}
-                >
-                  <Icon name={section?.icon} size={14} />
-                  <span className="hidden sm:inline">{section?.label}</span>
-                </button>
-              ))}
+              <h1 className="text-3xl font-bold text-foreground">Skills & Expertise</h1>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Technologies and tools I use to build modern web applications
+              </p>
             </div>
 
             {/* Content Sections */}
             <motion.div
               key={activeSection}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="space-y-6"
             >
               {activeSection === 'overview' && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="bg-card border border-border rounded-lg p-6">
-                    <div className="flex items-center space-x-2 mb-4">
-                      <Icon name="BarChart3" size={20} className="text-primary" />
-                      <h3 className="text-lg font-semibold text-foreground">Skill Categories</h3>
-                    </div>
-                    <div className="space-y-4">
-                      {[
-                        { category: 'Frontend Development', skills: 8, level: 'Expert' },
-                        { category: 'Backend & APIs', skills: 6, level: 'Proficient' },
-                        { category: 'Tools & DevOps', skills: 6, level: 'Intermediate' },
-                        { category: 'AI & Emerging Tech', skills: 4, level: 'Learning' }
-                      ]?.map((item, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                          <div>
-                            <div className="font-medium text-foreground">{item?.category}</div>
-                            <div className="text-sm text-muted-foreground">{item?.skills} skills</div>
+                <div className="space-y-8">
+                  {/* Skills Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {skillAreas.map((area, index) => (
+                      <motion.div
+                        key={area.title}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="bg-card/50 border border-border rounded-xl p-6 space-y-4 group hover:bg-card/80 transition-all duration-300"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <Icon name={area.icon} size={20} className="text-primary" />
                           </div>
-                          <span className="px-2 py-1 text-xs bg-primary/10 text-primary rounded-full">
-                            {item?.level}
-                          </span>
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-foreground">{area.title}</h3>
+                            <span className="text-sm text-primary bg-primary/10 px-2 py-1 rounded-full">
+                              {area.level}
+                            </span>
+                          </div>
                         </div>
-                      ))}
-                    </div>
+                        
+                        <div className="flex flex-wrap gap-2">
+                          {area.skills.map((skill, idx) => (
+                            <span
+                              key={idx}
+                              className="px-3 py-1 text-sm bg-muted text-muted-foreground rounded-full border border-border"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
+                    ))}
                   </div>
 
-                  <div className="bg-card border border-border rounded-lg p-6">
-                    <div className="flex items-center space-x-2 mb-4">
-                      <Icon name="TrendingUp" size={20} className="text-primary" />
-                      <h3 className="text-lg font-semibold text-foreground">Learning Progress</h3>
+                  {/* Certifications Preview */}
+                  <div className="bg-card/30 border border-border rounded-xl p-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Icon name="Award" size={20} className="text-primary" />
+                      <h3 className="font-semibold text-foreground">Certifications</h3>
                     </div>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-foreground">Overall Proficiency</span>
-                          <span className="text-muted-foreground">82%</span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {certifications.slice(0, 2).map((cert, index) => (
+                        <div key={cert.id} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                          <Image
+                            src={cert.image}
+                            alt={cert.issuer}
+                            className="w-10 h-10 rounded-lg object-cover"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-foreground text-sm truncate">{cert.title}</h4>
+                            <p className="text-xs text-muted-foreground">{cert.issuer} • {cert.date}</p>
+                          </div>
+                          <Icon name="CheckCircle" size={16} className="text-success" />
                         </div>
-                        <div className="w-full bg-background rounded-full h-2">
-                          <div className="bg-primary h-2 rounded-full" style={{ width: '82%' }}></div>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 text-center pt-4 border-t border-border">
-                        <div>
-                          <div className="text-2xl font-bold text-success">{skillOverview?.certifications}</div>
-                          <div className="text-xs text-muted-foreground">Certifications</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold text-primary">{skillOverview?.projectsCompleted}</div>
-                          <div className="text-xs text-muted-foreground">Projects</div>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
               )}
 
-              {activeSection === 'proficiency' && <SkillRadarChart />}
-              {activeSection === 'timeline' && <TechnologyTimeline />}
-              {activeSection === 'certifications' && <CertificationBadges />}
-              {activeSection === 'projects' && <ProjectSkillMapping />}
-              {activeSection === 'resources' && <LearningResources />}
-              {activeSection === 'endorsements' && <SkillEndorsements />}
+              {activeSection === 'certifications' && (
+                <div className="space-y-6">
+                  <div className="text-center space-y-2 mb-6">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
+                      <Icon name="Award" size={20} className="text-primary" />
+                    </div>
+                    <h2 className="text-xl font-semibold text-foreground">Certifications</h2>
+                    <p className="text-muted-foreground">Professional certifications and achievements</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {certifications.map((cert, index) => (
+                      <motion.div
+                        key={cert.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="bg-card/50 border border-border rounded-xl p-4 space-y-3 group hover:bg-card/80 transition-all duration-300"
+                      >
+                        <div className="flex items-start gap-3">
+                          <Image
+                            src={cert.image}
+                            alt={cert.issuer}
+                            className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                              {cert.title}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">{cert.issuer}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className="text-xs text-muted-foreground">{cert.date}</span>
+                              <Icon name="CheckCircle" size={14} className="text-success" />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-1">
+                          {cert.skills.map((skill, idx) => (
+                            <span
+                              key={idx}
+                              className="px-2 py-1 text-xs bg-primary/10 text-primary rounded-full"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Other sections can be added similarly */}
+              {activeSection !== 'overview' && activeSection !== 'certifications' && (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Icon name={navigationSections.find(s => s.id === activeSection)?.icon || 'Settings'} 
+                          size={24} className="text-muted-foreground" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                    {navigationSections.find(s => s.id === activeSection)?.label}
+                  </h3>
+                  <p className="text-muted-foreground">Content coming soon</p>
+                </div>
+              )}
             </motion.div>
 
-            {/* Footer */}
-            <div className="mt-12 pt-6 border-t border-border text-center text-sm text-muted-foreground">
-              <p>Skills continuously updated • Last updated: October {new Date()?.getFullYear()}</p>
-              <p className="mt-1">Building the future of web applications with React and AI</p>
-            </div>
+            {/* Current Focus */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="mt-12 text-center space-y-4"
+            >
+              <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                <Icon name="Target" size={18} />
+                <span className="text-sm font-medium">Currently Learning</span>
+              </div>
+              <p className="text-foreground font-medium">
+                Advanced React Patterns & AI Integration
+              </p>
+            </motion.div>
           </div>
         </main>
       </div>

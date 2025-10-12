@@ -113,8 +113,8 @@ const Header: React.FC = () => {
   const activeTab = navigationItems.find((item) => item.path === pathname) ?? navigationItems[0];
 
   // Items to show in main tabs vs dropdown
-  const mainTabs = navigationItems.slice(0, 4);
-  const dropdownItems = navigationItems.slice(4);
+  const mainTabs = navigationItems.slice(0, 5);
+  const dropdownItems = navigationItems.slice(5);
 
   return (
     <>
@@ -264,7 +264,7 @@ const Header: React.FC = () => {
                       <div className="text-xs text-muted-foreground">{item.label}</div>
                     </div>
                     {index < 9 && (
-                      <kbd className="px-2 py-1 text-xs bg-muted rounded">⌘{index + 1}</kbd>
+                      <kbd className="px-2 py-1 text-xs bg-muted rounded">⌘ {index + 1}</kbd>
                     )}
                   </button>
                 ))

@@ -18,36 +18,34 @@ const AboutPage = () => {
   const sections = [
     {
       id: 'story',
-      title: 'Personal Story',
+      title: 'Story',
       icon: 'User',
-      description: 'Background and philosophy'
+      color: 'text-blue-400'
     },
     {
       id: 'timeline',
-      title: 'Experience Timeline',
+      title: 'Timeline',
       icon: 'Clock',
-      description: 'Professional journey'
+      color: 'text-green-400'
     },
     {
       id: 'skills',
-      title: 'Skills Evolution',
+      title: 'Skills',
       icon: 'TrendingUp',
-      description: 'Technical growth'
+      color: 'text-purple-400'
     },
     {
       id: 'leadership',
       title: 'Leadership',
       icon: 'Crown',
-      description: 'Mentoring & interviews'
+      color: 'text-orange-400'
     }
   ];
 
   useEffect(() => {
-    // Simulate loading time for realistic experience
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
-
+    }, 800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -73,10 +71,19 @@ const AboutPage = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading about.js...</p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center"
+        >
+          <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4 mx-auto">
+            <Icon name="User" size={24} color="white" />
+          </div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">
+            About Me
+          </h2>
+          <p className="text-muted-foreground">Loading personal story...</p>
+        </motion.div>
       </div>
     );
   }
@@ -87,154 +94,118 @@ const AboutPage = () => {
       <div className="flex">
         <Sidebar isCollapsed={sidebarCollapsed} onToggle={toggleSidebar} />
         
-        <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'lg:ml-0' : 'lg:ml-60'}`}>
-          <div className="flex h-[calc(100vh-84px)]">
-            {/* Code Editor Area */}
-            <div className="flex-1 flex flex-col">
-              {/* Editor Header */}
-              <div className="bg-card border-b border-border p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <Icon name="FileText" size={16} className="text-primary" />
-                      <span className="text-sm font-medium text-foreground">about.js</span>
-                      <span className="text-xs text-muted-foreground">• Personal & Professional Story</span>
-                    </div>
+        <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'lg:ml-0' : 'lg:ml-0'}`}>
+          <div className="flex flex-col h-[calc(100vh-64px)]">
+            {/* Minimal Header */}
+            <div className="bg-card/50 border-b border-border p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                    <Icon name="User" size={20} color="white" />
                   </div>
-                  
+                  <div>
+                    <h1 className="text-xl font-semibold text-foreground">About</h1>
+                    <p className="text-sm text-muted-foreground">Anup Solanki • Full Stack Developer</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Icon name="Users" size={12} />
-                      <span>Anup Solanki</span>
-                    </div>
                     <div className="w-2 h-2 bg-success rounded-full"></div>
+                    <span>Available for opportunities</span>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Section Navigation */}
-              <div className="bg-card border-b border-border p-4">
-                <div className="flex flex-wrap gap-2">
-                  {sections?.map((section) => (
+            {/* Minimal Navigation */}
+            <div className="bg-card/30 border-b border-border px-6 py-4">
+              <div className="flex items-center gap-1">
+                {sections?.map((section, index) => (
+                  <React.Fragment key={section?.id}>
                     <button
-                      key={section?.id}
                       onClick={() => setActiveSection(section?.id)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                         activeSection === section?.id
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted text-foreground hover:bg-border'
+                          ? 'bg-primary text-primary-foreground shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                       }`}
                     >
-                      <Icon name={section?.icon} size={14} />
-                      <span className="font-medium">{section?.title}</span>
-                      <span className="text-xs opacity-75 hidden sm:inline">
-                        {section?.description}
-                      </span>
+                      <Icon name={section?.icon} size={16} className={section?.color} />
+                      <span>{section?.title}</span>
                     </button>
-                  ))}
-                </div>
+                    {index < sections.length - 1 && (
+                      <div className="w-px h-4 bg-border mx-1"></div>
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
+            </div>
 
-              {/* Main Content Area */}
-              <div className="flex-1 overflow-y-auto">
+            {/* Content Area */}
+            <div className="flex-1 overflow-y-auto h-full">
+              <div className="max-w-full mx-auto h-full">
                 <motion.div
                   key={activeSection}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
-                  className="p-6"
+                  className="space-y-8"
                 >
-                  {/* Code Comment Header */}
-                  <div className="mb-6 font-mono text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-success">/**</span>
-                    </div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-success"> * @file</span>
-                      <span className="text-foreground">about.js</span>
-                    </div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-success"> * @author</span>
-                      <span className="text-foreground">Anup Solanki</span>
-                    </div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-success"> * @description</span>
-                      <span className="text-foreground">Personal story, experience timeline, and professional philosophy</span>
-                    </div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-success"> * @section</span>
-                      <span className="text-primary">{sections?.find(s => s?.id === activeSection)?.title}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-success"> */</span>
-                    </div>
+                  {/* Content */}
+                  <div className="bg-card/50 rounded-xl border h-full border-border p-6">
+                    {renderActiveSection()}
                   </div>
-
-                  {/* Dynamic Content */}
-                  {renderActiveSection()}
                 </motion.div>
               </div>
             </div>
+          </div>
 
-            {/* Mini Preview Panel */}
-            <div className="hidden xl:block w-80 bg-card border-l border-border">
-              <div className="p-4 border-b border-border">
-                <div className="flex items-center gap-2">
-                  <Icon name="Eye" size={16} className="text-primary" />
-                  <span className="text-sm font-medium text-foreground">Quick Preview</span>
-                </div>
+          {/* Floating Info Panel */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+            className="fixed bottom-6 right-6 bg-card border border-border rounded-lg p-4 shadow-lg w-64"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <Icon name="Code" size={16} color="white" />
               </div>
-              
-              <div className="p-4 space-y-4">
-                {/* Current Section Info */}
-                <div className="bg-muted/50 rounded-lg p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Icon name={sections?.find(s => s?.id === activeSection)?.icon as string} size={14} className="text-primary" />
-                    <span className="text-sm font-semibold text-foreground">
-                      {sections?.find(s => s?.id === activeSection)?.title}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {sections?.find(s => s?.id === activeSection)?.description}
-                  </p>
-                </div>
-
-                {/* Quick Stats */}
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-foreground">Quick Stats</h4>
-                  <div className="space-y-2 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Experience:</span>
-                      <span className="text-foreground">2+ Years</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Interviews:</span>
-                      <span className="text-foreground">30+</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Projects Led:</span>
-                      <span className="text-foreground">5+</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Team Size:</span>
-                      <span className="text-foreground">8+ Members</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Navigation Helper */}
-                <div className="bg-primary/10 border border-primary/20 rounded-lg p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Icon name="Info" size={14} className="text-primary" />
-                    <span className="text-sm font-medium text-primary">Navigation Tip</span>
-                  </div>
-                  <p className="text-xs text-foreground">
-                    Use the section tabs above to explore different aspects of my professional journey.
-                  </p>
-                </div>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Quick Stats</h3>
+                <p className="text-xs text-muted-foreground">At a glance</p>
               </div>
             </div>
-          </div>
+            
+            <div className="space-y-2 text-xs">
+              <div className="flex justify-between items-center">
+                <span className="text-muted-foreground">Experience</span>
+                <span className="font-medium text-foreground">2+ Years</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted-foreground">Projects</span>
+                <span className="font-medium text-foreground">15+</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted-foreground">Technologies</span>
+                <span className="font-medium text-foreground">12+</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Navigation Helper */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="fixed bottom-6 left-6 bg-primary/10 border border-primary/20 rounded-lg px-3 py-2"
+          >
+            <div className="flex items-center gap-2 text-xs">
+              <Icon name="MousePointer" size={12} className="text-primary" />
+              <span className="text-foreground">Click sections to navigate</span>
+            </div>
+          </motion.div>
         </main>
       </div>
     </div>
