@@ -281,7 +281,7 @@ const Header: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handleNavigation("/preview")}
+              onClick={() => handleNavigation("/contact")}
               iconName="MessageCircle"
               iconPosition="left"
               className={`text-xs ${isMobile ? "px-2" : ""}`}
