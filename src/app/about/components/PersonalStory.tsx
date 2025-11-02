@@ -6,29 +6,29 @@ import Image from 'next/image';
 const PersonalStory = () => {
   const personalInfo = {
     name: "Anup Solanki",
-    title: "Senior Frontend Developer",
+    title: "Frontend Developer | React & Next.js Specialist",
     location: "Ahmedabad, India",
-    experience: "2+ Years",
+    experience: "3+ Years",
     avatar: Profile,
-    bio: `I'm a passionate frontend developer focused on crafting digital experiences that solve real business problems. My journey in web development is driven by curiosity, continuous learning, and writing clean, maintainable code.`,
-    philosophy: `Development philosophy: **User-Centric Design**, **Technical Excellence**, **Continuous Innovation**. Every line of code is an opportunity to improve UX, performance, and solve complex challenges.`,
+    bio: `I’m a frontend developer at Solguruz with over 3 years of experience in building high-performance web applications. I specialize in React and Next.js, crafting modern UIs that merge design precision with scalable architecture. I’ve led frontend revamps, implemented AI-powered features, and conducted 30+ interviews to help shape efficient engineering teams.`,
+    philosophy: `My development philosophy blends **Technical Excellence**, **User-Centric Thinking**, and **AI-Driven Innovation**. I believe every feature should not only work flawlessly but also create a measurable business impact.`,
     values: [
-      { icon: "Code", title: "Clean Code Advocate" },
-      { icon: "Users", title: "User-First Mindset" },
-      { icon: "Lightbulb", title: "Innovation Driver" },
-      { icon: "Target", title: "Business Impact Focus" }
+      { icon: "Code", title: "Clean & Scalable Code" },
+      { icon: "Cpu", title: "AI Integration Enthusiast" },
+      { icon: "Users", title: "Empathetic Team Player" },
+      { icon: "Rocket", title: "Innovation-Driven Growth" }
     ]
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto px-6 py-8">
+    <div className="space-y-8 mx-auto px-6 py-8">
       {/* Personal Introduction */}
       <div className="flex flex-col lg:flex-row items-center gap-6">
         <div className="relative flex-shrink-0">
           <Image
             src={personalInfo.avatar}
             alt={personalInfo.name}
-            className="w-28 h-28 rounded-full object-cover border-2 border-primary"
+            className="w-28 h-28 rounded-full object-cover border-2 border-primary shadow-md"
           />
           <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-success rounded-full flex items-center justify-center border border-card">
             <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
@@ -44,14 +44,14 @@ const PersonalStory = () => {
             </div>
             <div className="flex items-center gap-1">
               <Icon name="Calendar" size={14} />
-              <span>{personalInfo.experience}</span>
+              <span>{personalInfo.experience} Experience</span>
             </div>
             <div className="flex items-center gap-1">
               <Icon name="Briefcase" size={14} />
               <span>Open to opportunities</span>
             </div>
           </div>
-          <p className="text-foreground text-sm mt-2">{personalInfo.bio}</p>
+          <p className="text-foreground text-sm mt-2 leading-relaxed">{personalInfo.bio}</p>
         </div>
       </div>
 
@@ -61,8 +61,8 @@ const PersonalStory = () => {
           <Icon name="Compass" size={18} className="text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Development Philosophy</h3>
         </div>
-        <p className="text-sm text-foreground">
-          {personalInfo.philosophy.split('**').map((part, idx) => 
+        <p className="text-sm text-foreground leading-relaxed">
+          {personalInfo.philosophy.split('**').map((part, idx) =>
             idx % 2 === 1 ? <strong key={idx} className="text-primary">{part}</strong> : part
           )}
         </p>
@@ -76,7 +76,7 @@ const PersonalStory = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {personalInfo.values.map((value, index) => (
-            <div key={index} className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+            <div key={index} className="flex items-center gap-3 p-3 bg-muted rounded-lg border border-border hover:bg-muted/80 transition">
               <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
                 <Icon name={value.icon} size={16} className="text-primary-foreground" />
               </div>

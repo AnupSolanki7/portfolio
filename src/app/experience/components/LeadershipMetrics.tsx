@@ -1,165 +1,146 @@
 import Icon from '@/component/AppIcon';
 import React from 'react';
 
-const LeadershipMetrics = () => {
-  const leadershipStats = [
+interface LeadershipMetricsProps {
+  theme?: {
+    background: string;
+    editor: string;
+    surface: string;
+    surfaceLight: string;
+    surfaceLighter: string;
+    border: string;
+    borderLight: string;
+    textPrimary: string;
+    textSecondary: string;
+    textMuted: string;
+    comment: string;
+    keyword: string;
+    string: string;
+    function: string;
+    variable: string;
+    number: string;
+    class: string;
+    accent: string;
+    success: string;
+    warning: string;
+    error: string;
+  };
+}
+
+const LeadershipMetrics = ({ theme }: LeadershipMetricsProps) => {
+  const t = theme || {
+    background: 'bg-[#1e1e1e]',
+    editor: 'bg-[#1e1e1e]',
+    surface: 'bg-[#252526]',
+    surfaceLight: 'bg-[#2d2d30]',
+    surfaceLighter: 'bg-[#3e3e42]',
+    border: 'border-[#404040]',
+    borderLight: 'border-[#464647]',
+    textPrimary: 'text-[#d4d4d4]',
+    textSecondary: 'text-[#969696]',
+    textMuted: 'text-[#6a6a6a]',
+    comment: 'text-[#6a9955]',
+    keyword: 'text-[#569cd6]',
+    string: 'text-[#ce9178]',
+    function: 'text-[#dcdcaa]',
+    variable: 'text-[#9cdcfe]',
+    number: 'text-[#b5cea8]',
+    class: 'text-[#4ec9b0]',
+    accent: 'text-[#007acc]',
+    success: 'text-[#4ec9b0]',
+    warning: 'text-[#ce9178]',
+    error: 'text-[#f44747]',
+  };
+
+  const leadershipData = [
     {
-      metric: '30+',
-      label: 'Interviews',
-      icon: 'Users',
+      section: 'metrics',
+      title: 'Leadership Metrics',
+      icon: 'BarChart3',
+      color: t.keyword,
+      items: [
+        { metric: '30+', label: 'Interviews', file: 'interviews.json', color: t.keyword },
+        { metric: '7+', label: 'Projects Led', file: 'projects.ts', color: t.string },
+        { metric: '8', label: 'Mentored', file: 'mentorship.md', color: t.function },
+        { metric: '3x', label: 'Productivity', file: 'metrics.yaml', color: t.class },
+      ]
     },
     {
-      metric: '5+',
-      label: 'Projects Led',
-      icon: 'Target',
-    },
-    {
-      metric: '8',
-      label: 'Mentored',
-      icon: 'GraduationCap',
-    },
-    {
-      metric: '3x',
-      label: 'Productivity',
+      section: 'impact', 
+      title: 'Team Impact',
       icon: 'TrendingUp',
-    }
-  ];
-
-  const teamImpact = [
-    {
-      area: 'Code Quality',
-      improvement: '40%',
-      icon: 'Code',
+      color: t.success,
+      items: [
+        { metric: '95%', label: 'UI/UX Consistency', file: 'uiux.json', color: t.success },
+        { metric: '40%', label: 'Dev Speed', file: 'speed.ts', color: t.keyword },
+        { metric: '45%', label: 'Code Quality', file: 'quality.js', color: t.string },
+        { metric: '3x', label: 'Collaboration', file: 'team.yaml', color: t.class },
+      ]
     },
     {
-      area: 'Development Speed',
-      improvement: '35%',
-      icon: 'Zap',
-    },
-    {
-      area: 'Team Knowledge',
-      improvement: '60%',
-      icon: 'BookOpen',
-    },
-    {
-      area: 'Project Success',
-      improvement: '25%',
+      section: 'recognition',
+      title: 'Recognition',
       icon: 'Award',
-    }
-  ];
-
-  const recognitionItems = [
-    {
-      title: 'Employee of the Quarter',
-      organization: 'Solguruz',
-      icon: 'Trophy'
-    },
-    {
-      title: 'Technical Excellence',
-      organization: 'Solguruz',
-      icon: 'Star'
-    },
-    {
-      title: 'Mentorship Recognition',
-      organization: 'Solguruz',
-      icon: 'Heart'
-    },
-    {
-      title: 'Top Performer',
-      organization: 'Solguruz',
-      icon: 'Medal'
+      color: t.warning,
+      items: [
+        { metric: 'Rising Star', label: 'Solguruz', file: 'award.md', color: t.warning },
+        { metric: 'AI Leadership', label: 'Automation', file: 'ai.md', color: t.function },
+        { metric: 'Frontend', label: 'Revamp', file: 'revamp.tsx', color: t.class },
+        { metric: 'Mentorship', label: 'Recognition', file: 'mentor.md', color: t.success },
+      ]
     }
   ];
 
   return (
-    <div className="space-y-8">
-      {/* Leadership Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {leadershipStats.map((stat, index) => (
-          <div key={index} className="bg-card/50 border border-border rounded-xl p-4 text-center">
-            <div className="text-2xl font-bold text-primary mb-1">{stat.metric}</div>
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <Icon name={stat.icon} size={14} />
-              <span>{stat.label}</span>
+    <div className="space-y-4 font-mono">
+      {/* File Header */}
+      <div className={`${t.comment} text-sm mb-2`}>
+        {`// leadership.js - Metrics & Impact`}
+      </div>
+
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {leadershipData.map((section, sectionIndex) => (
+          <div 
+            key={section.section}
+            className={`${t.surface} border ${t.border} rounded p-4 space-y-3`}
+          >
+            {/* Section Header */}
+            <div className="flex items-center gap-2">
+              <Icon name={section.icon} size={14} className={section.color} />
+              <span className={`text-sm ${t.textPrimary} font-mono`}>{section.title}</span>
+            </div>
+
+            {/* Metrics Grid */}
+            <div className="grid grid-cols-2 gap-2">
+              {section.items.map((item, itemIndex) => (
+                <div 
+                  key={itemIndex}
+                  className={`${t.surfaceLight} border ${t.border} rounded p-2 space-y-1 hover:${t.surfaceLighter} transition-colors`}
+                >
+                  <div className={`text-sm font-mono ${item.color}`}>
+                    {item.metric}
+                  </div>
+                  <div className={`text-xs ${t.textSecondary} truncate`}>
+                    {item.label}
+                  </div>
+                  <div className={`text-xs ${t.textMuted} font-mono`}>
+                    {item.file}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ))}
       </div>
 
-      {/* Team Impact */}
-      <div className="bg-card/30 border border-border rounded-xl p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-            <Icon name="TrendingUp" size={18} className="text-primary" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-foreground">Team Impact</h3>
-            <p className="text-sm text-muted-foreground">Measurable improvements</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {teamImpact.map((impact, index) => (
-            <div key={index} className="text-center space-y-2">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
-                <Icon name={impact.icon} size={18} className="text-primary" />
-              </div>
-              <div>
-                <div className="font-medium text-foreground">{impact.area}</div>
-                <div className="text-sm text-primary">{impact.improvement}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Recognition */}
-      <div className="bg-card/30 border border-border rounded-xl p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-            <Icon name="Award" size={18} className="text-primary" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-foreground">Recognition</h3>
-            <p className="text-sm text-muted-foreground">Professional achievements</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {recognitionItems.map((item, index) => (
-            <div key={index} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                <Icon name={item.icon} size={16} className="text-primary" />
-              </div>
-              <div>
-                <div className="font-medium text-foreground text-sm">{item.title}</div>
-                <div className="text-xs text-muted-foreground">{item.organization}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Leadership Principles */}
-      <div className="text-center space-y-4">
-        <div className="flex items-center justify-center gap-2 text-muted-foreground">
-          <Icon name="Lightbulb" size={18} />
-          <span className="text-sm font-medium">Leadership Principles</span>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="space-y-2">
-            <Icon name="Users" size={20} className="text-primary mx-auto" />
-            <div className="font-medium text-foreground">People First</div>
-          </div>
-          <div className="space-y-2">
-            <Icon name="Target" size={20} className="text-primary mx-auto" />
-            <div className="font-medium text-foreground">Results Driven</div>
-          </div>
-          <div className="space-y-2">
-            <Icon name="BookOpen" size={20} className="text-primary mx-auto" />
-            <div className="font-medium text-foreground">Continuous Learning</div>
-          </div>
+      {/* Footer */}
+      <div className={`${t.surface} border ${t.border} rounded p-3 text-center`}>
+        <div className="flex items-center justify-center gap-2 text-xs">
+          <Icon name="Code" size={10} className={t.keyword} />
+          <span className={t.textMuted}>leadership.js v3.0</span>
+          <span className={t.textMuted}>•</span>
+          <span className={t.textMuted}>Last updated: Today</span>
         </div>
       </div>
     </div>

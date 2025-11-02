@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Icon from "../AppIcon";
+import { useRouter } from "next/navigation";
 
 const WelcomeHero = () => {
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
 
   const texts = [
     "Software Developer",
@@ -16,25 +18,36 @@ const WelcomeHero = () => {
   ];
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      const current = texts[currentIndex];
+    const timeout = setTimeout(
+      () => {
+        const current = texts[currentIndex];
 
-      if (isDeleting) {
-        setCurrentText(current.substring(0, currentText.length - 1));
-      } else {
-        setCurrentText(current.substring(0, currentText.length + 1));
-      }
+        if (isDeleting) {
+          setCurrentText(current.substring(0, currentText.length - 1));
+        } else {
+          setCurrentText(current.substring(0, currentText.length + 1));
+        }
 
-      if (!isDeleting && currentText === current) {
-        setTimeout(() => setIsDeleting(true), 2000);
-      } else if (isDeleting && currentText === "") {
-        setIsDeleting(false);
-        setCurrentIndex((currentIndex + 1) % texts.length);
-      }
-    }, isDeleting ? 50 : 100);
+        if (!isDeleting && currentText === current) {
+          setTimeout(() => setIsDeleting(true), 2000);
+        } else if (isDeleting && currentText === "") {
+          setIsDeleting(false);
+          setCurrentIndex((currentIndex + 1) % texts.length);
+        }
+      },
+      isDeleting ? 50 : 100
+    );
 
     return () => clearTimeout(timeout);
   }, [currentText, currentIndex, isDeleting, texts]);
+
+  const handleProjectRedirect = () => {
+    router.push("/projects");
+  };
+
+  const handleResumeView = () => {
+    window.open("/Anup_Solanki_Resume.pdf", "_blank");
+  }
 
   return (
     <motion.div
@@ -83,8 +96,8 @@ const WelcomeHero = () => {
           I’m a passionate software developer with 3 years of experience
           building high-performance, scalable, and SEO-friendly web
           applications. Skilled in React.js, Next.js, Redux, and GraphQL, I
-          focus on crafting clean, responsive, and efficient digital
-          experiences that drive real business impact.
+          focus on crafting clean, responsive, and efficient digital experiences
+          that drive real business impact.
         </motion.p>
 
         {/* Stats */}
@@ -121,11 +134,14 @@ const WelcomeHero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <button className="flex items-center space-x-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-lg hover:shadow-primary/25">
+          <button
+            onClick={handleProjectRedirect}
+            className="flex cursor-pointer items-center space-x-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-lg hover:shadow-primary/25"
+          >
             <Icon name="Eye" size={18} />
             <span>View Projects</span>
           </button>
-          <button className="flex items-center space-x-2 bg-card hover:bg-muted text-foreground border border-border px-6 py-3 rounded-lg font-medium transition-all duration-200">
+          <button onClick={handleResumeView} className="flex cursor-pointer items-center space-x-2 bg-card hover:bg-muted text-foreground border border-border px-6 py-3 rounded-lg font-medium transition-all duration-200">
             <Icon name="Download" size={18} />
             <span>Download Resume</span>
           </button>

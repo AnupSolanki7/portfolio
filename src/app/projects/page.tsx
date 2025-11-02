@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import ProjectCard from "./components/ProjectCard";
 import ProjectFilter from "./components/ProjectFilter";
 import ProjectModal from "./components/ProjectModal";
@@ -13,89 +13,129 @@ import Sidebar from "@/component/ui/Sidebar";
 
 const ProjectsPage = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState<null | string>(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [terminalOpen, setTerminalOpen] = useState(false);
+  const [terminalOutput, setTerminalOutput] = useState<string[]>([]);
 
-  // Simplified project data
+  // VS Code Dark+ Theme Colors
+  const theme = {
+    background: 'bg-[#1e1e1e]',
+    editor: 'bg-[#1e1e1e]',
+    surface: 'bg-[#252526]',
+    surfaceLight: 'bg-[#2d2d30]',
+    surfaceLighter: 'bg-[#3e3e42]',
+    border: 'border-[#404040]',
+    borderLight: 'border-[#464647]',
+    textPrimary: 'text-[#d4d4d4]',
+    textSecondary: 'text-[#969696]',
+    textMuted: 'text-[#6a6a6a]',
+    comment: 'text-[#6a9955]',
+    keyword: 'text-[#569cd6]',
+    string: 'text-[#ce9178]',
+    function: 'text-[#dcdcaa]',
+    variable: 'text-[#9cdcfe]',
+    number: 'text-[#b5cea8]',
+    class: 'text-[#4ec9b0]',
+    accent: 'text-[#007acc]',
+    success: 'text-[#4ec9b0]',
+    warning: 'text-[#ce9178]',
+    error: 'text-[#f44747]',
+  };
+
+  // Enhanced project data with animated images
   const projects = [
     {
       id: 1,
-      title: "Property Dollar",
+      title: "Property Management App",
       category: "Real Estate",
-      description: "Real estate platform with virtual tours and advanced search",
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop",
-      techStack: ["React", "Node.js", "MongoDB"],
+      description:
+        "Comprehensive property management system built with React, Vite, and Feather.js — enabling seamless loan tracking, insurance management, and admin dashboards for real estate businesses.",
+      image: "/images/property_app.jpg",
+      techStack: ["React", "Vite.js", "Feather.js"],
       year: "2024",
       status: "live",
       featured: true,
       liveUrl: "https://propertydollar.com",
       githubUrl: "https://github.com/anupsolanki/property-dollar",
+      fileType: "real-estate.js"
     },
     {
       id: 2,
-      title: "iManagify",
-      category: "Business",
-      description: "Business management suite with project tracking and analytics",
-      image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop",
-      techStack: ["React", "TypeScript", "PostgreSQL"],
+      title: "Hotel Management App",
+      category: "Hospitality",
+      description:
+        "Hotel and property management platform built with React and Ant Design — featuring role-based access, booking management, and real-time analytics dashboards.",
+      image: "/images/hotel_app.webp",
+      techStack: ["React", "Ant Design"],
       year: "2023",
       status: "live",
-      featured: false,
+      featured: true,
       liveUrl: "https://imanagify.com",
       githubUrl: "https://github.com/anupsolanki/imanagify",
+      fileType: "hospitality.ts"
     },
     {
       id: 3,
-      title: "EcoTrack",
-      category: "Sustainability",
-      description: "Environmental impact tracking with AI-powered insights",
-      image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop",
-      techStack: ["React", "Python", "TensorFlow"],
+      title: "TravelEase",
+      category: "Tours & Travel",
+      description:
+        "Next.js and Node-powered CRM for travel agencies with enquiry-to-booking conversion, commission tracking, and automated monthly reports.",
+      image: "/images/travel_app.png",
+      techStack: ["Next.js", "React", "Node.js", "MongoDB"],
       year: "2024",
-      status: "development",
-      featured: false,
-      liveUrl: null,
-      githubUrl: "https://github.com/anupsolanki/ecotrack",
+      status: "live",
+      featured: true,
+      liveUrl: "https://travelease.ai",
+      githubUrl: "https://github.com/anupsolanki/travelease",
+      fileType: "travel.json"
     },
     {
       id: 4,
-      title: "FinanceFlow",
-      category: "FinTech",
-      description: "Personal finance manager with AI budgeting and insights",
-      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop",
-      techStack: ["React Native", "Node.js", "MongoDB"],
+      title: "BenchPage",
+      category: "Recruitment",
+      description:
+        "A social networking platform for recruiters and bench sales professionals built using React, Node.js, and MySQL — offering chat, resume generation, and analytics.",
+      image: "/images/bench_app.webp",
+      techStack: ["React", "Node.js", "MySQL"],
       year: "2023",
       status: "live",
       featured: false,
-      liveUrl: "https://financeflow.app",
-      githubUrl: "https://github.com/anupsolanki/financeflow",
+      liveUrl: "https://benchpage.io",
+      githubUrl: "https://github.com/anupsolanki/benchpage",
+      fileType: "recruitment.js"
     },
     {
       id: 5,
-      title: "HealthHub",
-      category: "HealthTech",
-      description: "Telemedicine platform with secure video consultations",
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop",
-      techStack: ["React", "WebRTC", "PostgreSQL"],
+      title: "Grocery App",
+      category: "E-commerce",
+      description:
+        "E-commerce grocery platform built using Next.js with NextAuth for secure authentication and an intuitive React-based admin panel for managing products and orders.",
+      image: "/images/grocery_app.png",
+      techStack: ["Next.js", "React", "NextAuth"],
       year: "2024",
       status: "live",
       featured: false,
-      liveUrl: "https://healthhub.medical",
-      githubUrl: "https://github.com/anupsolanki/healthhub",
+      liveUrl: "https://groceryapp.shop",
+      githubUrl: "https://github.com/anupsolanki/groceryapp",
+      fileType: "ecommerce.ts"
     },
     {
       id: 6,
-      title: "EduConnect",
-      category: "EdTech",
-      description: "Learning management system with AI-powered learning paths",
-      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
-      techStack: ["React", "Next.js", "PostgreSQL"],
-      year: "2023",
-      status: "live",
+      title: "Recaply",
+      category: "AI / Productivity",
+      description:
+        "AI-powered offline meeting summarizer built with Next.js, Node.js, Gemini API, and AWS Transcribe — for real-time transcription, translation, and intelligent summaries.",
+      image: "/images/recaply_app.webp",
+      techStack: ["Next.js", "React", "Node.js", "Gemini API", "AWS Transcribe"],
+      year: "2025",
+      status: "development",
       featured: false,
-      liveUrl: "https://educonnect.learning",
-      githubUrl: "https://github.com/anupsolanki/educonnect",
+      liveUrl: null,
+      githubUrl: "https://github.com/anupsolanki/recaply",
+      fileType: "ai.md"
     },
   ];
 
@@ -109,101 +149,235 @@ const ProjectsPage = () => {
 
   // Categories for navigation
   const categories = [
-    { value: "all", label: "All Projects" },
-    { value: "Real Estate", label: "Real Estate" },
-    { value: "Business", label: "Business" },
-    { value: "Sustainability", label: "Sustainability" },
-    { value: "FinTech", label: "FinTech" },
-    { value: "HealthTech", label: "HealthTech" },
-    { value: "EdTech", label: "EdTech" },
+    { value: null, label: "All Projects", icon: "Folder", color: theme.textPrimary },
+    { value: "Real Estate", label: "Real Estate", icon: "Home", color: theme.string },
+    { value: "Hospitality", label: "Hospitality", icon: "Building", color: theme.keyword },
+    { value: "Tours & Travel", label: "Travel", icon: "Plane", color: theme.function },
+    { value: "Recruitment", label: "Recruitment", icon: "Users", color: theme.class },
+    { value: "E-commerce", label: "E-commerce", icon: "ShoppingCart", color: theme.success },
+    { value: "AI / Productivity", label: "AI", icon: "Brain", color: theme.warning },
   ];
+
+  // Responsive breakpoints
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  // Terminal simulation
+  const runTerminalCommand = (command: string) => {
+    const output = [
+      `$ ${command}`,
+      '> Loading project portfolio...',
+      '> ✓ Found 6 projects across 6 categories',
+      '> ℹ️  Type "projects --help" for more options'
+    ];
+    setTerminalOutput(output);
+  };
+
+  useEffect(() => {
+    if (terminalOpen) {
+      runTerminalCommand('ls -la projects/');
+    }
+  }, [terminalOpen]);
 
   // Show all projects - no filtering
   const displayedProjects = projects;
 
-  const featuredProject = projects.find((p) => p.featured);
+  const featuredProject = selectedCategory ? projects.filter((p) => p.category === selectedCategory) : projects;
 
   const handleViewDetails = (project: React.SetStateAction<null>) => {
     setSelectedProject(project);
     setIsModalOpen(true);
   };
 
+  const toggleTerminal = () => {
+    setTerminalOpen(prev => !prev);
+  };
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed(prev => !prev);
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen ${theme.background} font-mono`}>
       <Header />
+      
       <div className="flex">
+        {/* Your Existing Sidebar */}
         <Sidebar
           isCollapsed={sidebarCollapsed}
-          onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+          onToggle={toggleSidebar}
         />
         
-        <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'lg:ml-0' : 'lg:ml-0'}`}>
-          <div className="max-w-7xl mx-auto px-6 py-8">
-            {/* Header */}
-            <div className="text-center space-y-4 mb-12">
-              <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto">
-                <Icon name="FolderOpen" size={24} className="text-primary" />
+        {/* Main Coding-Themed Content */}
+        <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'md:ml-0' : 'md:ml-0'} w-full`}>
+          <div className="flex flex-col min-h-[calc(100vh-64px)]">
+
+
+            {/* File Tabs Navigation */}
+            <div className={`${theme.surface} border-b ${theme.border}`}>
+              <div className="flex overflow-x-auto scrollbar-hide">
+                {categories.map((category) => (
+                  <button
+                    key={category.value}
+                    onClick={() => setSelectedCategory(category.value)}
+                    className={`flex items-center gap-2 px-4 py-3 border-r ${theme.border} transition-all duration-200 whitespace-nowrap flex-shrink-0 min-w-[140px] font-mono text-sm ${
+                      selectedCategory === category.value
+                        ? `${theme.editor} ${theme.textPrimary} border-t-2 border-t-[#007acc]`
+                        : `${theme.surface} ${theme.textSecondary} hover:${theme.surfaceLight}`
+                    }`}
+                  >
+                    <Icon 
+                      name={category.icon} 
+                      size={14} 
+                      className={category.color} 
+                    />
+                    <span>{category.label}</span>
+                  </button>
+                ))}
               </div>
-              <h1 className="text-3xl font-bold text-foreground">Projects</h1>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                A collection of innovative applications built with modern technologies and user-centric design
-              </p>
             </div>
 
-            {/* Project Stats */}
-            <ProjectStats stats={projectStats} />
+            {/* Editor Content Area */}
+            <div className="flex-1 flex overflow-hidden">
+              {/* Main Editor Area */}
+              <div className="flex-1 overflow-auto">
+                <div className="min-h-full">
+                  {/* Editor Status Bar */}
+                  <div className={`flex items-center justify-between ${theme.surfaceLight} border-b ${theme.border} px-4 py-1 text-xs`}>
+                    <div className="flex items-center gap-4">
+                      <span className={theme.textSecondary}>Projects: {displayedProjects.length}</span>
+                      <span className={theme.textSecondary}>Filter: {selectedCategory}</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className={theme.success}>{projectStats.liveProjects} Live</span>
+                      <span className={theme.textSecondary}>Last Updated: Today</span>
+                    </div>
+                  </div>
 
-            {/* Featured Project */}
-            {/* {featuredProject && (
-              <FeaturedProject
-                project={featuredProject}
-                onViewDetails={handleViewDetails}
-              />
-            )} */}
+                  {/* Editor Content */}
+                  <div className={`${theme.editor} p-6 min-h-full`}>
+                    {/* Projects Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+                      {featuredProject.map((project, index) => (
+                        <motion.div
+                          key={project.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                        >
+                          <ProjectCard
+                            project={project}
+                            onViewDetails={handleViewDetails}
+                            // theme={theme}
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
 
-            {/* Project Collection Header */}
-            <ProjectFilter
-              categories={categories}
-              selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
-            />
-
-            {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {displayedProjects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <ProjectCard
-                    project={project}
-                    onViewDetails={handleViewDetails}
-                  />
-                </motion.div>
-              ))}
+                    {/* Footer CTA */}
+                    <div className={`text-center space-y-6 mt-12 p-6 ${theme.surface} rounded-lg border ${theme.border}`}>
+                      <div className="space-y-2">
+                        <h3 className={`text-lg font-semibold ${theme.textPrimary}`}>
+                          Interested in collaboration?
+                        </h3>
+                        <p className={theme.textSecondary}>
+                          Let's build something amazing together
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => (window.location.href = "mailto:anupsolanki.dev@gmail.com")}
+                        className={`inline-flex items-center gap-2 px-6 py-3 ${theme.surfaceLight} hover:${theme.surfaceLighter} ${theme.textPrimary} rounded-lg border ${theme.border} transition-all duration-200 font-mono text-sm`}
+                      >
+                        <Icon name="Mail" size={16} className={theme.accent} />
+                        <span>Start Conversation</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Footer CTA */}
-            <div className="text-center space-y-6">
-              <div className="space-y-2">
-                <h3 className="text-xl font-semibold text-foreground">
-                  Interested in working together?
-                </h3>
-                <p className="text-muted-foreground">
-                  Let's build something amazing
-                </p>
+            {/* Terminal */}
+            {terminalOpen && (
+              <div className={`border-t ${theme.border}`}>
+                <div className={`${theme.surface} border-b ${theme.border} px-4 py-2 flex items-center justify-between`}>
+                  <div className="flex items-center gap-2">
+                    <Icon name="Terminal" size={14} className={theme.textSecondary} />
+                    <span className={`text-sm ${theme.textPrimary} font-mono`}>TERMINAL</span>
+                  </div>
+                  <button 
+                    onClick={toggleTerminal}
+                    className="p-1 hover:bg-[#3e3e42] rounded"
+                  >
+                    <Icon name="X" size={12} className={theme.textSecondary} />
+                  </button>
+                </div>
+                <div className={`${theme.editor} p-4 font-mono text-sm h-40 overflow-auto`}>
+                  {terminalOutput.map((line, index) => (
+                    <div 
+                      key={index} 
+                      className={`${
+                        line.startsWith('$') ? theme.keyword : 
+                        line.startsWith('>') ? theme.textPrimary : 
+                        line.includes('✓') ? theme.success : 
+                        theme.comment
+                      } mb-1`}
+                    >
+                      {line}
+                    </div>
+                  ))}
+                  <div className="flex items-center">
+                    <span className={theme.keyword}>$</span>
+                    <span className={`${theme.textPrimary} ml-2 animate-pulse`}>_</span>
+                  </div>
+                </div>
               </div>
-              <button
-                onClick={() => (window.location.href = "mailto:anup.solanki@example.com")}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-              >
-                <Icon name="MessageCircle" size={18} />
-                <span>Start a Conversation</span>
-              </button>
+            )}
+          </div>
+
+          {/* Floating Action Buttons */}
+          <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-40">
+            {/* Terminal Button */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+              onClick={toggleTerminal}
+              className={`${theme.surfaceLighter} hover:${theme.surfaceLight} ${theme.textPrimary} rounded-full shadow-2xl transition-all duration-200 flex items-center justify-center w-12 h-12 border ${theme.border}`}
+            >
+              <Icon name="Terminal" size={20} className={theme.accent} />
+            </motion.button>
+          </div>
+
+          {/* Status Bar */}
+          <div className={`fixed bottom-0 left-0 right-0 ${theme.surface} border-t ${theme.border} px-4 py-2 flex items-center justify-between text-xs font-mono z-30`}>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Icon name="GitBranch" size={12} className={theme.textSecondary} />
+                <span className={theme.textPrimary}>projects-portfolio</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Icon name="Circle" size={8} className={theme.success} />
+                <span className={theme.textSecondary}>Live: {projectStats.liveProjects}</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <span className={theme.textSecondary}>Projects: {displayedProjects.length}</span>
+              <span className={theme.textSecondary}>Filter: {selectedCategory}</span>
+              <span className={theme.textSecondary}>UTF-8</span>
             </div>
           </div>
+
+          {/* Mobile Bottom Spacer */}
+          {isMobile && <div className="h-16"></div>}
         </main>
 
         {/* Project Modal */}
@@ -214,6 +388,7 @@ const ProjectsPage = () => {
             setIsModalOpen(false);
             setSelectedProject(null);
           }}
+          // theme={theme}
         />
       </div>
     </div>

@@ -5,73 +5,50 @@ const ExperienceTimeline = () => {
   const timelineData = [
     {
       id: 1,
-      period: "2022 - Present",
-      title: "Senior Frontend Developer",
+      period: "2023 - Present",
+      title: "Software Developer (Frontend)",
       company: "Solguruz LLP",
       location: "Ahmedabad, India",
       type: "Full-time",
       status: "current",
       highlights: [
-        "Led 5+ React applications",
-        "Conducted 30+ technical interviews", 
-        "Mentored junior developers",
-        "Improved team productivity by 40%"
+        "Leading frontend revamps using React & Next.js",
+        "Implemented AI-powered automation in dashboards",
+        "Conducted 30+ technical interviews for hiring",
+        "Mentored 8 developers, fostering clean code culture",
+        "Received 'Rising Star Award' for outstanding impact"
       ],
-      technologies: ["React 18", "TypeScript", "Next.js", "Tailwind"],
+      technologies: ["React", "Next.js", "TypeScript", "Tailwind", "MUI", "AI APIs", "Vercel"," GitHub","Next Auth"],
       icon: "Briefcase",
       color: "primary"
     },
     {
       id: 2,
-      period: "2021 - 2022", 
+      period: "2022 - 2023",
       title: "Frontend Developer",
-      company: "Solguruz LLP",
+      company: "WiseSkulls",
       location: "Ahmedabad, India",
       type: "Full-time",
       status: "completed",
       highlights: [
-        "Developed responsive applications",
-        "Optimized performance by 50%",
-        "Integrated RESTful APIs",
-        "Collaborated with UI/UX teams"
+        "Built dynamic dashboards and admin panels",
+        "Collaborated with backend teams to optimize API performance",
+        "Worked on Property Dollar and iManagify platforms",
+        "Enhanced UI performance and responsiveness by 40%",
+        "Improved codebase structure and state management"
       ],
-      technologies: ["React", "JavaScript", "CSS3", "Bootstrap"],
+      technologies: ["React","Next.js", "JavaScript", "Feathers.js", "MongoDB", "Bootstrap"],
       icon: "Code",
       color: "secondary"
     },
     {
-      id: 3,
-      period: "2020 - 2021",
-      title: "Junior Developer", 
-      company: "Freelance Projects",
-      location: "Remote",
-      type: "Contract",
-      status: "completed",
-      highlights: [
-        "Built 10+ responsive websites",
-        "Modern JavaScript frameworks", 
-        "Mobile-first approach",
-        "Client communication skills"
-      ],
-      technologies: ["HTML5", "CSS3", "JavaScript", "Bootstrap"],
-      icon: "Laptop",
-      color: "accent"
-    },
-    {
       id: 4,
-      period: "2019 - 2020",
-      title: "Computer Science",
-      company: "GTU University", 
+      period: "2016 - 2020",
+      title: "Bachelor of Engineering",
+      company: "GTU University",
       location: "Gujarat, India",
       type: "Education",
       status: "completed",
-      highlights: [
-        "Bachelor's in Computer Science",
-        "Web technologies specialization",
-        "Led tech club & competitions", 
-        "Graduated with distinction"
-      ],
-      technologies: ["C++", "Java", "Python", "Databases"],
       icon: "GraduationCap",
       color: "success"
     }
@@ -80,7 +57,7 @@ const ExperienceTimeline = () => {
   const getIconBgColor = (color: string) => {
     switch (color) {
       case 'primary': return 'bg-primary text-primary-foreground';
-      case 'secondary': return 'bg-secondary text-secondary-foreground'; 
+      case 'secondary': return 'bg-secondary text-secondary-foreground';
       case 'accent': return 'bg-accent text-accent-foreground';
       case 'success': return 'bg-success text-success-foreground';
       default: return 'bg-muted text-muted-foreground';
@@ -90,7 +67,7 @@ const ExperienceTimeline = () => {
   return (
     <div className="space-y-8">
       {/* Timeline */}
-      <div className="relative max-w-4xl mx-auto">
+      <div className="relative mx-auto">
         {/* Vertical Line */}
         <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-border to-border"></div>
 
@@ -131,11 +108,11 @@ const ExperienceTimeline = () => {
 
               {/* Highlights */}
               <div className="mb-4">
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-4">
                   {item?.highlights?.map((highlight, idx) => (
                     <span 
                       key={idx}
-                      className="px-2 py-1 text-xs bg-primary/5 text-foreground rounded border border-primary/10"
+                      className="px-3 py-2 text-xs bg-primary/5 text-foreground rounded border border-primary/10"
                     >
                       {highlight}
                     </span>
@@ -161,7 +138,7 @@ const ExperienceTimeline = () => {
 
       {/* Summary */}
       <div className="text-center text-sm text-muted-foreground">
-        <p>2+ years of progressive growth in frontend development</p>
+        <p>2+ years of professional growth in modern frontend development — React, Next.js & AI integration.</p>
       </div>
     </div>
   );

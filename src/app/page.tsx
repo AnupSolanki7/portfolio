@@ -55,7 +55,7 @@ const HomepageMainEditorInterface = () => {
         return (
           <div className="flex flex-col xl:flex-row items-center gap-6 lg:gap-8">
             <WelcomeHero />
-            <div className="w-full xl:w-auto xl:flex-shrink-0">
+            <div className="w-full xl:w-[50%] xl:flex-shrink-0">
               <CodePreview />
             </div>
           </div>
@@ -80,7 +80,7 @@ const HomepageMainEditorInterface = () => {
         return (
           <div className="flex flex-col xl:flex-row items-center gap-6 lg:gap-8">
             <WelcomeHero />
-            <div className="w-full xl:w-auto xl:flex-shrink-0">
+            <div className="w-full xl:w-[50%] xl:flex-shrink-0">
               <CodePreview />
             </div>
           </div>
@@ -128,7 +128,7 @@ const HomepageMainEditorInterface = () => {
                 <button
                   key={panel.id}
                   onClick={() => setActivePanel(panel.id)}
-                  className={`flex items-center space-x-2 px-3 py-3 text-xs sm:text-sm border-r border-border transition-colors duration-200 whitespace-nowrap flex-shrink-0 min-w-max ${
+                  className={`flex cursor-pointer items-center space-x-2 px-3 py-3 text-xs sm:text-sm border-r border-border transition-colors duration-200 whitespace-nowrap flex-shrink-0 min-w-max ${
                     activePanel === panel.id
                       ? 'bg-background text-foreground border-b-2 border-primary'
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted'
