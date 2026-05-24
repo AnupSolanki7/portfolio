@@ -1,54 +1,53 @@
 import type { Metadata } from "next";
-import { Inter, Fira_Code } from "next/font/google";
+import { Inter, Caveat } from "next/font/google";
 import "./globals.css";
 
-// Load Inter for sans
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
-// Load Fira Code for monospace
-const firaCode = Fira_Code({
-  variable: "--font-mono",
+const caveat = Caveat({
+  variable: "--font-hand",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Anup Solanki | Frontend Developer & React Specialist",
   description:
-    "Portfolio of Anup Solanki — Frontend Developer from Ahmedabad, India with 2+ years of experience in building modern, scalable, and AI-powered web applications using React.js, Next.js, and Tailwind CSS. Awarded 'Rising Star' at Solguruz for leading impactful UI revamps and mentoring developers.",
+    "Portfolio of Anup Solanki — Frontend Developer from Ahmedabad, India specializing in React, Next.js, and AI-powered web experiences. 3+ years building scalable, interactive applications. Awarded Rising Star for leading impactful UI revamps.",
   keywords: [
     "Anup Solanki",
     "Frontend Developer",
     "React Developer",
     "Next.js Developer",
+    "Full Stack Developer",
+    "AI Integration Developer",
+    "Interactive Web Developer",
+    "Web Application Developer",
     "Ahmedabad Developer",
-    "Solguruz",
-    "AI Integration",
-    "Web Developer Portfolio",
     "Tailwind CSS",
-    "JavaScript",
     "TypeScript",
-    "Next.js Portfolio",
-    "React Projects",
+    "JavaScript",
   ],
-  authors: [{ name: "Anup Solanki", url: "https://anupsolanki.dev" }],
+  authors: [{ name: "Anup Solanki", url: "https://anupsolanki.com" }],
   creator: "Anup Solanki",
   openGraph: {
-    title: "Anup Solanki | Frontend Developer & React.js Specialist",
+    title: "Anup Solanki | Frontend Developer & React Specialist",
     description:
-      "Explore the portfolio of Anup Solanki, a passionate React & Next.js developer with a knack for crafting AI-powered, performance-driven user interfaces.",
-    url: "https://anupsolanki.dev",
-    siteName: "Anup Solanki Portfolio",
+      "Explore the notebook of Anup Solanki — a creative engineer who builds digital experiences with React, Next.js, and AI integrations.",
+    url: "https://anupsolanki.com",
+    siteName: "Anup Solanki",
     images: [
       {
-        url: "https://anupsolanki.dev/og-image.jpg",
+        url: "https://anupsolanki.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Anup Solanki - Frontend Developer Portfolio",
+        alt: "Anup Solanki — Frontend Developer Portfolio",
       },
     ],
     locale: "en_IN",
@@ -56,14 +55,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Anup Solanki | Frontend Developer & React.js Specialist",
+    title: "Anup Solanki | Frontend Developer",
     description:
-      "Frontend Developer from India specializing in React.js, Next.js, and modern UI engineering.",
-    creator: "@anupsolanki",
-    images: ["https://anupsolanki.dev/og-image.jpg"],
+      "Frontend Developer from India specialising in React, Next.js, and modern interactive web engineering.",
+    images: ["https://anupsolanki.com/og-image.jpg"],
   },
-  themeColor: "#0ea5e9",
-  metadataBase: new URL("https://anupsolanki.dev"),
+  themeColor: "#F7F2E8",
+  metadataBase: new URL("https://anupsolanki.com"),
 };
 
 export default function RootLayout({
@@ -72,8 +70,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${firaCode.variable}`}>
-      <body className="antialiased">{children}</body>
+    <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
+      <body className="antialiased notebook-bg paper-grain min-h-screen">
+        {children}
+      </body>
     </html>
   );
 }

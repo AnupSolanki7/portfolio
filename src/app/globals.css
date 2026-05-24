@@ -1,275 +1,518 @@
 @import "tailwindcss";
-/* =========================
-   IMPORT FONTS
-   ========================= */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
 
-/* =========================
-   THEME VARIABLES
-   ========================= */
+/* ==========================================
+   FONTS
+   ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ==========================================
+   THEME TOKENS
+   ========================================== */
 @theme {
-  /* Background / Foreground */
-  --color-background: #1E1E1E;
-  --color-foreground: #D4D4D4;
-  --color-card: #252526;
-  --color-card-foreground: #D4D4D4;
-  --color-popover: #2D2D30;
-  --color-popover-foreground: #D4D4D4;
-  --color-muted: #3E3E42;
-  --color-muted-foreground: #858585;
+  /* Paper / Notebook */
+  --color-paper: #F7F2E8;
+  --color-paper-dark: #EDE8DA;
+  --color-paper-light: #FDFAF4;
+  --color-paper-card: #F0EBE0;
 
-  /* Primary / Secondary / Accent */
-  --color-primary: #007ACC;
+  /* Ink */
+  --color-ink: #1A1A2E;
+  --color-ink-blue: #1D4ED8;
+  --color-ink-medium: #2563EB;
+  --color-ink-light: #60A5FA;
+  --color-ink-faint: #BFDBFE;
+
+  /* Graphite */
+  --color-graphite: #374151;
+  --color-graphite-light: #6B7280;
+  --color-graphite-pale: #9CA3AF;
+
+  /* Accents */
+  --color-margin-red: #DC2626;
+  --color-highlight: #FEF08A;
+  --color-blueprint: #DBEAFE;
+
+  /* Semantic */
+  --color-background: #F7F2E8;
+  --color-foreground: #1A1A2E;
+  --color-card: #F0EBE0;
+  --color-card-foreground: #1A1A2E;
+  --color-muted: #E8E2D5;
+  --color-muted-foreground: #6B7280;
+  --color-border: rgba(59, 130, 246, 0.25);
+  --color-primary: #1D4ED8;
   --color-primary-foreground: #FFFFFF;
-  --color-secondary: #569CD6;
-  --color-secondary-foreground: #FFFFFF;
-  --color-accent: #4EC9B0;
-  --color-accent-foreground: #1E1E1E;
-
-  /* State Colors */
-  --color-success: #4EC9B0;
-  --color-success-foreground: #1E1E1E;
-  --color-warning: #FFCC02;
-  --color-warning-foreground: #1E1E1E;
-  --color-error: #F44747;
-  --color-error-foreground: #FFFFFF;
-  --color-destructive: #F44747;
-  --color-destructive-foreground: #FFFFFF;
-
-  /* UI Elements */
-  --color-border: #333333;
-  --color-input: #3C3C3C;
-  --color-ring: #007ACC;
-
-  /* Border Radius */
-  --radius: 8px;
 
   /* Fonts */
-  --font-sans: 'Inter, system-ui, sans-serif';
-  --font-mono: 'Fira Code, Monaco, monospace';
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-hand: 'Caveat', cursive;
+  --font-mono: 'Fira Code', Monaco, monospace;
 
-  /* Custom spacing */
-  --spacing-18: 4.5rem;
-  --spacing-88: 22rem;
+  /* Border radius - sharp for paper feel */
+  --radius: 2px;
 }
 
-/* =========================
-   BASE STYLES
-   ========================= */
-* {
-  border-color: var(--color-border);
+/* ==========================================
+   RESET & BASE
+   ========================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans);
-  font-feature-settings: "rlig" 1, "calt" 1;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbars */
-::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
+/* ==========================================
+   NOTEBOOK PAPER BACKGROUND
+   ========================================== */
+.notebook-bg {
+  background-color: #F7F2E8;
+  background-image:
+    /* Red margin line at 80px */
+    linear-gradient(
+      to right,
+      transparent 79px,
+      rgba(220, 38, 38, 0.35) 79px,
+      rgba(220, 38, 38, 0.35) 81px,
+      transparent 81px
+    ),
+    /* Horizontal ruled lines every 28px */
+    repeating-linear-gradient(
+      transparent 0px,
+      transparent 27px,
+      rgba(59, 130, 246, 0.2) 27px,
+      rgba(59, 130, 246, 0.2) 28px
+    ),
+    /* Faint vertical grid every 28px */
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 27px,
+      rgba(59, 130, 246, 0.06) 27px,
+      rgba(59, 130, 246, 0.06) 28px
+    );
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-background);
+/* Graph paper only (no margin line) */
+.graph-bg {
+  background-color: #EFF6FF;
+  background-image:
+    repeating-linear-gradient(
+      rgba(59, 130, 246, 0.12) 0px,
+      rgba(59, 130, 246, 0.12) 1px,
+      transparent 1px,
+      transparent 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 0.12) 0px,
+      rgba(59, 130, 246, 0.12) 1px,
+      transparent 1px,
+      transparent 24px
+    );
 }
 
-::-webkit-scrollbar-thumb {
-  background: #424242;
-  border-radius: 7px;
-  border: 3px solid var(--color-background);
+/* Ruled lines only */
+.ruled-bg {
+  background-color: #F7F2E8;
+  background-image:
+    repeating-linear-gradient(
+      transparent 0px,
+      transparent 27px,
+      rgba(59, 130, 246, 0.18) 27px,
+      rgba(59, 130, 246, 0.18) 28px
+    );
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #4F4F4F;
+/* Paper grain noise overlay */
+.paper-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
 }
 
-/* Text selection */
-::selection {
-  background: rgba(0, 122, 204, 0.3);
+/* ==========================================
+   TYPOGRAPHY
+   ========================================== */
+.font-hand {
+  font-family: var(--font-hand) !important;
 }
 
-/* Code editor */
-.code-editor {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.5;
+/* Handwritten heading — blue ink style */
+.ink-heading {
+  font-family: var(--font-hand);
+  color: #1D4ED8;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
 }
 
-/* VS Code panels / layout */
-.status-bar {
-  height: 22px;
+/* Body text */
+.body-text {
+  font-family: var(--font-sans);
+  color: #374151;
+  line-height: 1.7;
 }
 
-.file-explorer {
-  width: 240px;
-}
-
-.preview-panel {
-  width: 300px;
-}
-
-/* =========================
-   COMPONENTS
-   ========================= */
-.vs-code-panel {
-  background-color: var(--color-card);
-  border: 1px solid var(--color-border);
-}
-
-.vs-code-tab {
-  background-color: var(--color-card);
-  color: var(--color-foreground);
-  border-right: 1px solid var(--color-border);
-  padding: 0.5rem 1rem;
+/* Caption / annotation */
+.annotation {
+  font-family: var(--font-hand);
+  color: #6B7280;
   font-size: 0.875rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.vs-code-tab:hover {
-  background-color: var(--color-muted);
-}
-
-.vs-code-tab.active {
-  background-color: var(--color-background);
-  border-bottom: 2px solid var(--color-primary);
-}
-
-.file-tree-item {
-  display: flex;
-  align-items: center;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-  color: var(--color-foreground);
-  transition: background-color 0.2s;
-}
-
-.file-tree-item:hover {
-  background-color: var(--color-muted);
-}
-
-.file-tree-item.active {
-  background-color: var(--color-primary);
-  color: var(--color-primary-foreground);
-}
-
-.command-palette {
-  background-color: var(--color-popover);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-}
-
-.status-indicator {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
   font-weight: 500;
 }
 
-.status-indicator.available {
-  background-color: var(--color-success);
-  color: var(--color-success-foreground);
+/* ==========================================
+   HANDWRITING ANIMATIONS
+   ========================================== */
+
+/* Left-to-right text reveal (handwriting simulation) */
+.write-reveal {
+  clip-path: inset(0 100% 0 0);
+  animation: writeReveal 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.status-indicator.busy {
-  background-color: var(--color-warning);
-  color: var(--color-warning-foreground);
+.write-reveal-slow {
+  clip-path: inset(0 100% 0 0);
+  animation: writeReveal 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.status-indicator.offline {
-  background-color: var(--color-muted);
-  color: var(--color-muted-foreground);
+@keyframes writeReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
 }
 
-/* Typing animation */
-.typing-animation {
+/* Ink drop appearance */
+@keyframes inkDrop {
+  from { opacity: 0; transform: scale(0.85) translateY(14px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.ink-drop {
+  animation: inkDrop 0.55s ease-out forwards;
+}
+
+/* SVG line draw */
+@keyframes drawLine {
+  from { stroke-dashoffset: 1000; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.draw-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2s ease-in-out forwards;
+}
+
+/* Floating annotation */
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50%       { transform: translateY(-7px) rotate(0.5deg); }
+}
+
+.float-note {
+  animation: floatUp 4s ease-in-out infinite;
+}
+
+/* Pen cursor blink */
+@keyframes penBlink {
+  0%, 45%  { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+
+.pen-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: #1D4ED8;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: penBlink 1s ease-in-out infinite;
+}
+
+/* Shimmer / highlight sweep */
+@keyframes sweep {
+  from { background-position: -200% center; }
+  to   { background-position:  200% center; }
+}
+
+/* ==========================================
+   SKETCH / PAPER UI ELEMENTS
+   ========================================== */
+
+/* Paper card */
+.paper-card {
+  background-color: #FDFAF4;
+  border: 1.5px solid rgba(29, 78, 216, 0.18);
+  box-shadow:
+    2px 3px 0 rgba(29, 78, 216, 0.07),
+    4px 6px 0 rgba(29, 78, 216, 0.035);
   position: relative;
 }
 
-.typing-animation::after {
-  content: '|';
-  color: var(--color-primary);
-  animation: blink 1s infinite;
+/* Blueprint / graph paper card */
+.blueprint-card {
+  background-color: #EFF6FF;
+  border: 1.5px solid rgba(59, 130, 246, 0.3);
+  background-image:
+    repeating-linear-gradient(
+      rgba(59, 130, 246, 0.08) 0px,
+      rgba(59, 130, 246, 0.08) 1px,
+      transparent 1px,
+      transparent 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 0.08) 0px,
+      rgba(59, 130, 246, 0.08) 1px,
+      transparent 1px,
+      transparent 24px
+    );
 }
 
-.slide-in-right {
-  animation: slideInRight 0.3s ease-out;
+/* Sketch border — simulates hand-drawn outline */
+.sketch-border {
+  border: 2px solid rgba(29, 78, 216, 0.6);
+  border-radius: 2px;
+  position: relative;
 }
 
-.fade-in-up {
-  animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.sketch-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid rgba(29, 78, 216, 0.15);
+  border-radius: 3px;
+  pointer-events: none;
 }
 
-/* Focus ring */
-.focus-ring:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--color-ring);
+/* Lifted paper effect (hover) */
+.paper-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* =========================
-   LAYOUT & UTILITIES
-   ========================= */
-.editor-layout {
-  display: grid;
-  grid-template-columns: 240px 1fr 300px;
-  grid-template-rows: auto 1fr auto;
-  height: 100vh;
+.paper-lift:hover {
+  transform: translateY(-3px) rotate(0.3deg);
+  box-shadow:
+    3px 8px 0 rgba(29, 78, 216, 0.1),
+    6px 14px 0 rgba(29, 78, 216, 0.05);
 }
 
-.editor-layout-mobile {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr auto;
-  height: 100vh;
+/* Torn edge effect (bottom of a section) */
+.torn-edge {
+  position: relative;
 }
 
-/* Animations */
-@keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+.torn-edge::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 16'%3E%3Cpath d='M0 8 Q30 0 60 8 Q90 16 120 8 Q150 0 180 8 Q210 16 240 8 Q270 0 300 8 Q330 16 360 8 Q390 0 420 8 Q450 16 480 8 Q510 0 540 8 Q570 16 600 8 Q630 0 660 8 Q690 16 720 8 Q750 0 780 8 Q810 16 840 8 Q870 0 900 8 Q930 16 960 8 Q990 0 1020 8 Q1050 16 1080 8 Q1110 0 1140 8 Q1170 16 1200 8 L1200 16 L0 16Z' fill='%23F7F2E8'/%3E%3C/svg%3E");
+  background-size: cover;
+  pointer-events: none;
 }
 
-@keyframes fadeInUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* Ink underline (wavy) */
+.ink-underline {
+  position: relative;
+  display: inline;
 }
 
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+.ink-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 4px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 4'%3E%3Cpath d='M0 3 Q12.5 0 25 2 Q37.5 4 50 2 Q62.5 0 75 2 Q87.5 4 100 2' stroke='%231D4ED8' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x;
+  background-size: 100px 4px;
 }
 
-.animate-blink {
-  animation: blink 1s infinite;
+/* Highlighter mark */
+.marker-yellow {
+  background: linear-gradient(transparent 40%, rgba(254, 240, 138, 0.75) 40%);
 }
 
-/* Utility classes for CSS variables */
-.bg-primary { background-color: var(--color-primary); }
-.text-primary-foreground { color: var(--color-primary-foreground); }
-.bg-secondary { background-color: var(--color-secondary); }
-.text-secondary-foreground { color: var(--color-secondary-foreground); }
-.bg-accent { background-color: var(--color-accent); }
-.text-accent-foreground { color: var(--color-accent-foreground); }
-.bg-success { background-color: var(--color-success); }
-.text-success-foreground { color: var(--color-success-foreground); }
-.bg-warning { background-color: var(--color-warning); }
-.text-warning-foreground { color: var(--color-warning-foreground); }
-.bg-error { background-color: var(--color-error); }
-.text-error-foreground { color: var(--color-error-foreground); }
-.bg-muted { background-color: var(--color-muted); }
-.text-muted-foreground { color: var(--color-muted-foreground); }
-.bg-card { background-color: var(--color-card); }
-.text-card-foreground { color: var(--color-card-foreground); }
-.bg-popover { background-color: var(--color-popover); }
-.text-popover-foreground { color: var(--color-popover-foreground); }
-.border-border { border-color: var(--color-border); }
-.rounded-lg { border-radius: var(--radius); }
+.marker-blue {
+  background: linear-gradient(transparent 40%, rgba(191, 219, 254, 0.75) 40%);
+}
+
+/* Notebook spiral binding hint (left edge) */
+.notebook-binding {
+  position: relative;
+  padding-left: 24px;
+}
+
+.notebook-binding::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 18px,
+    rgba(29, 78, 216, 0.25) 18px,
+    rgba(29, 78, 216, 0.25) 22px,
+    transparent 22px,
+    transparent 36px
+  );
+}
+
+/* Annotation tag */
+.annotation-tag {
+  font-family: var(--font-hand);
+  font-size: 0.75rem;
+  color: #6B7280;
+  border: 1px dashed rgba(107, 114, 128, 0.5);
+  padding: 2px 8px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* Post-it note */
+.sticky-note {
+  background: #FEF08A;
+  box-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.1),
+    4px 4px 0 rgba(0, 0, 0, 0.05);
+  transform: rotate(-1.5deg);
+  padding: 12px 16px;
+  font-family: var(--font-hand);
+}
+
+/* Pin dot */
+.paper-pin {
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle at 38% 38%, #EF4444, #991B1B);
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+
+/* Sketch button */
+.sketch-btn {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: 2px solid #1D4ED8;
+  background: transparent;
+  color: #1D4ED8;
+  padding: 10px 28px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  border-radius: 2px;
+}
+
+.sketch-btn::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(29, 78, 216, 0.2);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.sketch-btn:hover {
+  background: rgba(29, 78, 216, 0.06);
+  transform: translateY(-1px);
+  box-shadow: 2px 4px 0 rgba(29, 78, 216, 0.15);
+}
+
+.sketch-btn-filled {
+  background: #1D4ED8;
+  color: #FFFFFF;
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: 2px solid #1D4ED8;
+  padding: 10px 28px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  border-radius: 2px;
+  position: relative;
+}
+
+.sketch-btn-filled::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.sketch-btn-filled:hover {
+  background: #1e40af;
+  transform: translateY(-1px);
+  box-shadow: 2px 4px 0 rgba(29, 78, 216, 0.25);
+}
+
+/* ==========================================
+   SCROLLBAR
+   ========================================== */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: rgba(59, 130, 246, 0.04); }
+::-webkit-scrollbar-thumb {
+  background: rgba(29, 78, 216, 0.22);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(29, 78, 216, 0.4); }
+
+/* ==========================================
+   TEXT SELECTION
+   ========================================== */
+::selection {
+  background: rgba(254, 240, 138, 0.7);
+  color: #1A1A2E;
+}
+
+/* ==========================================
+   FOCUS
+   ========================================== */
+:focus-visible {
+  outline: 2px solid rgba(29, 78, 216, 0.5);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   RESPONSIVE HELPERS
+   ========================================== */
+.section-pad {
+  padding-left: max(1.5rem, calc((100vw - 1200px) / 2 + 2rem));
+  padding-right: max(1.5rem, calc((100vw - 1200px) / 2 + 2rem));
+}
+
+/* ==========================================
+   PRINT
+   ========================================== */
+@media print {
+  .notebook-bg {
+    background-image: none;
+    background-color: white;
+  }
+  .no-print { display: none !important; }
+}

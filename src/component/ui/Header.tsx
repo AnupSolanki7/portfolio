@@ -1,378 +1,230 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import Icon from "../AppIcon";
-import Button from "./Button";
+import React, { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 interface NavItem {
   path: string;
   label: string;
-  icon: string;
-  file: string;
+  number: string;
 }
 
+const navItems: NavItem[] = [
+  { path: "/",           label: "Home",       number: "01" },
+  { path: "/about",      label: "About",      number: "02" },
+  { path: "/projects",   label: "Projects",   number: "03" },
+  { path: "/skills",     label: "Skills",     number: "04" },
+  { path: "/experience", label: "Experience", number: "05" },
+  { path: "/contact",    label: "Contact",    number: "06" },
+];
+
 const Header: React.FC = () => {
-  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
-
-  const router = useRouter();
   const pathname = usePathname();
-  const moreMenuRef = useRef<HTMLDivElement>(null);
-  const moreButtonRef = useRef<HTMLButtonElement>(null);
-  const commandPaletteRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const navigationItems: NavItem[] = [
-    { path: "/", label: "Home", icon: "Home", file: "index.js" },
-    { path: "/about", label: "About", icon: "User", file: "about.js" },
-    { path: "/projects", label: "Projects", icon: "FolderOpen", file: "projects.js" },
-    { path: "/skills", label: "Skills", icon: "Code", file: "skills.js" },
-    { path: "/experience", label: "Experience", icon: "Briefcase", file: "experience.js" },
-  ];
-
-  // Responsive breakpoints
   useEffect(() => {
-    const checkScreenSize = () => {
-      const width = window.innerWidth;
-      setIsMobile(width < 768);
-      setIsTablet(width >= 768 && width < 1024);
-    };
-
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const filteredItems = navigationItems.filter(
-    (item) =>
-      item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.file.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        moreMenuRef.current && 
-        !moreMenuRef.current.contains(event.target as Node) &&
-        moreButtonRef.current &&
-        !moreButtonRef.current.contains(event.target as Node)
-      ) {
-        setIsMoreOpen(false);
-      }
-      if (
-        commandPaletteRef.current &&
-        !commandPaletteRef.current.contains(event.target as Node) &&
-        isCommandPaletteOpen
-      ) {
-        setIsCommandPaletteOpen(false);
-        setSearchQuery("");
+    const onClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isCommandPaletteOpen]);
-
-  // Close dropdown when scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsMoreOpen(false);
-    };
-
-    if (isMoreOpen) {
-      window.addEventListener("scroll", handleScroll, true);
-    }
-    
-    return () => window.removeEventListener("scroll", handleScroll, true);
-  }, [isMoreOpen]);
-
-  // 🕒 Clock
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
 
-  // ⌨️ Keyboard shortcuts
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "/" && !isCommandPaletteOpen) {
-        e.preventDefault();
-        setIsCommandPaletteOpen(true);
-      }
-      if (e.key === "Escape") {
-        if (isCommandPaletteOpen) {
-          setIsCommandPaletteOpen(false);
-          setSearchQuery("");
-        }
-        if (isMoreOpen) {
-          setIsMoreOpen(false);
-        }
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isCommandPaletteOpen, isMoreOpen]);
+    setMenuOpen(false);
+  }, [pathname]);
 
-  const handleNavigation = useCallback(
-    (path: string) => {
-      router.push(path);
-      setIsCommandPaletteOpen(false);
-      setIsMoreOpen(false);
-      setSearchQuery("");
-    },
-    [router]
-  );
-
-  const handleCloseTab = useCallback((e: React.MouseEvent, path: string) => {
-    e.stopPropagation();
-  }, []);
-
-  const activeTab = navigationItems.find((item) => item.path === pathname) ?? navigationItems[0];
-
-  // Responsive tab configuration
-  const getVisibleTabs = () => {
-    if (isMobile) {
-      return navigationItems.slice(0, 2); // Show only 2 tabs on mobile
-    } else if (isTablet) {
-      return navigationItems.slice(0, 4); // Show 4 tabs on tablet
-    }
-    return navigationItems; // Show all tabs on desktop
-  };
-
-  const getDropdownItems = () => {
-    const visibleTabs = getVisibleTabs();
-    return navigationItems.filter(item => !visibleTabs.includes(item));
-  };
-
-  const visibleTabs = getVisibleTabs();
-  const dropdownItems = getDropdownItems();
-
-  // Format time for mobile
-  const formatTime = (date: Date) => {
-    if (isMobile) {
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-    return date.toLocaleTimeString();
-  };
+  const isActive = (path: string) =>
+    path === "/" ? pathname === "/" : pathname.startsWith(path);
 
   return (
     <>
-      {/* Header Bar */}
-      <header className="bg-card border-b border-border h-12 flex items-center justify-between relative z-50">
-        {/* Left: Logo */}
-        <div className="flex items-center px-3 sm:px-4 space-x-2 flex-shrink-0">
-          <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
-            <Icon name="Code" size={14} color="white" />
-          </div>
-          <span className={`text-foreground font-semibold ${
-            isMobile ? "text-xs hidden sm:block" : "text-sm"
-          }`}>
-            CodeFolio
-          </span>
-        </div>
+      <header
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-paper/95 backdrop-blur-sm border-b border-ink-blue/15 shadow-paper"
+            : "bg-paper/90 backdrop-blur-sm border-b border-ink-blue/10"
+        }`}
+        style={{ borderBottom: scrolled ? "1px solid rgba(29,78,216,0.18)" : "1px solid rgba(29,78,216,0.1)" }}
+      >
+        {/* Red margin line accent at very top */}
+        <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-margin-red/40 to-transparent" />
 
-        {/* Center: File Tabs */}
-        <div className="flex-1 flex items-center h-max overflow-x-auto overflow-y-hidden scrollbar-hide relative min-w-0">
-          {/* Visible Tabs */}
-          {visibleTabs.map((item) => (
-            <button
-              key={item.path}
-              onClick={() => handleNavigation(item.path)}
-              className={`vs-code-tab flex items-center space-x-2 px-3 flex-shrink-0 min-w-max ${
-                pathname === item.path ? "active" : ""
-              }`}
-            >
-              <Icon name={item.icon} size={isMobile ? 12 : 14} />
-              <span className={`${isMobile ? "text-xs" : "text-xs"} truncate max-w-20 sm:max-w-none`}>
-                {isMobile ? item.file.replace('.js', '') : item.file}
-              </span>
-              {pathname === item.path && (
-                <div 
-                  className="ml-1 hover:bg-muted rounded p-0.5 transition-colors flex-shrink-0"
-                  onClick={(e) => handleCloseTab(e, item.path)}
-                >
-                  <Icon name="X" size={12} />
-                </div>
-              )}
-            </button>
-          ))}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
 
-          {/* "More" Dropdown for hidden items */}
-          {dropdownItems.length > 0 && (
-            <div className="relative flex-shrink-0" ref={moreMenuRef}>
-              <button 
-                ref={moreButtonRef}
-                className={`vs-code-tab flex items-center space-x-1 px-3 ${
-                  isMoreOpen ? "bg-muted" : ""
-                }`}
-                onClick={() => setIsMoreOpen(!isMoreOpen)}
-              >
-                <Icon name="MoreHorizontal" size={14} />
-                {!isMobile && <span className="text-xs">More</span>}
-                <Icon 
-                  name="ChevronDown" 
-                  size={12} 
-                  className={`transition-transform duration-200 ${
-                    isMoreOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              
-              {/* Dropdown Menu */}
-              {isMoreOpen && (
-                <div className="fixed bg-popover border border-border rounded-md shadow-lg z-50 min-w-48 py-1 mt-1"
-                  style={{
-                    top: moreButtonRef.current ? moreButtonRef.current.getBoundingClientRect().bottom + window.scrollY : 0,
-                    left: moreButtonRef.current ? 
-                      (isMobile ? 8 : moreButtonRef.current.getBoundingClientRect().left + window.scrollX) : 0,
-                    right: isMobile ? 8 : 'auto',
-                  }}
-                >
-                  {dropdownItems.map((item) => (
-                    <button
-                      key={item.path}
-                      onClick={() => handleNavigation(item.path)}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 text-sm hover:bg-muted transition-colors ${
-                        pathname === item.path ? "bg-muted" : ""
-                      }`}
-                    >
-                      <Icon name={item.icon} size={14} />
-                      <span className="flex-1 text-left">{item.file}</span>
-                      {pathname === item.path && (
-                        <Icon name="Check" size={12} className="text-primary" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Right: Search + Status + Contact */}
-        <div className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 flex-shrink-0">
-          {/* Search Button - Icon only on mobile */}
-          <button
-            onClick={() => setIsCommandPaletteOpen(true)}
-            className="flex items-center space-x-1 px-2 py-1 text-xs bg-muted hover:bg-border rounded transition-colors duration-200"
+          {/* Logo — handwritten signature style */}
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 group select-none"
           >
-            <Icon name="Search" size={12} />
-            {!isMobile && (
-              <>
-                <span>Search</span>
-                <kbd className="hidden sm:inline-block px-1 py-0.5 text-xs bg-border rounded">/</kbd>
-              </>
-            )}
-          </button>
-
-          <div className="flex items-center space-x-1 sm:space-x-2">
-            {/* Status Indicator - Simplified on mobile */}
-            <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 bg-success rounded-full"></div>
-              {!isMobile && <span className="text-xs">Available</span>}
-            </div>
-
-            {/* Contact Button - Icon only on mobile */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleNavigation("/contact")}
-              iconName="MessageCircle"
-              iconPosition="left"
-              className={`text-xs ${isMobile ? "px-2" : ""}`}
+            {/* Ink dot */}
+            <div className="w-2 h-2 rounded-full bg-ink-blue opacity-80 group-hover:opacity-100 transition-opacity" />
+            <span
+              className="text-2xl font-hand font-bold text-ink-blue leading-none tracking-wide"
+              style={{ fontFamily: "var(--font-hand)" }}
             >
-              {isMobile ? "" : "Contact"}
-            </Button>
+              Anup Solanki
+            </span>
+            {/* Underline drawn on hover */}
+            <span className="absolute bottom-0 left-0 w-0 group-hover:w-full h-0.5 bg-ink-blue/30 transition-all duration-300" />
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`relative group px-3.5 py-2 text-sm font-sans transition-colors duration-150 ${
+                  isActive(item.path)
+                    ? "text-ink-blue"
+                    : "text-graphite hover:text-ink-blue"
+                }`}
+              >
+                {/* Number annotation */}
+                <span
+                  className="font-hand text-xs text-graphite-pale absolute -top-0.5 left-2 opacity-60 group-hover:opacity-80 transition-opacity"
+                  style={{ fontFamily: "var(--font-hand)", fontSize: "10px" }}
+                >
+                  {item.number}
+                </span>
+
+                <span className="relative">
+                  {item.label}
+
+                  {/* Active underline — drawn ink style */}
+                  {isActive(item.path) && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-ink-blue rounded-full"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+
+                  {/* Hover underline */}
+                  {!isActive(item.path) && (
+                    <span className="absolute -bottom-0.5 left-0 right-0 h-[1.5px] bg-ink-blue/0 group-hover:bg-ink-blue/40 transition-all duration-200 rounded-full" />
+                  )}
+                </span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* Right side */}
+          <div className="flex items-center gap-3">
+            {/* Available badge */}
+            <span className="hidden sm:flex items-center gap-1.5 text-xs font-sans text-graphite-light">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Available
+            </span>
+
+            {/* Let's Talk button */}
+            <Link
+              href="/contact"
+              className="hidden sm:inline-flex sketch-btn text-sm px-4 py-1.5"
+            >
+              Let&apos;s Talk
+            </Link>
+
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMenuOpen((p) => !p)}
+              className="md:hidden flex flex-col gap-[5px] p-2 group"
+              aria-label="Toggle menu"
+            >
+              <span
+                className={`block h-[2px] w-5 bg-ink-blue transition-all duration-200 ${menuOpen ? "rotate-45 translate-y-[7px]" : ""}`}
+              />
+              <span
+                className={`block h-[2px] w-5 bg-ink-blue transition-all duration-200 ${menuOpen ? "opacity-0" : ""}`}
+              />
+              <span
+                className={`block h-[2px] w-5 bg-ink-blue transition-all duration-200 ${menuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}
+              />
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Command Palette - Responsive */}
-      {isCommandPaletteOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-10 sm:pt-20 px-2 sm:px-4">
-          <div 
-            ref={commandPaletteRef}
-            className="command-palette w-full max-w-lg animate-fade-in bg-popover border border-border rounded-lg shadow-lg"
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            ref={menuRef}
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.18 }}
+            className="fixed top-[57px] left-0 right-0 z-40 md:hidden"
           >
-            <div className="flex items-center px-3 sm:px-4 py-3 border-b border-border">
-              <Icon name="Search" size={16} className="text-muted-foreground mr-3" />
-              <input
-                type="text"
-                placeholder="Search files, commands..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 bg-transparent text-foreground placeholder-muted-foreground outline-none text-sm sm:text-base"
-                autoFocus
-              />
-              <kbd className="px-2 py-1 text-xs bg-muted rounded hidden sm:inline">ESC</kbd>
-            </div>
-
-            <div className="max-h-48 sm:max-h-64 overflow-y-auto">
-              {filteredItems.length > 0 ? (
-                filteredItems.map((item, index) => (
-                  <button
+            <div
+              className="mx-4 rounded-sm overflow-hidden paper-card border border-ink-blue/20"
+              style={{ boxShadow: "3px 5px 0 rgba(29,78,216,0.1)" }}
+            >
+              {/* Ruled lines bg */}
+              <div
+                className="ruled-bg"
+                style={{
+                  backgroundImage:
+                    "repeating-linear-gradient(transparent 0px, transparent 47px, rgba(59,130,246,0.18) 47px, rgba(59,130,246,0.18) 48px)",
+                }}
+              >
+                {navItems.map((item, i) => (
+                  <motion.div
                     key={item.path}
-                    onClick={() => handleNavigation(item.path)}
-                    className="w-full flex items-center space-x-3 px-3 sm:px-4 py-2 sm:py-3 hover:bg-muted text-left transition-colors duration-200"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
                   >
-                    <Icon name={item.icon} size={isMobile ? 14 : 16} className="text-muted-foreground" />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm text-foreground truncate">{item.file}</div>
-                      <div className="text-xs text-muted-foreground truncate">{item.label}</div>
-                    </div>
-                    {index < 9 && !isMobile && (
-                      <kbd className="px-2 py-1 text-xs bg-muted rounded flex-shrink-0">⌘ {index + 1}</kbd>
-                    )}
-                  </button>
-                ))
-              ) : (
-                <div className="px-4 py-6 sm:py-8 text-center text-muted-foreground">
-                  <Icon name="Search" size={isMobile ? 20 : 24} className="mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No results found</p>
+                    <Link
+                      href={item.path}
+                      className={`flex items-center gap-3 px-5 py-3.5 border-b border-ink-blue/10 last:border-0 transition-colors ${
+                        isActive(item.path)
+                          ? "bg-ink-blue/6 text-ink-blue"
+                          : "text-graphite hover:text-ink-blue hover:bg-ink-blue/4"
+                      }`}
+                    >
+                      <span
+                        className="font-hand text-xs text-graphite-pale w-6"
+                        style={{ fontFamily: "var(--font-hand)" }}
+                      >
+                        {item.number}
+                      </span>
+                      <span className="font-sans text-sm font-medium">{item.label}</span>
+                      {isActive(item.path) && (
+                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-ink-blue" />
+                      )}
+                    </Link>
+                  </motion.div>
+                ))}
+
+                {/* Bottom CTA in mobile menu */}
+                <div className="px-5 py-4">
+                  <Link
+                    href="/contact"
+                    className="sketch-btn-filled w-full text-center block text-sm py-2.5"
+                  >
+                    Let&apos;s Build Something
+                  </Link>
                 </div>
-              )}
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Status Bar - Responsive */}
-      <div className="status-bar bg-primary text-primary-foreground flex items-center justify-between px-3 sm:px-4 text-xs">
-        <div className="flex items-center space-x-2 sm:space-x-4 overflow-x-auto scrollbar-hide flex-1">
-          <div className="flex items-center space-x-1 flex-shrink-0">
-            <Icon name="GitBranch" size={12} />
-            <span className="hidden xs:inline">main</span>
-          </div>
-          <div className="flex items-center space-x-1 flex-shrink-0">
-            <Icon name="AlertCircle" size={12} />
-            <span>0</span>
-          </div>
-          <div className="flex items-center space-x-1 flex-shrink-0">
-            <Icon name="AlertTriangle" size={12} />
-            <span>0</span>
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-2 sm:space-x-4 ml-4 flex-shrink-0">
-          {!isMobile && (
-            <>
-              <span className="hidden sm:inline truncate max-w-20">{activeTab?.file}</span>
-              <span className="hidden md:inline">JavaScript</span>
-              <span className="hidden lg:inline">UTF-8</span>
-              <span className="hidden lg:inline">LF</span>
-            </>
-          )}
-          <span className="flex-shrink-0">{formatTime(currentTime)}</span>
-        </div>
-      </div>
-
-      {/* Mobile Safe Area Spacer */}
-      {isMobile && <div className="h-4"></div>}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
