@@ -1,60 +1,43 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Header from "@/component/ui/Header";
-import HandwrittenText, {
+import {
   DrawUnderline,
   DrawArrow,
   InkReveal,
 } from "@/component/ui/HandwrittenText";
-import { SectionTitle } from "@/component/ui/SketchCard";
 
 /* ============================================================
    DATA
    ============================================================ */
-const skills = [
-  "React", "Next.js", "TypeScript", "Node.js",
-  "Framer Motion", "GSAP", "Three.js", "Tailwind CSS",
-  "MongoDB", "PostgreSQL", "OpenAI API", "AWS",
+const HERO_PHRASES = [
+  "Frontend Developer · Ahmedabad, India",
+  "React & Next.js Specialist · 3.5 yrs",
+  "UI Engineer · Available for hire",
 ];
 
-const projects = [
-  {
-    id: "property-dollar",
-    title: "Property Dollar",
-    tag: "Real Estate SaaS",
-    desc: "Full-featured property listing & management platform with advanced search, virtual tours, and AI-powered price predictions.",
-    tech: ["Next.js", "TypeScript", "MongoDB", "AI"],
-    status: "Live",
-    year: "2024",
-  },
-  {
-    id: "imanagify",
-    title: "iManagify",
-    tag: "Hotel Management",
-    desc: "End-to-end hotel operations system — bookings, housekeeping, billing, and real-time analytics for 50+ properties.",
-    tech: ["React", "Node.js", "PostgreSQL", "Charts"],
-    status: "Live",
-    year: "2023",
-  },
-  {
-    id: "recaply",
-    title: "Recaply",
-    tag: "AI Video Summary",
-    desc: "AI-powered tool that transcribes and summarises any video into actionable notes using OpenAI & AWS Transcribe.",
-    tech: ["Next.js", "OpenAI", "AWS Transcribe", "Vercel"],
-    status: "Live",
-    year: "2024",
-  },
+const TECH_PILLS = [
+  "React.js", "Next.js", "TypeScript", "Redux Toolkit", "React Query",
+  "Tailwind CSS", "Node.js", "Gemini API", "OpenAI API", "Claude API",
+  "AWS Transcribe", "Hugging Face", "Ollama", "PostgreSQL", "MongoDB",
 ];
 
-const stats = [
-  { value: "3+", label: "Years Experience" },
-  { value: "20+", label: "Projects Delivered" },
-  { value: "8",   label: "Devs Mentored" },
-  { value: "∞",   label: "Coffee Cups" },
+const featuredProjects = [
+  {
+    chips: ["AI", "Python", "Gemini API"],
+    title: "Company Brain",
+    desc: "Enterprise knowledge intelligence platform — vector ingestion pipelines, semantic search, and contextual reasoning over org-wide data (Slack, docs, messages).",
+    year: "2025",
+  },
+  {
+    chips: ["Next.js", "Gemini API", "AWS"],
+    title: "AI Offline Meeting Summarizer",
+    desc: "Automatically transcribes audio recordings and generates structured summaries with action items — built for async-first teams.",
+    year: "2024",
+  },
 ];
 
 /* ============================================================
@@ -62,11 +45,21 @@ const stats = [
    ============================================================ */
 function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
+  const [phraseIdx, setPhraseIdx] = useState(0);
+
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const yAnnotations = useTransform(scrollYProgress, [0, 1], [0, -40]);
+
+  useEffect(() => {
+    const t = setInterval(
+      () => setPhraseIdx((i) => (i + 1) % HERO_PHRASES.length),
+      3000
+    );
+    return () => clearInterval(t);
+  }, []);
 
   return (
     <section
@@ -79,19 +72,13 @@ function HeroSection() {
         className="pointer-events-none absolute inset-0 overflow-hidden"
         aria-hidden="true"
       >
-        <svg
-          className="absolute bottom-24 left-0 w-32 opacity-8"
-          viewBox="0 0 160 80"
-        >
+        <svg className="absolute bottom-24 left-0 w-32 opacity-8" viewBox="0 0 160 80">
           {[0, 12, 24, 36, 48].map((y) => (
             <line key={y} x1="8" y1={y + 10} x2="150" y2={y + 10}
               stroke="#1D4ED8" strokeWidth="1" strokeDasharray="4 3" />
           ))}
         </svg>
-        <svg
-          className="absolute top-24 right-0 w-32 opacity-8"
-          viewBox="0 0 160 80"
-        >
+        <svg className="absolute top-24 right-0 w-32 opacity-8" viewBox="0 0 160 80">
           {[0, 12, 24, 36, 48].map((y) => (
             <line key={y} x1="8" y1={y + 10} x2="150" y2={y + 10}
               stroke="#1D4ED8" strokeWidth="1" strokeDasharray="4 3" />
@@ -107,8 +94,16 @@ function HeroSection() {
           <InkReveal delay={0.1}>
             <div className="flex items-center gap-3 mb-6">
               <div className="w-6 h-px bg-ink-blue/40" />
-              <span className="font-hand text-sm text-ink-blue font-medium" style={{ fontFamily: "var(--font-hand)" }}>
-                Frontend Developer · Ahmedabad, India
+              <span
+                className="font-hand text-sm text-ink-blue font-medium"
+                style={{ fontFamily: "var(--font-hand)" }}
+              >
+                {HERO_PHRASES[phraseIdx]}
+                <motion.span
+                  animate={{ opacity: [1, 0, 1] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                  className="ml-0.5"
+                >|</motion.span>
               </span>
             </div>
           </InkReveal>
@@ -161,7 +156,7 @@ function HeroSection() {
           </InkReveal>
 
           <InkReveal delay={2.1}>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4 mb-6">
               <Link href="/projects" className="sketch-btn-filled text-base px-7 py-3">
                 View Projects
               </Link>
@@ -171,195 +166,286 @@ function HeroSection() {
             </div>
           </InkReveal>
 
-          {/* Stats row — mobile only */}
-          <InkReveal delay={2.4} className="lg:hidden">
-            <div className="flex flex-wrap gap-8 mt-10 pt-8 border-t border-ink-blue/12">
-              {stats.map(({ value, label }) => (
-                <div key={label}>
-                  <span className="font-hand text-3xl font-bold text-ink-blue block" style={{ fontFamily: "var(--font-hand)" }}>
-                    {value}
-                  </span>
-                  <span className="text-xs text-graphite-light font-sans uppercase tracking-wider">{label}</span>
-                </div>
+          {/* Stat chips */}
+          <InkReveal delay={2.3}>
+            <div className="flex flex-wrap gap-2">
+              {["3+ yrs exp", "20+ projects", "30+ interviews"].map((chip) => (
+                <span
+                  key={chip}
+                  className="border border-ink-blue/30 rounded px-4 py-1 text-sm font-hand text-graphite"
+                  style={{ fontFamily: "var(--font-hand)" }}
+                >
+                  {chip}
+                </span>
               ))}
             </div>
           </InkReveal>
         </div>
 
-        {/* RIGHT — code doodle illustration (desktop only) */}
+        {/* RIGHT — rich pinboard collage (desktop only) */}
         <div className="hidden lg:block relative">
-          {/* Available badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -8, rotate: 8 }}
-            animate={{ opacity: 1, y: 0, rotate: 5 }}
-            transition={{ delay: 2.5, duration: 0.5 }}
-            className="absolute -top-4 right-2 annotation-tag rotate-[5deg] float-note z-20"
-            style={{ animationDelay: "0.5s" }}
-          >
-            Available for hire ✓
-          </motion.div>
-
-          {/* Code doodle SVG */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.4, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="w-full"
           >
-            <svg viewBox="0 0 400 310" className="w-full h-auto" style={{ maxHeight: "360px" }} aria-hidden="true">
+            <svg viewBox="0 0 520 450" className="w-full h-auto" style={{ maxHeight: "500px" }} aria-hidden="true">
 
-              {/* ── LAPTOP LID ── */}
-              <motion.path
-                d="M 78 38 L 322 38 L 322 212 L 78 212 Z"
-                fill="rgba(29,78,216,0.03)"
-                stroke="rgba(29,78,216,0.38)"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ delay: 1.5, duration: 1.1, ease: "easeInOut" }}
-              />
-              {/* Screen bezel */}
-              <motion.path
-                d="M 93 52 L 307 52 L 307 200 L 93 200 Z"
-                fill="rgba(29,78,216,0.03)"
-                stroke="rgba(29,78,216,0.18)"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.95, duration: 0.4 }}
-              />
-
-              {/* ── KEYBOARD BASE ── */}
-              <motion.path
-                d="M 62 218 L 338 218 L 338 244 L 62 244 Z"
-                fill="rgba(29,78,216,0.02)"
-                stroke="rgba(29,78,216,0.28)"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ delay: 1.65, duration: 0.55 }}
-              />
-              {/* Key rows */}
-              <motion.path
-                d="M 80 228 L 320 228"
-                stroke="rgba(29,78,216,0.12)" strokeWidth="1" strokeDasharray="5 3" strokeLinecap="round"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ delay: 2.2, duration: 0.5 }}
-              />
-              {/* Touchpad */}
-              <motion.rect
-                x="165" y="233" width="70" height="7" rx="2"
-                fill="none" stroke="rgba(29,78,216,0.14)" strokeWidth="1"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.4 }}
-              />
-
-              {/* ── CODE LINES (screen) ── */}
-              {([
-                [108, 68,  155, "rgba(29,78,216,0.7)",  2.5],
-                [108, 82,  222, "rgba(29,78,216,0.3)",  1.5],
-                [122, 96,  258, "rgba(29,78,216,0.24)", 1.5],
-                [122, 110, 186, "rgba(29,78,216,0.5)",  2.0],
-                [108, 124, 244, "rgba(29,78,216,0.28)", 1.5],
-                [108, 138, 286, "rgba(29,78,216,0.16)", 1.5],
-                [122, 152, 210, "rgba(29,78,216,0.34)", 1.5],
-                [108, 166, 175, "rgba(29,78,216,0.5)",  2.0],
-                [108, 180, 238, "rgba(29,78,216,0.22)", 1.5],
-              ] as [number,number,number,string,number][]).map(([x1, y, x2, clr, sw], i) => (
-                <motion.path
-                  key={i}
-                  d={`M ${x1} ${y} L ${x2} ${y}`}
-                  stroke={clr} strokeWidth={sw} strokeLinecap="round"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ delay: 2.15 + i * 0.09, duration: 0.38 }}
-                />
-              ))}
-
-              {/* ── FLOATING CODE SYMBOLS ── */}
-              {/* { } top-left */}
-              <motion.text
-                x="18" y="30"
-                initial={{ opacity: 0 }} animate={{ opacity: 0.42 }}
-                transition={{ delay: 2.8 }}
-                style={{ fontSize: "22px", fontFamily: "Courier New, monospace", fill: "rgba(29,78,216,0.42)" }}
-              >{"{ }"}</motion.text>
-
-              {/* </> top-right */}
-              <motion.text
-                x="336" y="28"
-                initial={{ opacity: 0 }} animate={{ opacity: 0.38 }}
-                transition={{ delay: 2.9 }}
-                style={{ fontSize: "19px", fontFamily: "Courier New, monospace", fill: "rgba(29,78,216,0.38)" }}
-              >{"</>"}</motion.text>
-
-              {/* => right side */}
-              <motion.text
-                x="348" y="138"
-                initial={{ opacity: 0 }} animate={{ opacity: 0.32 }}
-                transition={{ delay: 3.0 }}
-                style={{ fontSize: "16px", fontFamily: "Courier New, monospace", fill: "rgba(29,78,216,0.32)" }}
-              >{"=>"}</motion.text>
-
-              {/* // comment bottom-left */}
-              <motion.text
-                x="18" y="272"
-                initial={{ opacity: 0 }} animate={{ opacity: 0.32 }}
-                transition={{ delay: 3.1 }}
-                style={{ fontSize: "13px", fontFamily: "Courier New, monospace", fill: "rgba(29,78,216,0.32)" }}
-              >{"// build."}</motion.text>
-
-              {/* ── COFFEE CUP (bottom-right) ── */}
-              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.15 }}>
-                <path d="M 348 258 L 354 284 L 386 284 L 392 258 Z"
-                  fill="rgba(29,78,216,0.05)" stroke="rgba(29,78,216,0.38)"
-                  strokeWidth="1.5" strokeLinejoin="round" />
-                <path d="M 386 264 Q 400 264 400 273 Q 400 282 386 282"
-                  fill="none" stroke="rgba(29,78,216,0.38)" strokeWidth="1.5" strokeLinecap="round" />
-                <path d="M 360 252 Q 358 244 361 237" fill="none" stroke="rgba(29,78,216,0.22)" strokeWidth="1.5" strokeLinecap="round" />
-                <path d="M 370 252 Q 368 244 371 237" fill="none" stroke="rgba(29,78,216,0.22)" strokeWidth="1.5" strokeLinecap="round" />
-                <text x="362" y="277" style={{ fontSize: "11px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.5)" }}>∞</text>
+              {/* ── COFFEE STAINS ── */}
+              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.4 }}>
+                <circle cx="390" cy="390" r="42" fill="rgba(139,90,43,0.07)" />
+                <circle cx="393" cy="393" r="34" fill="rgba(139,90,43,0.04)" stroke="rgba(139,90,43,0.1)" strokeWidth="1.5" />
+                <circle cx="487" cy="50" r="27" fill="rgba(139,90,43,0.07)" />
+                <circle cx="489" cy="52" r="20" fill="rgba(139,90,43,0.04)" stroke="rgba(139,90,43,0.1)" strokeWidth="1" />
               </motion.g>
 
-              {/* ── ANNOTATION TAG ── */}
-              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.25 }}>
-                <rect x="18" y="186" width="72" height="18" rx="2"
-                  fill="rgba(29,78,216,0.05)" stroke="rgba(29,78,216,0.2)"
-                  strokeWidth="0.8" strokeDasharray="3 2" />
-                <text x="54" y="199" textAnchor="middle"
-                  style={{ fontSize: "9px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.6)" }}>
-                  20+ projects
+              {/* ── PSEUDO-CODE SNIPPETS ── */}
+              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.8 }}
+                style={{ fontSize: "7.5px", fontFamily: "Courier New, monospace" }}>
+                <text x="270" y="38" fill="rgba(29,78,216,0.3)" style={{ fontStyle: "italic" }}>pseudo-code:</text>
+                <text x="275" y="50" fill="rgba(29,78,216,0.25)">{"// build{"}</text>
+                <text x="280" y="61" fill="rgba(29,78,216,0.22)">{"  footcode:{"}</text>
+                <text x="285" y="72" fill="rgba(29,78,216,0.2)">{"  modelstream{}"}</text>
+                <text x="285" y="83" fill="rgba(29,78,216,0.2)">{"  device"}</text>
+                <text x="275" y="94" fill="rgba(29,78,216,0.22)">{"}"}</text>
+              </motion.g>
+              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.9 }}
+                style={{ fontSize: "7.5px", fontFamily: "Courier New, monospace" }}>
+                <text x="432" y="132" fill="rgba(29,78,216,0.28)" style={{ fontStyle: "italic" }}>pseudo-code:</text>
+                <text x="430" y="143" fill="rgba(29,78,216,0.22)">{"/ pseudo-code()"}</text>
+              </motion.g>
+              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.0 }}
+                style={{ fontSize: "7.5px", fontFamily: "Courier New, monospace" }}>
+                <text x="342" y="182" fill="rgba(29,78,216,0.28)" style={{ fontStyle: "italic" }}>pseudo-code:</text>
+                <text x="344" y="193" fill="rgba(29,78,216,0.25)">{"// build{"}</text>
+                <text x="349" y="204" fill="rgba(29,78,216,0.22)">{"  -> creat"}</text>
+                <text x="344" y="215" fill="rgba(29,78,216,0.25)">{"}"}</text>
+              </motion.g>
+
+              {/* ── CONNECTOR LINES ── */}
+              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.7 }}
+                stroke="rgba(29,78,216,0.14)" strokeWidth="1" strokeDasharray="3 2" fill="none">
+                <line x1="195" y1="95" x2="268" y2="52" />
+                <line x1="285" y1="178" x2="338" y2="155" />
+                <line x1="172" y1="278" x2="248" y2="268" />
+                <path d="M 437 122 C 422 116 408 103 398 94" />
+                <path d="M 186 138 C 222 152 242 163 250 170" />
+              </motion.g>
+
+              {/* ── CARD 1 — React Performance Optimization ── */}
+              <motion.g transform="rotate(-3, 108, 112)"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.7, duration: 0.6 }}>
+                <rect x="68" y="22" width="52" height="12" rx="2"
+                  fill="rgba(29,78,216,0.06)" stroke="rgba(29,78,216,0.2)" strokeWidth="0.8" />
+                <rect x="26" y="37" width="166" height="120" rx="3"
+                  fill="rgba(0,0,0,0.05)" transform="translate(3,3)" />
+                <rect x="26" y="35" width="166" height="120" rx="3"
+                  fill="rgba(248,244,236,0.97)" stroke="rgba(29,78,216,0.22)" strokeWidth="1.5" />
+                <rect x="36" y="45" width="146" height="66" rx="2"
+                  fill="rgba(29,78,216,0.03)" stroke="rgba(29,78,216,0.1)" strokeWidth="1" />
+                {[90,78,66].map(y => (
+                  <line key={y} x1="36" y1={y} x2="182" y2={y} stroke="rgba(29,78,216,0.09)" strokeWidth="0.5" strokeDasharray="2 2" />
+                ))}
+                <rect x="50" y="69" width="15" height="22" rx="1" fill="rgba(29,78,216,0.3)" />
+                <rect x="72" y="60" width="15" height="31" rx="1" fill="rgba(29,78,216,0.2)" />
+                <rect x="94" y="64" width="15" height="27" rx="1" fill="rgba(29,78,216,0.45)" />
+                <rect x="116" y="55" width="15" height="36" rx="1" fill="rgba(29,78,216,0.25)" />
+                <rect x="138" y="62" width="15" height="29" rx="1" fill="rgba(29,78,216,0.38)" />
+                <line x1="42" y1="91" x2="162" y2="91" stroke="rgba(29,78,216,0.22)" strokeWidth="1" />
+                <path d="M 57 85 L 79 76 L 101 80 L 123 69 L 145 73"
+                  fill="none" stroke="rgba(220,38,38,0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <text x="109" y="120" textAnchor="middle"
+                  style={{ fontSize: "9px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.82)", fontWeight: "600" }}>
+                  React Performance
+                </text>
+                <text x="109" y="132" textAnchor="middle"
+                  style={{ fontSize: "9px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.72)" }}>
+                  Optimization
                 </text>
               </motion.g>
 
-              {/* ── CURSOR BLINK on screen ── */}
-              <motion.rect
-                x="108" y="188" width="8" height="10" rx="1"
-                fill="rgba(29,78,216,0.4)"
-                animate={{ opacity: [1, 0, 1] }}
-                transition={{ duration: 1.1, repeat: Infinity, delay: 3.5 }}
-              />
-            </svg>
-          </motion.div>
+              {/* ── CARD 2 — Next.js Static Site Generation ── */}
+              <motion.g transform="rotate(2, 212, 252)"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.9, duration: 0.6 }}>
+                <rect x="178" y="152" width="46" height="12" rx="2"
+                  fill="rgba(29,78,216,0.06)" stroke="rgba(29,78,216,0.2)" strokeWidth="0.8" />
+                <rect x="146" y="167" width="146" height="116" rx="3"
+                  fill="rgba(0,0,0,0.05)" transform="translate(3,3)" />
+                <rect x="146" y="165" width="146" height="116" rx="3"
+                  fill="rgba(248,244,236,0.97)" stroke="rgba(29,78,216,0.22)" strokeWidth="1.5" />
+                <rect x="157" y="173" width="48" height="76" rx="5"
+                  fill="none" stroke="rgba(29,78,216,0.45)" strokeWidth="1.8" />
+                <rect x="160" y="179" width="42" height="53" rx="1"
+                  fill="rgba(29,78,216,0.04)" stroke="rgba(29,78,216,0.1)" strokeWidth="0.5" />
+                {[186,194,201,208].map((y) => (
+                  <line key={y} x1="165" y1={y} x2={y === 208 ? 191 : 197} y2={y}
+                    stroke="rgba(29,78,216,0.22)" strokeWidth="1" />
+                ))}
+                <circle cx="181" cy="237" r="5" fill="none" stroke="rgba(29,78,216,0.3)" strokeWidth="1" />
+                <rect x="214" y="175" width="54" height="65" rx="4"
+                  fill="none" stroke="rgba(29,78,216,0.35)" strokeWidth="1.5" />
+                <rect x="217" y="179" width="48" height="48" rx="1" fill="rgba(29,78,216,0.03)" />
+                {[187,195,203,211].map((y) => (
+                  <line key={y} x1="221" y1={y} x2={y === 211 ? 253 : 261} y2={y}
+                    stroke="rgba(29,78,216,0.18)" strokeWidth="0.9" />
+                ))}
+                <text x="219" y="262" textAnchor="middle"
+                  style={{ fontSize: "6.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.35)", fontStyle: "italic" }}>
+                  site projects
+                </text>
+                <text x="219" y="272" textAnchor="middle"
+                  style={{ fontSize: "8.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.82)", fontWeight: "600" }}>
+                  Next.js Static
+                </text>
+                <text x="219" y="282" textAnchor="middle"
+                  style={{ fontSize: "8.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.72)" }}>
+                  Site Generation
+                </text>
+              </motion.g>
 
-          {/* Arrow annotation */}
-          <motion.div
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 2.8 }}
-            className="absolute -bottom-8 left-4 flex items-center gap-2 float-note"
-            style={{ animationDelay: "1s" }}
-          >
-            <DrawArrow direction="right" className="w-10 h-4" color="#9CA3AF" delay={0} />
-            <span className="font-hand text-xs text-graphite-pale" style={{ fontFamily: "var(--font-hand)" }}>
-              3+ yrs exp.
-            </span>
+              {/* ── CARD 3 — State Management (Redux) ── */}
+              <motion.g transform="rotate(-2, 92, 348)"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.1, duration: 0.6 }}>
+                <rect x="57" y="284" width="40" height="11" rx="2"
+                  fill="rgba(29,78,216,0.06)" stroke="rgba(29,78,216,0.2)" strokeWidth="0.8" />
+                <rect x="22" y="298" width="148" height="100" rx="3"
+                  fill="rgba(0,0,0,0.05)" transform="translate(3,3)" />
+                <rect x="22" y="296" width="148" height="100" rx="3"
+                  fill="rgba(248,244,236,0.97)" stroke="rgba(29,78,216,0.22)" strokeWidth="1.5" />
+                <rect x="30" y="304" width="132" height="62" rx="2"
+                  fill="rgba(29,78,216,0.05)" stroke="rgba(29,78,216,0.15)" strokeWidth="1" />
+                <rect x="30" y="304" width="132" height="11" rx="2" fill="rgba(29,78,216,0.1)" />
+                <circle cx="39" cy="309" r="2.5" fill="rgba(220,38,38,0.55)" />
+                <circle cx="47" cy="309" r="2.5" fill="rgba(234,179,8,0.55)" />
+                <circle cx="55" cy="309" r="2.5" fill="rgba(34,197,94,0.55)" />
+                <line x1="37" y1="322" x2="130" y2="322" stroke="rgba(29,78,216,0.35)" strokeWidth="1.8" />
+                <line x1="37" y1="331" x2="110" y2="331" stroke="rgba(29,78,216,0.22)" strokeWidth="1.2" />
+                <line x1="44" y1="339" x2="122" y2="339" stroke="rgba(29,78,216,0.28)" strokeWidth="1.2" />
+                <line x1="44" y1="347" x2="96" y2="347" stroke="rgba(29,78,216,0.2)" strokeWidth="1.2" />
+                <line x1="37" y1="355" x2="114" y2="355" stroke="rgba(29,78,216,0.22)" strokeWidth="1.2" />
+                <rect x="37" y="359" width="7" height="8" rx="1" fill="rgba(29,78,216,0.35)" />
+                <text x="96" y="381" textAnchor="middle"
+                  style={{ fontSize: "8.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.82)", fontWeight: "600" }}>
+                  State Management
+                </text>
+                <text x="96" y="391" textAnchor="middle"
+                  style={{ fontSize: "8.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.65)" }}>
+                  (Redux)
+                </text>
+              </motion.g>
+
+              {/* ── REACT LOGO ── */}
+              <motion.g transform="translate(352, 62)"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.2, duration: 0.5 }}>
+                <circle cx="0" cy="0" r="14" fill="rgba(29,78,216,0.1)" stroke="rgba(29,78,216,0.18)" strokeWidth="1" />
+                <ellipse cx="0" cy="0" rx="44" ry="16" fill="none" stroke="rgba(29,78,216,0.7)" strokeWidth="2.2" />
+                <ellipse cx="0" cy="0" rx="44" ry="16" fill="none" stroke="rgba(29,78,216,0.7)" strokeWidth="2.2" transform="rotate(60)" />
+                <ellipse cx="0" cy="0" rx="44" ry="16" fill="none" stroke="rgba(29,78,216,0.7)" strokeWidth="2.2" transform="rotate(120)" />
+                <circle cx="0" cy="0" r="7" fill="rgba(29,78,216,0.85)" />
+              </motion.g>
+
+              {/* ── TYPESCRIPT BADGE ── */}
+              <motion.g transform="translate(456, 62)"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.3, duration: 0.5 }}>
+                <rect x="0" y="0" width="56" height="56" rx="5" fill="rgba(29,78,216,0.9)" />
+                <text x="28" y="38" textAnchor="middle"
+                  style={{ fontSize: "22px", fontFamily: "Arial, sans-serif", fill: "white", fontWeight: "bold" }}>TS</text>
+              </motion.g>
+
+              {/* ── NEXT.JS BADGE ── */}
+              <motion.g transform="translate(338, 148)"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.4, duration: 0.4 }}>
+                <rect x="0" y="0" width="80" height="30" rx="4" fill="rgba(8,8,8,0.82)" />
+                <text x="40" y="21" textAnchor="middle"
+                  style={{ fontSize: "13px", fontFamily: "Arial, sans-serif", fill: "white", fontWeight: "bold", letterSpacing: "0.5px" }}>NEXT.js</text>
+              </motion.g>
+
+              {/* ── DOCKER BADGE ── */}
+              <motion.g transform="translate(406, 178)"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 0.4 }}>
+                <rect x="0" y="0" width="74" height="54" rx="4"
+                  fill="rgba(29,78,216,0.07)" stroke="rgba(29,78,216,0.28)" strokeWidth="1.5" />
+                <rect x="8" y="8" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
+                <rect x="23" y="8" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
+                <rect x="38" y="8" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
+                <rect x="8" y="21" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
+                <rect x="23" y="21" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
+                <path d="M 6 38 Q 37 28 68 36"
+                  fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.5" strokeLinecap="round" />
+                <text x="37" y="50" textAnchor="middle"
+                  style={{ fontSize: "9px", fontFamily: "Arial, sans-serif", fill: "rgba(29,78,216,0.75)", fontWeight: "bold", letterSpacing: "1px" }}>docker</text>
+              </motion.g>
+
+              {/* ── SKILL HEXAGONS ── */}
+              {[
+                { cx: 365, cy: 278, label: "GraphQL", score: "9/x" },
+                { cx: 420, cy: 258, label: "Experience", score: "9/x" },
+                { cx: 362, cy: 328, label: "TDD", score: "8/x" },
+                { cx: 418, cy: 308, label: "Con", score: "8/x" },
+                { cx: 474, cy: 288, label: "CI/CD", score: "9/x" },
+              ].map(({ cx, cy, label, score }, i) => {
+                const r = 28;
+                const pts = Array.from({ length: 6 }, (_, k) => {
+                  const a = (Math.PI / 3) * k - Math.PI / 6;
+                  return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
+                }).join(" ");
+                return (
+                  <motion.g key={label}
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                    transition={{ delay: 2.45 + i * 0.08, duration: 0.4 }}>
+                    <polygon points={pts}
+                      fill="rgba(248,244,236,0.93)" stroke="rgba(29,78,216,0.38)" strokeWidth="1.5" />
+                    <text x={cx} y={cy - 6} textAnchor="middle"
+                      style={{ fontSize: "7px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.85)", fontWeight: "700" }}>
+                      {label}
+                    </text>
+                    <text x={cx} y={cy + 4} textAnchor="middle"
+                      style={{ fontSize: "6px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.6)" }}>
+                      Experience
+                    </text>
+                    <text x={cx} y={cy + 15} textAnchor="middle"
+                      style={{ fontSize: "9px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.82)", fontWeight: "bold" }}>
+                      {score}
+                    </text>
+                  </motion.g>
+                );
+              })}
+
+              {/* ── AVAILABLE FOR HIRE badge ── */}
+              <motion.g transform="translate(248, 170)"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.6, duration: 0.4 }}>
+                <rect x="0" y="0" width="96" height="22" rx="3"
+                  fill="rgba(29,78,216,0.06)" stroke="rgba(29,78,216,0.28)" strokeWidth="1" strokeDasharray="3 2" />
+                <circle cx="11" cy="11" r="3.5" fill="rgba(34,197,94,0.75)" />
+                <text x="54" y="15" textAnchor="middle"
+                  style={{ fontSize: "9px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.78)", fontWeight: "600" }}>
+                  Available for hire!
+                </text>
+              </motion.g>
+
+              {/* ── HAND EXPERIENCE RATING annotation ── */}
+              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.1 }}>
+                <path d="M 462 248 C 470 242 474 234 471 224"
+                  fill="none" stroke="rgba(29,78,216,0.3)" strokeWidth="1" strokeLinecap="round" />
+                <path d="M 467 226 L 471 224 L 473 228"
+                  fill="none" stroke="rgba(29,78,216,0.3)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+                <text x="475" y="238"
+                  style={{ fontSize: "7px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.45)" }}>Hand experience</text>
+                <text x="475" y="248"
+                  style={{ fontSize: "7px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.45)" }}>rating</text>
+              </motion.g>
+
+              {/* ── TO GET REP annotation ── */}
+              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.2 }}>
+                <text x="178" y="410"
+                  style={{ fontSize: "7px", fontFamily: "Courier New, monospace", fill: "rgba(29,78,216,0.28)", fontStyle: "italic" }}>
+                  {"// To get rep."}
+                </text>
+                <path d="M 181 405 L 181 399 L 192 391"
+                  fill="none" stroke="rgba(29,78,216,0.22)" strokeWidth="1" strokeLinecap="round" />
+              </motion.g>
+            </svg>
           </motion.div>
         </div>
       </div>
@@ -371,9 +457,7 @@ function HeroSection() {
         transition={{ delay: 3 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
       >
-        <span className="font-hand text-xs text-graphite-pale" style={{ fontFamily: "var(--font-hand)" }}>
-          scroll
-        </span>
+        <span className="font-hand text-xs text-graphite-pale" style={{ fontFamily: "var(--font-hand)" }}>scroll</span>
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
@@ -385,565 +469,334 @@ function HeroSection() {
 }
 
 /* ============================================================
-   ABOUT SECTION
+   MARQUEE SECTION
    ============================================================ */
-function AboutSection() {
+function MarqueeSection() {
   return (
-    <section className="relative py-24 px-6 md:px-12 lg:px-20 border-t border-ink-blue/10">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
-        {/* Left — text */}
-        <div>
-          <SectionTitle
-            number="02"
-            title="Who Am I?"
-            subtitle="A few pages from the developer's journal."
-          />
-
-          <InkReveal delay={0.3}>
-            <p className="mt-6 text-graphite leading-relaxed font-sans">
-              I&apos;m a <span className="marker-yellow px-0.5">frontend-focused full-stack developer</span> based
-              in Ahmedabad with 3+ years of production experience. I obsess over
-              the intersection of performance, aesthetics, and user experience.
-            </p>
-          </InkReveal>
-
-          <InkReveal delay={0.45}>
-            <p className="mt-4 text-graphite leading-relaxed font-sans">
-              At Solguruz, I led a complete UI revamp that improved load times by 40%,
-              integrated AI workflows into three products, and mentored a team of 8
-              junior developers. I was awarded{" "}
-              <span className="marker-blue px-0.5 font-medium text-ink">
-                Rising Star of the Year
-              </span>{" "}
-              for that work.
-            </p>
-          </InkReveal>
-
-          <InkReveal delay={0.6}>
-            <p className="mt-4 text-graphite leading-relaxed font-sans">
-              I believe great software is crafted, not just coded — and that the best
-              products feel inevitable once you use them.
-            </p>
-          </InkReveal>
-
-          <InkReveal delay={0.75}>
-            <div className="mt-8 flex gap-4">
-              <Link href="/about" className="sketch-btn text-sm">
-                Read More
-              </Link>
-              <Link
-                href="/experience"
-                className="text-sm text-ink-blue font-hand flex items-center gap-2"
-                style={{ fontFamily: "var(--font-hand)" }}
-              >
-                View Experience
-                <DrawArrow direction="right" className="w-10 h-4" color="#1D4ED8" delay={0} />
-              </Link>
-            </div>
-          </InkReveal>
-        </div>
-
-        {/* Right — notebook-style key facts */}
-        <div className="space-y-4 mt-2">
-          {[
-            {
-              icon: "⚡",
-              title: "React & Next.js Expert",
-              body: "Deep expertise in component architecture, SSR/SSG, performance tuning, and modern React patterns.",
-              tilt: 0.8,
-            },
-            {
-              icon: "🤖",
-              title: "AI Integration",
-              body: "Built production features using OpenAI, Gemini API, and AWS Transcribe — real AI, not hype.",
-              tilt: -0.6,
-            },
-            {
-              icon: "🏗️",
-              title: "Product Thinker",
-              body: "I understand the 'why' behind every feature. Good engineering decisions are also business decisions.",
-              tilt: 0.4,
-            },
-            {
-              icon: "👥",
-              title: "Team Leader",
-              body: "Conducted 30+ technical interviews, mentored 8 developers, ran code reviews and architectural decisions.",
-              tilt: -0.5,
-            },
-          ].map(({ icon, title, body, tilt }, i) => (
-            <motion.div
-              key={title}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              whileHover={{ y: -3, rotate: tilt + 0.2 }}
-              className="paper-card rounded-sm p-4 flex gap-4 cursor-default"
-              style={{ rotate: tilt }}
-            >
-              <span className="text-2xl mt-0.5 flex-shrink-0">{icon}</span>
-              <div>
-                <h4
-                  className="font-hand text-base font-bold text-ink-blue mb-1"
-                  style={{ fontFamily: "var(--font-hand)" }}
-                >
-                  {title}
-                </h4>
-                <p className="text-sm text-graphite font-sans leading-relaxed">{body}</p>
-              </div>
-            </motion.div>
+    <section className="border-t border-ink-blue/10 py-6 px-6 md:px-12 lg:px-20">
+      <p className="font-sans text-xs text-graphite-pale mb-3 tracking-wider uppercase select-none">
+        Tech I work with →
+      </p>
+      <div className="overflow-hidden">
+        <motion.div
+          className="flex gap-3 w-max"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        >
+          {[...TECH_PILLS, ...TECH_PILLS].map((item, i) => (
+            <span key={i} className="annotation-tag flex-shrink-0 px-3 py-1">
+              {item}
+            </span>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
 
 /* ============================================================
-   SKILLS SECTION
+   WHAT I DO SECTION
    ============================================================ */
-function SkillsSection() {
+function WhatIDoSection() {
+  const serviceCards = [
+    {
+      icon: (
+        <svg viewBox="0 0 48 38" width="48" height="38" aria-hidden="true">
+          <rect x="2" y="2" width="44" height="34" rx="2" stroke="rgba(29,78,216,0.6)" strokeWidth="2" fill="rgba(29,78,216,0.03)"/>
+          <line x1="2" y1="12" x2="46" y2="12" stroke="rgba(29,78,216,0.35)" strokeWidth="1.5"/>
+          <circle cx="9" cy="7" r="2.5" fill="rgba(220,38,38,0.45)"/>
+          <circle cx="16" cy="7" r="2.5" fill="rgba(234,179,8,0.45)"/>
+          <circle cx="23" cy="7" r="2.5" fill="rgba(34,197,94,0.45)"/>
+          <rect x="6" y="17" width="34" height="3" rx="1" fill="rgba(29,78,216,0.18)"/>
+          <rect x="6" y="24" width="24" height="3" rx="1" fill="rgba(29,78,216,0.12)"/>
+          <rect x="6" y="30" width="16" height="2.5" rx="1" fill="rgba(29,78,216,0.08)"/>
+        </svg>
+      ),
+      title: "Frontend Engineering",
+      tags: ["React.js", "Next.js", "TypeScript"],
+      body: "Building fast, accessible, production-ready interfaces that designers love and users trust.",
+    },
+    {
+      icon: (
+        <svg viewBox="0 0 40 48" width="40" height="48" aria-hidden="true">
+          <line x1="20" y1="6" x2="20" y2="1" stroke="rgba(29,78,216,0.55)" strokeWidth="2" strokeLinecap="round"/>
+          <circle cx="20" cy="1" r="2.5" fill="rgba(29,78,216,0.55)"/>
+          <rect x="4" y="6" width="32" height="22" rx="3" stroke="rgba(29,78,216,0.6)" strokeWidth="2" fill="rgba(29,78,216,0.04)"/>
+          <rect x="10" y="12" width="6" height="6" rx="1.5" fill="rgba(29,78,216,0.45)"/>
+          <rect x="24" y="12" width="6" height="6" rx="1.5" fill="rgba(29,78,216,0.45)"/>
+          <line x1="11" y1="22" x2="29" y2="22" stroke="rgba(29,78,216,0.25)" strokeWidth="1.5"/>
+          <rect x="8" y="30" width="24" height="16" rx="2" stroke="rgba(29,78,216,0.4)" strokeWidth="2" fill="rgba(29,78,216,0.03)"/>
+          <line x1="12" y1="36" x2="28" y2="36" stroke="rgba(29,78,216,0.22)" strokeWidth="1.2"/>
+          <line x1="12" y1="41" x2="22" y2="41" stroke="rgba(29,78,216,0.16)" strokeWidth="1.2"/>
+        </svg>
+      ),
+      title: "AI Integration",
+      tags: ["Gemini API", "OpenAI", "Claude API"],
+      body: "Shipping intelligent product features — summarizers, triagers, semantic search — using LLMs and vector databases.",
+    },
+    {
+      icon: (
+        <svg viewBox="0 0 56 40" width="56" height="40" aria-hidden="true">
+          <circle cx="10" cy="12" r="8" stroke="rgba(29,78,216,0.45)" strokeWidth="1.5" fill="none"/>
+          <circle cx="28" cy="10" r="10" stroke="rgba(29,78,216,0.6)" strokeWidth="2" fill="rgba(29,78,216,0.04)"/>
+          <circle cx="46" cy="12" r="8" stroke="rgba(29,78,216,0.45)" strokeWidth="1.5" fill="none"/>
+          <path d="M 0 40 Q 1 28 10 26 Q 19 28 20 40" stroke="rgba(29,78,216,0.35)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+          <path d="M 16 40 Q 18 26 28 24 Q 38 26 40 40" stroke="rgba(29,78,216,0.5)" strokeWidth="2" fill="none" strokeLinecap="round"/>
+          <path d="M 36 40 Q 37 28 46 26 Q 55 28 56 40" stroke="rgba(29,78,216,0.35)" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+        </svg>
+      ),
+      title: "Team Leadership",
+      tags: ["OKRs", "Sprints", "Mentoring"],
+      body: "Acting team lead at Solguruz — sprint coordination, OKR ownership, 30+ technical interviews conducted.",
+    },
+  ];
+
   return (
-    <section className="relative py-24 px-6 md:px-12 lg:px-20 border-t border-ink-blue/10">
-      {/* Blueprint-style bg strip */}
-      <div
-        className="absolute inset-0 graph-bg opacity-40"
-        aria-hidden="true"
-      />
-
-      <div className="relative max-w-6xl mx-auto">
-        <SectionTitle
-          number="03"
-          title="Technical Arsenal"
-          subtitle="Tools I pick up and never put down."
-          align="center"
-          className="mb-14"
-        />
-
-        <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-          {skills.map((skill, i) => (
-            <motion.div
-              key={skill}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: i * 0.06 }}
-              whileHover={{ y: -3, scale: 1.04 }}
-              className="relative group"
-            >
-              <div
-                className="px-4 py-2.5 rounded-sm border border-ink-blue/25 bg-paper-light cursor-default select-none"
-                style={{
-                  boxShadow: "1.5px 2px 0 rgba(29,78,216,0.08)",
-                }}
-              >
-                <span
-                  className="font-hand text-base font-semibold text-ink"
-                  style={{ fontFamily: "var(--font-hand)" }}
-                >
-                  {skill}
-                </span>
-              </div>
-              {/* Hover underline */}
-              <motion.div
-                className="absolute -bottom-1 left-2 right-2 h-[1.5px] bg-ink-blue/0 group-hover:bg-ink-blue/40 transition-all duration-200"
-              />
-            </motion.div>
-          ))}
-        </div>
-
-        <InkReveal delay={0.4} className="mt-10 text-center">
-          <Link
-            href="/skills"
-            className="font-hand text-ink-blue text-base inline-flex items-center gap-2"
-            style={{ fontFamily: "var(--font-hand)" }}
-          >
-            See full skill breakdown
-            <DrawArrow direction="right" className="w-12 h-5" color="#1D4ED8" delay={0} />
-          </Link>
-        </InkReveal>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   PROJECTS SECTION
-   ============================================================ */
-function ProjectsSection() {
-  return (
-    <section className="relative py-24 px-6 md:px-12 lg:px-20 border-t border-ink-blue/10">
+    <section className="border-t border-ink-blue/10 py-16 px-6 md:px-12 lg:px-20">
       <div className="max-w-6xl mx-auto">
-        <SectionTitle
-          number="04"
-          title="Selected Work"
-          subtitle="Three blueprints from the sketchbook."
-          className="mb-14"
-        />
-
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-          {projects.map((project, i) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.12 }}
-              whileHover={{
-                y: -6,
-                rotate: 0.15,
-                boxShadow: "4px 12px 0 rgba(59,130,246,0.14)",
-              }}
-              className="relative rounded-sm border border-ink-light/30 overflow-hidden cursor-default"
-              style={{
-                rotate: [-0.5, 0.4, -0.3][i] ?? 0,
-                backgroundColor: "#EFF6FF",
-                backgroundImage: `
-                  repeating-linear-gradient(rgba(59,130,246,0.08) 0px, rgba(59,130,246,0.08) 1px, transparent 1px, transparent 22px),
-                  repeating-linear-gradient(90deg, rgba(59,130,246,0.08) 0px, rgba(59,130,246,0.08) 1px, transparent 1px, transparent 22px)
-                `,
-                boxShadow: "2px 4px 0 rgba(59,130,246,0.09), 4px 8px 0 rgba(59,130,246,0.045)",
-              }}
+        <InkReveal>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-6 h-px bg-ink-blue/40" />
+            <span className="font-hand text-sm text-ink-blue" style={{ fontFamily: "var(--font-hand)" }}>
+              § 02 / What I do
+            </span>
+          </div>
+        </InkReveal>
+        <InkReveal delay={0.1}>
+          <div className="overflow-hidden mb-10">
+            <motion.h2
+              initial={{ clipPath: "inset(0 100% 0 0)" }}
+              whileInView={{ clipPath: "inset(0 0% 0 0)" }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="ink-heading text-4xl md:text-5xl"
             >
-              {/* Top strip */}
-              <div className="h-1 bg-ink-blue/60" />
+              Where I add value
+            </motion.h2>
+          </div>
+        </InkReveal>
 
-              <div className="p-5">
-                {/* Tag + year */}
-                <div className="flex items-center justify-between mb-3">
-                  <span
-                    className="font-hand text-xs text-ink-blue border border-ink-blue/30 px-2 py-0.5 rounded-sm"
-                    style={{ fontFamily: "var(--font-hand)" }}
-                  >
-                    {project.tag}
-                  </span>
-                  <span
-                    className="font-hand text-xs text-graphite-pale"
-                    style={{ fontFamily: "var(--font-hand)" }}
-                  >
-                    {project.year}
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3
-                  className="font-hand text-xl font-bold text-ink mb-2"
-                  style={{ fontFamily: "var(--font-hand)" }}
-                >
-                  {project.title}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {serviceCards.map(({ icon, title, tags, body }, i) => (
+            <InkReveal key={title} delay={i * 0.1}>
+              <div className="paper-card hover:-translate-y-1 transition-transform duration-200 cursor-default p-6 flex flex-col gap-3 h-full rounded-sm">
+                <div>{icon}</div>
+                <h3 className="font-hand text-xl font-bold text-ink-blue" style={{ fontFamily: "var(--font-hand)" }}>
+                  {title}
                 </h3>
-
-                {/* Desc */}
-                <p className="text-sm text-graphite font-sans leading-relaxed mb-4">
-                  {project.desc}
-                </p>
-
-                {/* Tech chips */}
                 <div className="flex flex-wrap gap-1.5">
-                  {project.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="text-[11px] font-sans bg-white/60 text-graphite border border-ink-blue/15 px-2 py-0.5 rounded-sm"
-                    >
-                      {t}
-                    </span>
+                  {tags.map((tag) => (
+                    <span key={tag} className="annotation-tag text-xs px-2 py-0.5">{tag}</span>
                   ))}
                 </div>
-
-                {/* Status */}
-                <div className="mt-4 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span className="text-xs font-sans text-graphite-light">{project.status}</span>
-                </div>
+                <p className="text-sm text-graphite font-sans leading-relaxed">{body}</p>
               </div>
-            </motion.div>
+            </InkReveal>
           ))}
         </div>
-
-        <InkReveal delay={0.5} className="mt-10">
-          <Link href="/projects" className="sketch-btn inline-flex text-sm px-6 py-2.5">
-            All Projects →
-          </Link>
-        </InkReveal>
       </div>
     </section>
   );
 }
 
 /* ============================================================
-   JOURNEY SECTION
+   FEATURED PROJECTS SECTION
    ============================================================ */
-function JourneySection() {
-  const stages = [
-    { year: "2020", title: "Learning", desc: "First lines of HTML & CSS. Fell in love with making things interactive.", icon: "📖" },
-    { year: "2021", title: "Building", desc: "React clicked. Started shipping real features to real users.", icon: "🔨" },
-    { year: "2022", title: "Leading", desc: "Led frontend architecture for 3 SaaS products. Mentored junior devs.", icon: "🧭" },
-    { year: "2024", title: "Scaling", desc: "AI integrations, performance optimisation, full-stack Next.js at scale.", icon: "🚀" },
-  ];
-
+function FeaturedProjectsSection() {
   return (
-    <section className="relative py-24 px-6 md:px-12 lg:px-20 border-t border-ink-blue/10 overflow-hidden">
-      {/* Faint wide ruled lines */}
-      <div className="absolute inset-0 ruled-bg opacity-50" aria-hidden="true" />
-
-      <div className="relative max-w-6xl mx-auto">
-        <SectionTitle
-          number="05"
-          title="The Journey"
-          subtitle="A hand-drawn roadmap of how I got here."
-          className="mb-16"
-        />
-
-        {/* Timeline */}
-        <div className="relative">
-          {/* Horizontal connecting line (desktop) */}
-          <div className="hidden md:block absolute top-10 left-0 right-0 h-px">
-            <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.4, ease: "easeInOut" }}
-              className="w-full h-px bg-ink-blue/25 origin-left"
-              style={{
-                backgroundImage: "repeating-linear-gradient(90deg, rgba(29,78,216,0.3) 0, rgba(29,78,216,0.3) 8px, transparent 8px, transparent 14px)",
-              }}
-            />
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-8 md:gap-6">
-            {stages.map((stage, i) => (
-              <motion.div
-                key={stage.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 + i * 0.15 }}
-                className="relative flex flex-col items-start md:items-center text-left md:text-center"
-              >
-                {/* Dot on line */}
-                <motion.div
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
+    <section className="border-t border-b border-ink-blue/10 py-16 px-6 md:px-12 lg:px-20 bg-ink-blue/[0.02]">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
+          <div>
+            <InkReveal>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-6 h-px bg-ink-blue/40" />
+                <span className="font-hand text-sm text-ink-blue" style={{ fontFamily: "var(--font-hand)" }}>
+                  § 03 / Selected work
+                </span>
+              </div>
+            </InkReveal>
+            <InkReveal delay={0.1}>
+              <div className="overflow-hidden">
+                <motion.h2
+                  initial={{ clipPath: "inset(0 100% 0 0)" }}
+                  whileInView={{ clipPath: "inset(0 0% 0 0)" }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.4 + i * 0.15, type: "spring", stiffness: 300 }}
-                  className="w-5 h-5 rounded-full border-2 border-ink-blue bg-paper z-10 mb-6 flex-shrink-0 flex items-center justify-center"
+                  transition={{ duration: 1.2, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  className="ink-heading text-4xl md:text-5xl"
                 >
-                  <div className="w-2 h-2 rounded-full bg-ink-blue" />
-                </motion.div>
-
-                {/* Card */}
-                <div className="paper-card rounded-sm p-4 w-full">
-                  <div className="text-2xl mb-2">{stage.icon}</div>
-                  <div
-                    className="font-hand text-xs text-graphite-pale mb-1"
-                    style={{ fontFamily: "var(--font-hand)" }}
-                  >
-                    {stage.year}
-                  </div>
-                  <h4
-                    className="font-hand text-lg font-bold text-ink-blue mb-2"
-                    style={{ fontFamily: "var(--font-hand)" }}
-                  >
-                    {stage.title}
-                  </h4>
-                  <p className="text-xs text-graphite font-sans leading-relaxed">
-                    {stage.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        <InkReveal delay={0.4} className="mt-12">
-          <Link href="/experience" className="sketch-btn inline-flex text-sm px-6 py-2.5">
-            Full Experience →
-          </Link>
-        </InkReveal>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   PHILOSOPHY SECTION
-   ============================================================ */
-function PhilosophySection() {
-  const principles = [
-    { label: "Creativity", symbol: "✦", note: "Every UI is a story." },
-    { label: "Engineering", symbol: "⊕", note: "Every story needs structure." },
-    { label: "Interaction", symbol: "◎", note: "Structure needs to breathe." },
-    { label: "Impact", symbol: "→", note: "Breathing creates impact." },
-  ];
-
-  return (
-    <section className="relative py-24 px-6 md:px-12 lg:px-20 border-t border-ink-blue/10">
-      {/* Blueprint bg */}
-      <div className="absolute inset-0 graph-bg opacity-30" aria-hidden="true" />
-
-      <div className="relative max-w-5xl mx-auto text-center">
-        {/* Main heading */}
-        <div className="overflow-hidden mb-3">
-          <HandwrittenText
-            as="h2"
-            className="text-4xl md:text-6xl text-ink-blue"
-            duration={1.5}
-          >
-            Building Experiences
-          </HandwrittenText>
-        </div>
-        <div className="overflow-hidden mb-8">
-          <HandwrittenText
-            as="h2"
-            className="text-4xl md:text-6xl text-ink-blue"
-            delay={0.6}
-            duration={1.5}
-          >
-            That Feel Alive.
-          </HandwrittenText>
-        </div>
-
-        <InkReveal delay={0.3}>
-          <p className="text-graphite font-sans max-w-2xl mx-auto leading-relaxed mb-16">
-            I approach every project as a synthesis of art and engineering — where
-            clean code meets deliberate interaction design, and performance meets
-            personality. Great digital products don&apos;t just work. They resonate.
-          </p>
-        </InkReveal>
-
-        {/* Four principles — sketch boxes */}
-        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {principles.map(({ label, symbol, note }, i) => (
-            <motion.div
-              key={label}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 + i * 0.1, duration: 0.45 }}
-              whileHover={{ y: -4 }}
-              className="paper-card rounded-sm p-5 text-left"
-            >
-              <div
-                className="font-hand text-3xl text-ink-blue/40 mb-2"
-                style={{ fontFamily: "var(--font-hand)" }}
-              >
-                {symbol}
+                  Things I&apos;ve shipped
+                </motion.h2>
               </div>
-              <h4
-                className="font-hand text-lg font-bold text-ink-blue mb-1"
-                style={{ fontFamily: "var(--font-hand)" }}
-              >
-                {label}
-              </h4>
-              <p className="text-xs text-graphite-light font-sans italic">{note}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   CONTACT CTA SECTION
-   ============================================================ */
-function ContactCTA() {
-  return (
-    <section className="relative py-28 px-6 md:px-12 lg:px-20 border-t border-ink-blue/10 overflow-hidden">
-      {/* Faint grid */}
-      <div className="absolute inset-0 ruled-bg opacity-40" aria-hidden="true" />
-
-      {/* Red margin accent */}
-      <div className="absolute left-16 top-0 bottom-0 w-px bg-margin-red/20" aria-hidden="true" />
-
-      <div className="relative max-w-4xl mx-auto text-center">
-        {/* Decorative annotation */}
-        <InkReveal>
-          <p
-            className="font-hand text-sm text-graphite-pale mb-6"
-            style={{ fontFamily: "var(--font-hand)" }}
-          >
-            — last page of this notebook —
-          </p>
-        </InkReveal>
-
-        {/* Main heading */}
-        <div className="overflow-hidden mb-2">
-          <HandwrittenText as="h2" className="text-4xl md:text-6xl text-ink-blue" duration={1.4}>
-            Let&apos;s Build Something
-          </HandwrittenText>
-        </div>
-        <div className="overflow-hidden mb-8">
-          <HandwrittenText
-            as="h2"
-            className="text-4xl md:text-6xl text-ink-blue"
-            delay={0.5}
-            duration={1.4}
-          >
-            Meaningful.
-          </HandwrittenText>
-        </div>
-
-        <InkReveal delay={0.5}>
-          <p className="text-graphite font-sans max-w-xl mx-auto mb-10 leading-relaxed">
-            I&apos;m open to full-time roles, freelance projects, and interesting
-            collaborations. Let&apos;s start a conversation.
-          </p>
-        </InkReveal>
-
-        <InkReveal delay={0.7}>
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <Link href="/contact" className="sketch-btn-filled text-base px-8 py-3">
-              Send a Message
-            </Link>
-            <a
-              href="mailto:anupsolanki.dev@gmail.com"
-              className="sketch-btn text-base px-8 py-3"
-            >
-              anupsolanki.dev@gmail.com
-            </a>
+            </InkReveal>
           </div>
-        </InkReveal>
-
-        {/* Social links */}
-        <InkReveal delay={0.9}>
-          <div className="flex justify-center gap-6">
-            {[
-              { label: "GitHub", href: "https://github.com/AnupSolanki7" },
-              { label: "LinkedIn", href: "https://linkedin.com/in/anup-solanki" },
-            ].map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-hand text-sm text-ink-blue hover:text-ink transition-colors flex items-center gap-1.5"
-                style={{ fontFamily: "var(--font-hand)" }}
-              >
-                <span className="w-3 h-px bg-current" />
-                {label}
-              </a>
-            ))}
-          </div>
-        </InkReveal>
-
-        {/* Handwritten signature */}
-        <InkReveal delay={1.1}>
-          <div className="mt-16 flex flex-col items-center gap-2">
-            <span
-              className="font-hand text-3xl text-ink-blue/50"
+          <InkReveal delay={0.15}>
+            <Link
+              href="/projects"
+              className="font-hand text-sm text-ink-blue flex items-center gap-2"
               style={{ fontFamily: "var(--font-hand)" }}
             >
-              — Anup
+              View all projects
+              <DrawArrow direction="right" className="w-10 h-4" color="#1D4ED8" delay={0} />
+            </Link>
+          </InkReveal>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {featuredProjects.map(({ chips, title, desc, year }, i) => (
+            <InkReveal key={title} delay={i * 0.1}>
+              <div className="paper-card p-6 flex flex-col gap-4 hover:-translate-y-1 transition-transform duration-200 cursor-default h-full rounded-sm">
+                <div className="flex flex-wrap gap-2">
+                  {chips.map((chip) => (
+                    <span key={chip} className="annotation-tag text-xs px-2 py-0.5">{chip}</span>
+                  ))}
+                </div>
+                <h3 className="ink-heading text-2xl">{title}</h3>
+                <p className="text-sm text-graphite font-sans leading-relaxed flex-1">{desc}</p>
+                <div className="flex items-center justify-between pt-2 border-t border-ink-blue/8">
+                  <div className="flex items-center gap-2">
+                    <DrawArrow direction="right" className="w-10 h-4" color="#1D4ED8" delay={0} />
+                    <span className="font-hand text-sm text-ink-blue" style={{ fontFamily: "var(--font-hand)" }}>
+                      View project →
+                    </span>
+                  </div>
+                  <span className="font-hand text-xs text-graphite-pale" style={{ fontFamily: "var(--font-hand)" }}>
+                    {year}
+                  </span>
+                </div>
+              </div>
+            </InkReveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   STATS SECTION
+   ============================================================ */
+function StatsSection() {
+  const statBlocks = [
+    { number: "3 yrs 11 mo", label: "Total experience" },
+    { number: "20+",          label: "Projects shipped" },
+    { number: "30+",          label: "Technical interviews" },
+    { number: "2024",         label: "Rising Star Award — Solguruz" },
+  ];
+
+  return (
+    <section className="border-t border-ink-blue/10 py-16 px-6 md:px-12 lg:px-20">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+          {statBlocks.map(({ number, label }, i) => (
+            <InkReveal key={label} delay={i * 0.1}>
+              <div className="flex flex-col gap-1">
+                <span
+                  className="font-hand text-4xl font-bold text-ink-blue leading-none"
+                  style={{ fontFamily: "var(--font-hand)" }}
+                >
+                  {number}
+                </span>
+                <span className="text-sm text-graphite-light font-sans leading-snug">{label}</span>
+              </div>
+            </InkReveal>
+          ))}
+        </div>
+
+        <InkReveal delay={0.4}>
+          <div className="flex items-center justify-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+            <span className="text-sm text-graphite-light font-sans">
+              Senior Software Engineer at Solguruz LLP · Ahmedabad, India
             </span>
-            <DrawUnderline
-              className="max-w-[120px] mx-auto"
-              color="#1D4ED8"
-              strokeWidth={1.5}
-              delay={0}
-            />
           </div>
         </InkReveal>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   CTA STRIP
+   ============================================================ */
+function CTAStrip() {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref as React.RefObject<Element>, { once: true, margin: "-80px" });
+
+  return (
+    <section ref={ref} className="bg-ink-blue py-16 px-6 md:px-12 lg:px-20">
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_auto] gap-12 items-center">
+
+        {/* Left */}
+        <div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5 }}
+            className="font-hand text-sm text-white/60 mb-2"
+            style={{ fontFamily: "var(--font-hand)" }}
+          >
+            Let&apos;s build something
+          </motion.p>
+          <div className="overflow-hidden mb-4">
+            <motion.h2
+              initial={{ clipPath: "inset(0 100% 0 0)" }}
+              animate={isInView ? { clipPath: "inset(0 0% 0 0)" } : {}}
+              transition={{ duration: 1.2, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="font-hand text-4xl md:text-5xl font-bold text-white leading-tight"
+              style={{ fontFamily: "var(--font-hand)" }}
+            >
+              Got a project in mind?
+            </motion.h2>
+          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="text-white/70 font-sans text-base max-w-lg mb-8"
+          >
+            I&apos;m open to senior frontend roles, freelance projects, and AI integration work.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="flex flex-wrap gap-4"
+          >
+            <Link
+              href="/projects"
+              className="bg-white text-ink-blue px-6 py-3 font-hand text-lg border border-white hover:bg-transparent hover:text-white transition-colors duration-200 rounded-sm"
+              style={{ fontFamily: "var(--font-hand)" }}
+            >
+              View my work
+            </Link>
+            <Link
+              href="/contact"
+              className="border border-white/50 text-white px-6 py-3 font-hand text-lg hover:bg-white/10 transition-colors duration-200 rounded-sm"
+              style={{ fontFamily: "var(--font-hand)" }}
+            >
+              Get in touch
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Right — decorative envelope SVG (desktop only) */}
+        <div className="hidden lg:block" aria-hidden="true">
+          <motion.svg
+            viewBox="0 0 200 160" width="200" height="160"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 0.2 } : {}}
+            transition={{ duration: 0.8, delay: 0.5 }}
+          >
+            <rect x="10" y="35" width="180" height="110" rx="4" stroke="white" strokeWidth="2" fill="none"/>
+            <path d="M 10 35 L 100 95 L 190 35" stroke="white" strokeWidth="2" fill="none"/>
+            <path d="M 10 145 L 80 95 M 190 145 L 120 95" stroke="white" strokeWidth="1.5" fill="none"/>
+            <path d="M 80 18 L 120 18 M 110 10 L 120 18 L 110 26"
+              stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="160" cy="18" r="13" stroke="white" strokeWidth="1.5" fill="none"/>
+            <text x="154" y="23" fontSize="14" fill="white" style={{ fontFamily: "sans-serif" }}>@</text>
+          </motion.svg>
+        </div>
       </div>
     </section>
   );
@@ -958,21 +811,16 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroSection />
-        <AboutSection />
-        <SkillsSection />
-        <ProjectsSection />
-        <JourneySection />
-        <PhilosophySection />
-        <ContactCTA />
+        <MarqueeSection />
+        <WhatIDoSection />
+        <FeaturedProjectsSection />
+        <StatsSection />
+        <CTAStrip />
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-ink-blue/10 py-6 px-6 md:px-12">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span
-            className="font-hand text-sm text-graphite-pale"
-            style={{ fontFamily: "var(--font-hand)" }}
-          >
+          <span className="font-hand text-sm text-graphite-pale" style={{ fontFamily: "var(--font-hand)" }}>
             © 2024 Anup Solanki — handcrafted with care
           </span>
           <span className="text-xs text-graphite-pale font-sans">
