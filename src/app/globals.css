@@ -105,20 +105,20 @@ body {
 
 /* Graph paper only (no margin line) */
 .graph-bg {
-  background-color: #EFF6FF;
+  background-color: #F7F2E8;
   background-image:
     repeating-linear-gradient(
-      rgba(59, 130, 246, 0.12) 0px,
-      rgba(59, 130, 246, 0.12) 1px,
+      rgba(59, 130, 246, 0.09) 0px,
+      rgba(59, 130, 246, 0.09) 1px,
       transparent 1px,
-      transparent 24px
+      transparent 28px
     ),
     repeating-linear-gradient(
       90deg,
-      rgba(59, 130, 246, 0.12) 0px,
-      rgba(59, 130, 246, 0.12) 1px,
+      rgba(59, 130, 246, 0.09) 0px,
+      rgba(59, 130, 246, 0.09) 1px,
       transparent 1px,
-      transparent 24px
+      transparent 28px
     );
 }
 

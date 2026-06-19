@@ -25,7 +25,14 @@
       "PowerShell(Stop-Process -Id 26276 -Force -ErrorAction SilentlyContinue)",
       "PowerShell($conn = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if \\($conn\\) { \"Port 3000 is listening \\(PID $\\($conn.OwningProcess\\)\\)\" } else { \"Port 3000 not in use\" })",
       "PowerShell(try { \\(Invoke-WebRequest -Uri 'http://localhost:3000' -TimeoutSec 10 -UseBasicParsing\\).StatusCode } catch { $_.Exception.Message })",
-      "PowerShell(Get-NetTCPConnection -LocalPort 3000,3001,3002,3003 -State Listen -ErrorAction SilentlyContinue)"
+      "PowerShell(Get-NetTCPConnection -LocalPort 3000,3001,3002,3003 -State Listen -ErrorAction SilentlyContinue)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 5)",
+      "Bash(sleep 20 && cat /tmp/devserver.log | tail -10)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" http://localhost:3001/)",
+      "Bash(curl -s -o /tmp/response.html -w \"%{http_code}\" http://localhost:3001/)",
+      "PowerShell(taskkill /PID 9808 /F 2>&1)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" http://localhost:3000/)"
     ]
   }
 }

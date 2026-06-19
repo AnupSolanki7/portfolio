@@ -41,6 +41,298 @@ const featuredProjects = [
 ];
 
 /* ============================================================
+   HERO CARDS — 3D Glassmorphism floating cards
+   ============================================================ */
+function HeroCards() {
+  return (
+    <div className="hidden lg:block relative" style={{ height: "500px" }}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
+        className="relative w-full h-full"
+      >
+        {/* ── SVG connection lines + dots + arrows ── */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          aria-hidden="true"
+          viewBox="0 0 500 500"
+          preserveAspectRatio="none"
+        >
+          {/* Line: Performance → Code Architecture */}
+          <line x1="310" y1="155" x2="395" y2="110" stroke="rgba(96,165,250,0.6)" strokeWidth="1.5" />
+          <circle cx="310" cy="155" r="4.5" fill="#60A5FA" />
+          <circle cx="395" cy="110" r="4.5" fill="#60A5FA" />
+          {/* Line: Performance → UI Components */}
+          <line x1="250" y1="210" x2="270" y2="355" stroke="rgba(96,165,250,0.6)" strokeWidth="1.5" />
+          <circle cx="270" cy="355" r="4.5" fill="#60A5FA" />
+          {/* Document icon dot */}
+          <circle cx="455" cy="295" r="4.5" fill="#60A5FA" />
+          <line x1="435" y1="285" x2="453" y2="293" stroke="rgba(96,165,250,0.5)" strokeWidth="1.5" />
+          {/* Right arrow */}
+          <line x1="478" y1="255" x2="498" y2="255" stroke="rgba(96,165,250,0.7)" strokeWidth="1.5" />
+          <polyline points="492,249 500,255 492,261" fill="none" stroke="rgba(96,165,250,0.7)" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+        </svg>
+
+        {/* ── Document icon (right side) ── */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 2.4, duration: 0.5 }}
+          style={{ position: "absolute", right: "3%", top: "52%" }}
+        >
+          <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}>
+            <div style={{
+              width: "42px", height: "42px", borderRadius: "10px",
+              background: "linear-gradient(135deg, rgba(219,234,254,0.8) 0%, rgba(147,197,253,0.5) 100%)",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255,255,255,0.7)",
+              boxShadow: "0 4px 16px rgba(29,78,216,0.15)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <rect x="4" y="2" width="11" height="15" rx="2" stroke="#3B82F6" strokeWidth="1.8" />
+                <path d="M15 2l4 4v14a2 2 0 01-2 2H7" stroke="#3B82F6" strokeWidth="1.8" strokeLinecap="round" />
+                <line x1="7" y1="8" x2="13" y2="8" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="7" y1="11" x2="11" y2="11" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* ── React Atom logo (left-middle) ── */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 2.2, duration: 0.5 }}
+          style={{ position: "absolute", left: "6%", top: "46%" }}
+        >
+          <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}>
+            <div style={{
+              width: "50px", height: "50px", borderRadius: "12px",
+              background: "linear-gradient(135deg, rgba(219,234,254,0.85) 0%, rgba(147,197,253,0.6) 100%)",
+              backdropFilter: "blur(12px)",
+              border: "1px solid rgba(255,255,255,0.7)",
+              boxShadow: "0 6px 20px rgba(29,78,216,0.15)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <svg width="30" height="30" viewBox="0 0 30 30">
+                <circle cx="15" cy="15" r="3" fill="#60A5FA" />
+                <ellipse cx="15" cy="15" rx="13" ry="5" fill="none" stroke="#60A5FA" strokeWidth="1.8" />
+                <ellipse cx="15" cy="15" rx="13" ry="5" fill="none" stroke="#60A5FA" strokeWidth="1.8" transform="rotate(60 15 15)" />
+                <ellipse cx="15" cy="15" rx="13" ry="5" fill="none" stroke="#60A5FA" strokeWidth="1.8" transform="rotate(120 15 15)" />
+              </svg>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* ── CARD 1 — Performance (top-left of right column) ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 1.5, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          style={{ position: "absolute", left: "12%", top: "5%" }}
+        >
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+            style={{
+              width: "225px",
+              borderRadius: "20px",
+              background: "linear-gradient(145deg, rgba(255,255,255,0.75) 0%, rgba(219,234,254,0.55) 100%)",
+              backdropFilter: "blur(28px)",
+              WebkitBackdropFilter: "blur(28px)",
+              border: "1.5px solid rgba(255,255,255,0.85)",
+              boxShadow: "0 16px 48px rgba(29,78,216,0.14), 0 4px 12px rgba(29,78,216,0.08), inset 0 1px 0 rgba(255,255,255,1)",
+              padding: "20px",
+              position: "relative",
+            }}
+          >
+            {/* </> code badge in top-right corner */}
+            <div style={{
+              position: "absolute", top: "-12px", right: "16px",
+              background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
+              borderRadius: "10px",
+              padding: "6px 10px",
+              boxShadow: "0 4px 12px rgba(29,78,216,0.4)",
+            }}>
+              <span style={{ color: "white", fontSize: "12px", fontFamily: "monospace", fontWeight: "bold" }}>&lt;/&gt;</span>
+            </div>
+
+            {/* Chart */}
+            <div style={{ height: "115px", marginBottom: "12px" }}>
+              <svg width="100%" height="100%" viewBox="0 0 185 105" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="perfFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.28" />
+                    <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.02" />
+                  </linearGradient>
+                </defs>
+                {/* Grid lines */}
+                {[25, 50, 75].map((y) => (
+                  <line key={y} x1="0" y1={y} x2="185" y2={y} stroke="rgba(147,197,253,0.22)" strokeWidth="0.8" />
+                ))}
+                {/* Area fill */}
+                <path
+                  d="M0 98 C30 94 55 80 80 65 C105 50 125 34 155 22 C168 16 178 14 185 10 L185 105 L0 105 Z"
+                  fill="url(#perfFill)"
+                />
+                {/* Line */}
+                <path
+                  d="M0 98 C30 94 55 80 80 65 C105 50 125 34 155 22 C168 16 178 14 185 10"
+                  fill="none" stroke="#3B82F6" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"
+                />
+                {/* Peak dot */}
+                <circle cx="185" cy="10" r="5" fill="#3B82F6" />
+                <circle cx="185" cy="10" r="9" fill="rgba(59,130,246,0.18)" />
+              </svg>
+            </div>
+            <span style={{ fontSize: "15px", fontWeight: "700", color: "#1D4ED8", fontFamily: "var(--font-hand)" }}>
+              Performance
+            </span>
+          </motion.div>
+        </motion.div>
+
+        {/* ── CARD 2 — Code Architecture (top-right) ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 1.8, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          style={{ position: "absolute", right: "4%", top: "2%" }}
+        >
+          <motion.div
+            animate={{ y: [0, -13, 0] }}
+            transition={{ duration: 4.7, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
+            style={{
+              width: "210px",
+              borderRadius: "20px",
+              background: "linear-gradient(145deg, rgba(12,20,50,0.95) 0%, rgba(20,35,85,0.92) 100%)",
+              backdropFilter: "blur(28px)",
+              WebkitBackdropFilter: "blur(28px)",
+              border: "1.5px solid rgba(80,120,200,0.4)",
+              boxShadow: "0 16px 48px rgba(0,0,0,0.38), 0 4px 12px rgba(29,78,216,0.25)",
+              padding: "20px",
+            }}
+          >
+            {/* Two code columns with arrow */}
+            <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "10px" }}>
+              {/* Left column */}
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "7px" }}>
+                {[
+                  { w: "92%", color: "#60A5FA" },
+                  { w: "68%", color: "rgba(148,163,184,0.38)" },
+                  { w: "82%", color: "#A78BFA" },
+                  { w: "55%", color: "rgba(148,163,184,0.32)" },
+                  { w: "75%", color: "#60A5FA" },
+                ].map(({ w, color }, i) => (
+                  <div key={i} style={{ height: "7px", width: w, borderRadius: "3.5px", background: color }} />
+                ))}
+              </div>
+              {/* Arrow divider */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px", alignItems: "center", flexShrink: 0 }}>
+                <span style={{ color: "rgba(148,163,184,0.6)", fontSize: "16px" }}>→</span>
+                <span style={{ color: "rgba(148,163,184,0.3)", fontSize: "16px" }}>→</span>
+              </div>
+              {/* Right column */}
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "7px" }}>
+                {[
+                  { w: "78%", color: "rgba(148,163,184,0.32)" },
+                  { w: "88%", color: "#34D399" },
+                  { w: "62%", color: "rgba(148,163,184,0.38)" },
+                  { w: "82%", color: "#F472B6" },
+                  { w: "58%", color: "#34D399" },
+                ].map(({ w, color }, i) => (
+                  <div key={i} style={{ height: "7px", width: w, borderRadius: "3.5px", background: color }} />
+                ))}
+              </div>
+            </div>
+            {/* Separator */}
+            <div style={{ height: "1px", background: "rgba(80,120,200,0.3)", marginBottom: "12px" }} />
+            <span style={{ fontSize: "14px", fontWeight: "700", color: "#93C5FD", fontFamily: "var(--font-hand)" }}>
+              Code Architecture
+            </span>
+          </motion.div>
+        </motion.div>
+
+        {/* ── CARD 3 — UI Components (bottom-center) ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 2.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          style={{ position: "absolute", left: "22%", bottom: "4%" }}
+        >
+          <motion.div
+            animate={{ y: [0, -9, 0] }}
+            transition={{ duration: 3.9, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
+            style={{
+              width: "235px",
+              borderRadius: "20px",
+              background: "linear-gradient(145deg, rgba(255,255,255,0.75) 0%, rgba(219,234,254,0.55) 100%)",
+              backdropFilter: "blur(28px)",
+              WebkitBackdropFilter: "blur(28px)",
+              border: "1.5px solid rgba(255,255,255,0.88)",
+              boxShadow: "0 16px 48px rgba(29,78,216,0.13), 0 4px 12px rgba(29,78,216,0.07), inset 0 1px 0 rgba(255,255,255,1)",
+              padding: "16px",
+            }}
+          >
+            {/* Browser mockup */}
+            <div style={{
+              borderRadius: "12px",
+              overflow: "hidden",
+              border: "1.5px solid rgba(147,197,253,0.5)",
+              marginBottom: "12px",
+            }}>
+              {/* Browser bar */}
+              <div style={{
+                background: "rgba(219,234,254,0.75)",
+                padding: "7px 10px",
+                display: "flex", alignItems: "center", gap: "5px",
+              }}>
+                {["#F87171", "#FCD34D", "#4ADE80"].map((c) => (
+                  <div key={c} style={{ width: "8px", height: "8px", borderRadius: "50%", background: c, opacity: 0.9 }} />
+                ))}
+              </div>
+              {/* Content area */}
+              <div style={{ display: "flex", height: "88px", background: "rgba(248,252,255,0.65)" }}>
+                {/* Sidebar */}
+                <div style={{
+                  width: "34px", background: "rgba(219,234,254,0.6)",
+                  padding: "8px 6px", display: "flex", flexDirection: "column", gap: "6px",
+                }}>
+                  {[true, false, false, false].map((active, i) => (
+                    <div key={i} style={{
+                      height: "5px", borderRadius: "3px",
+                      background: active ? "#3B82F6" : "rgba(147,197,253,0.5)",
+                    }} />
+                  ))}
+                </div>
+                {/* Main content */}
+                <div style={{ flex: 1, padding: "8px 10px", display: "flex", flexDirection: "column", gap: "7px" }}>
+                  <div style={{ height: "7px", width: "60%", borderRadius: "3px", background: "rgba(147,197,253,0.6)" }} />
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "5px" }}>
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <div key={i} style={{
+                        height: "22px", borderRadius: "5px",
+                        background: "rgba(219,234,254,0.7)",
+                        border: "1px solid rgba(147,197,253,0.4)",
+                      }} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span style={{ fontSize: "15px", fontWeight: "700", color: "#1D4ED8", fontFamily: "var(--font-hand)" }}>
+              UI Components
+            </span>
+          </motion.div>
+        </motion.div>
+
+      </motion.div>
+    </div>
+  );
+}
+
+/* ============================================================
    HERO SECTION
    ============================================================ */
 function HeroSection() {
@@ -51,7 +343,7 @@ function HeroSection() {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const yAnnotations = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const yBg = useTransform(scrollYProgress, [0, 1], [0, -30]);
 
   useEffect(() => {
     const t = setInterval(
@@ -66,38 +358,18 @@ function HeroSection() {
       ref={heroRef}
       className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden px-6 md:px-12 lg:px-20"
     >
-      {/* Background sketch lines */}
-      <motion.div
-        style={{ y: yAnnotations }}
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        aria-hidden="true"
-      >
-        <svg className="absolute bottom-24 left-0 w-32 opacity-8" viewBox="0 0 160 80">
-          {[0, 12, 24, 36, 48].map((y) => (
-            <line key={y} x1="8" y1={y + 10} x2="150" y2={y + 10}
-              stroke="#1D4ED8" strokeWidth="1" strokeDasharray="4 3" />
-          ))}
-        </svg>
-        <svg className="absolute top-24 right-0 w-32 opacity-8" viewBox="0 0 160 80">
-          {[0, 12, 24, 36, 48].map((y) => (
-            <line key={y} x1="8" y1={y + 10} x2="150" y2={y + 10}
-              stroke="#1D4ED8" strokeWidth="1" strokeDasharray="4 3" />
-          ))}
-        </svg>
-      </motion.div>
+      <motion.div style={{ y: yBg }} className="pointer-events-none absolute inset-0" aria-hidden="true" />
 
       {/* Two-column layout */}
-      <div className="relative z-10 max-w-6xl mx-auto w-full grid lg:grid-cols-[1fr_0.9fr] lg:gap-20 gap-0 items-center pb-12">
+      <div className="relative z-10 max-w-6xl mx-auto w-full grid lg:grid-cols-[1fr_0.95fr] lg:gap-16 gap-0 items-center pb-12 pt-8">
 
         {/* LEFT — headline + cta */}
         <div>
+          {/* Rotating phrase */}
           <InkReveal delay={0.1}>
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-5">
               <div className="w-6 h-px bg-ink-blue/40" />
-              <span
-                className="font-hand text-sm text-ink-blue font-medium"
-                style={{ fontFamily: "var(--font-hand)" }}
-              >
+              <span className="font-hand text-sm text-ink-blue font-medium" style={{ fontFamily: "var(--font-hand)" }}>
                 {HERO_PHRASES[phraseIdx]}
                 <motion.span
                   animate={{ opacity: [1, 0, 1] }}
@@ -108,55 +380,48 @@ function HeroSection() {
             </div>
           </InkReveal>
 
-          <div className="overflow-hidden mb-2">
+          {/* Headline — "I Build Digital" on one line, "Experiences." on second */}
+          <div className="overflow-hidden mb-1">
             <motion.h1
               initial={{ clipPath: "inset(0 100% 0 0)" }}
               animate={{ clipPath: "inset(0 0% 0 0)" }}
-              transition={{ duration: 1.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="ink-heading text-5xl sm:text-6xl md:text-7xl leading-tight"
+              transition={{ duration: 1.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="ink-heading text-6xl sm:text-7xl md:text-8xl leading-[1.05]"
             >
-              I Build
+              I Build Digital
             </motion.h1>
           </div>
-          <div className="overflow-hidden mb-2">
+          <div className="overflow-hidden mb-7 relative inline-block w-full">
             <motion.h1
               initial={{ clipPath: "inset(0 100% 0 0)" }}
               animate={{ clipPath: "inset(0 0% 0 0)" }}
-              transition={{ duration: 1.6, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="ink-heading text-5xl sm:text-6xl md:text-7xl leading-tight"
-            >
-              Digital
-            </motion.h1>
-          </div>
-          <div className="overflow-hidden mb-8 relative inline-block">
-            <motion.h1
-              initial={{ clipPath: "inset(0 100% 0 0)" }}
-              animate={{ clipPath: "inset(0 0% 0 0)" }}
-              transition={{ duration: 1.6, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
-              className="ink-heading text-5xl sm:text-6xl md:text-7xl leading-tight"
+              transition={{ duration: 1.5, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
+              className="ink-heading text-6xl sm:text-7xl md:text-8xl leading-[1.05]"
             >
               Experiences.
             </motion.h1>
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ duration: 0.9, delay: 2.0, ease: "easeOut" }}
+              transition={{ duration: 0.9, delay: 1.7, ease: "easeOut" }}
               className="origin-left"
             >
               <DrawUnderline delay={0} color="#1D4ED8" strokeWidth={3} />
             </motion.div>
           </div>
 
-          <InkReveal delay={1.8}>
-            <p className="text-base md:text-lg text-graphite max-w-lg leading-relaxed font-sans mb-8">
+          {/* Description */}
+          <InkReveal delay={1.5}>
+            <p className="text-base md:text-lg text-graphite max-w-md leading-relaxed font-sans mb-8">
               Hi, I&apos;m <strong className="text-ink font-semibold">Anup Solanki</strong> — a React &
               Next.js specialist who turns complex product ideas into fast, interactive,
               and polished web applications. I write code the way a designer thinks.
             </p>
           </InkReveal>
 
-          <InkReveal delay={2.1}>
-            <div className="flex flex-wrap items-center gap-4 mb-6">
+          {/* CTA Buttons */}
+          <InkReveal delay={1.8}>
+            <div className="flex flex-wrap items-center gap-4 mb-8">
               <Link href="/projects" className="sketch-btn-filled text-base px-7 py-3">
                 View Projects
               </Link>
@@ -166,295 +431,41 @@ function HeroSection() {
             </div>
           </InkReveal>
 
-          {/* Stat chips */}
-          <InkReveal delay={2.3}>
-            <div className="flex flex-wrap gap-2">
-              {["3+ yrs exp", "20+ projects", "30+ interviews"].map((chip) => (
-                <span
-                  key={chip}
-                  className="border border-ink-blue/30 rounded px-4 py-1 text-sm font-hand text-graphite"
-                  style={{ fontFamily: "var(--font-hand)" }}
+          {/* Stat boxes */}
+          <InkReveal delay={2.0}>
+            <div className="flex flex-wrap gap-3">
+              {[
+                { number: "3+", label: "yrs exp" },
+                { number: "20+", label: "projects" },
+                { number: "30+", label: "interviews" },
+              ].map(({ number, label }) => (
+                <div
+                  key={label}
+                  className="border border-ink-blue/20 rounded-lg px-5 py-3 text-center bg-paper-light/60"
+                  style={{ minWidth: "90px" }}
                 >
-                  {chip}
-                </span>
+                  <div
+                    className="font-hand text-2xl font-bold text-ink-blue leading-tight"
+                    style={{ fontFamily: "var(--font-hand)" }}
+                  >
+                    {number}
+                  </div>
+                  <div className="text-xs text-graphite-light font-sans mt-0.5">{label}</div>
+                </div>
               ))}
             </div>
           </InkReveal>
         </div>
 
-        {/* RIGHT — rich pinboard collage (desktop only) */}
-        <div className="hidden lg:block relative">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.4, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full"
-          >
-            <svg viewBox="0 0 520 450" className="w-full h-auto" style={{ maxHeight: "500px" }} aria-hidden="true">
-
-              {/* ── COFFEE STAINS ── */}
-              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.4 }}>
-                <circle cx="390" cy="390" r="42" fill="rgba(139,90,43,0.07)" />
-                <circle cx="393" cy="393" r="34" fill="rgba(139,90,43,0.04)" stroke="rgba(139,90,43,0.1)" strokeWidth="1.5" />
-                <circle cx="487" cy="50" r="27" fill="rgba(139,90,43,0.07)" />
-                <circle cx="489" cy="52" r="20" fill="rgba(139,90,43,0.04)" stroke="rgba(139,90,43,0.1)" strokeWidth="1" />
-              </motion.g>
-
-              {/* ── PSEUDO-CODE SNIPPETS ── */}
-              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.8 }}
-                style={{ fontSize: "7.5px", fontFamily: "Courier New, monospace" }}>
-                <text x="270" y="38" fill="rgba(29,78,216,0.3)" style={{ fontStyle: "italic" }}>pseudo-code:</text>
-                <text x="275" y="50" fill="rgba(29,78,216,0.25)">{"// build{"}</text>
-                <text x="280" y="61" fill="rgba(29,78,216,0.22)">{"  footcode:{"}</text>
-                <text x="285" y="72" fill="rgba(29,78,216,0.2)">{"  modelstream{}"}</text>
-                <text x="285" y="83" fill="rgba(29,78,216,0.2)">{"  device"}</text>
-                <text x="275" y="94" fill="rgba(29,78,216,0.22)">{"}"}</text>
-              </motion.g>
-              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.9 }}
-                style={{ fontSize: "7.5px", fontFamily: "Courier New, monospace" }}>
-                <text x="432" y="132" fill="rgba(29,78,216,0.28)" style={{ fontStyle: "italic" }}>pseudo-code:</text>
-                <text x="430" y="143" fill="rgba(29,78,216,0.22)">{"/ pseudo-code()"}</text>
-              </motion.g>
-              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.0 }}
-                style={{ fontSize: "7.5px", fontFamily: "Courier New, monospace" }}>
-                <text x="342" y="182" fill="rgba(29,78,216,0.28)" style={{ fontStyle: "italic" }}>pseudo-code:</text>
-                <text x="344" y="193" fill="rgba(29,78,216,0.25)">{"// build{"}</text>
-                <text x="349" y="204" fill="rgba(29,78,216,0.22)">{"  -> creat"}</text>
-                <text x="344" y="215" fill="rgba(29,78,216,0.25)">{"}"}</text>
-              </motion.g>
-
-              {/* ── CONNECTOR LINES ── */}
-              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.7 }}
-                stroke="rgba(29,78,216,0.14)" strokeWidth="1" strokeDasharray="3 2" fill="none">
-                <line x1="195" y1="95" x2="268" y2="52" />
-                <line x1="285" y1="178" x2="338" y2="155" />
-                <line x1="172" y1="278" x2="248" y2="268" />
-                <path d="M 437 122 C 422 116 408 103 398 94" />
-                <path d="M 186 138 C 222 152 242 163 250 170" />
-              </motion.g>
-
-              {/* ── CARD 1 — React Performance Optimization ── */}
-              <motion.g transform="rotate(-3, 108, 112)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.7, duration: 0.6 }}>
-                <rect x="68" y="22" width="52" height="12" rx="2"
-                  fill="rgba(29,78,216,0.06)" stroke="rgba(29,78,216,0.2)" strokeWidth="0.8" />
-                <rect x="26" y="37" width="166" height="120" rx="3"
-                  fill="rgba(0,0,0,0.05)" transform="translate(3,3)" />
-                <rect x="26" y="35" width="166" height="120" rx="3"
-                  fill="rgba(248,244,236,0.97)" stroke="rgba(29,78,216,0.22)" strokeWidth="1.5" />
-                <rect x="36" y="45" width="146" height="66" rx="2"
-                  fill="rgba(29,78,216,0.03)" stroke="rgba(29,78,216,0.1)" strokeWidth="1" />
-                {[90,78,66].map(y => (
-                  <line key={y} x1="36" y1={y} x2="182" y2={y} stroke="rgba(29,78,216,0.09)" strokeWidth="0.5" strokeDasharray="2 2" />
-                ))}
-                <rect x="50" y="69" width="15" height="22" rx="1" fill="rgba(29,78,216,0.3)" />
-                <rect x="72" y="60" width="15" height="31" rx="1" fill="rgba(29,78,216,0.2)" />
-                <rect x="94" y="64" width="15" height="27" rx="1" fill="rgba(29,78,216,0.45)" />
-                <rect x="116" y="55" width="15" height="36" rx="1" fill="rgba(29,78,216,0.25)" />
-                <rect x="138" y="62" width="15" height="29" rx="1" fill="rgba(29,78,216,0.38)" />
-                <line x1="42" y1="91" x2="162" y2="91" stroke="rgba(29,78,216,0.22)" strokeWidth="1" />
-                <path d="M 57 85 L 79 76 L 101 80 L 123 69 L 145 73"
-                  fill="none" stroke="rgba(220,38,38,0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <text x="109" y="120" textAnchor="middle"
-                  style={{ fontSize: "9px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.82)", fontWeight: "600" }}>
-                  React Performance
-                </text>
-                <text x="109" y="132" textAnchor="middle"
-                  style={{ fontSize: "9px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.72)" }}>
-                  Optimization
-                </text>
-              </motion.g>
-
-              {/* ── CARD 2 — Next.js Static Site Generation ── */}
-              <motion.g transform="rotate(2, 212, 252)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.9, duration: 0.6 }}>
-                <rect x="178" y="152" width="46" height="12" rx="2"
-                  fill="rgba(29,78,216,0.06)" stroke="rgba(29,78,216,0.2)" strokeWidth="0.8" />
-                <rect x="146" y="167" width="146" height="116" rx="3"
-                  fill="rgba(0,0,0,0.05)" transform="translate(3,3)" />
-                <rect x="146" y="165" width="146" height="116" rx="3"
-                  fill="rgba(248,244,236,0.97)" stroke="rgba(29,78,216,0.22)" strokeWidth="1.5" />
-                <rect x="157" y="173" width="48" height="76" rx="5"
-                  fill="none" stroke="rgba(29,78,216,0.45)" strokeWidth="1.8" />
-                <rect x="160" y="179" width="42" height="53" rx="1"
-                  fill="rgba(29,78,216,0.04)" stroke="rgba(29,78,216,0.1)" strokeWidth="0.5" />
-                {[186,194,201,208].map((y) => (
-                  <line key={y} x1="165" y1={y} x2={y === 208 ? 191 : 197} y2={y}
-                    stroke="rgba(29,78,216,0.22)" strokeWidth="1" />
-                ))}
-                <circle cx="181" cy="237" r="5" fill="none" stroke="rgba(29,78,216,0.3)" strokeWidth="1" />
-                <rect x="214" y="175" width="54" height="65" rx="4"
-                  fill="none" stroke="rgba(29,78,216,0.35)" strokeWidth="1.5" />
-                <rect x="217" y="179" width="48" height="48" rx="1" fill="rgba(29,78,216,0.03)" />
-                {[187,195,203,211].map((y) => (
-                  <line key={y} x1="221" y1={y} x2={y === 211 ? 253 : 261} y2={y}
-                    stroke="rgba(29,78,216,0.18)" strokeWidth="0.9" />
-                ))}
-                <text x="219" y="262" textAnchor="middle"
-                  style={{ fontSize: "6.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.35)", fontStyle: "italic" }}>
-                  site projects
-                </text>
-                <text x="219" y="272" textAnchor="middle"
-                  style={{ fontSize: "8.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.82)", fontWeight: "600" }}>
-                  Next.js Static
-                </text>
-                <text x="219" y="282" textAnchor="middle"
-                  style={{ fontSize: "8.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.72)" }}>
-                  Site Generation
-                </text>
-              </motion.g>
-
-              {/* ── CARD 3 — State Management (Redux) ── */}
-              <motion.g transform="rotate(-2, 92, 348)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.1, duration: 0.6 }}>
-                <rect x="57" y="284" width="40" height="11" rx="2"
-                  fill="rgba(29,78,216,0.06)" stroke="rgba(29,78,216,0.2)" strokeWidth="0.8" />
-                <rect x="22" y="298" width="148" height="100" rx="3"
-                  fill="rgba(0,0,0,0.05)" transform="translate(3,3)" />
-                <rect x="22" y="296" width="148" height="100" rx="3"
-                  fill="rgba(248,244,236,0.97)" stroke="rgba(29,78,216,0.22)" strokeWidth="1.5" />
-                <rect x="30" y="304" width="132" height="62" rx="2"
-                  fill="rgba(29,78,216,0.05)" stroke="rgba(29,78,216,0.15)" strokeWidth="1" />
-                <rect x="30" y="304" width="132" height="11" rx="2" fill="rgba(29,78,216,0.1)" />
-                <circle cx="39" cy="309" r="2.5" fill="rgba(220,38,38,0.55)" />
-                <circle cx="47" cy="309" r="2.5" fill="rgba(234,179,8,0.55)" />
-                <circle cx="55" cy="309" r="2.5" fill="rgba(34,197,94,0.55)" />
-                <line x1="37" y1="322" x2="130" y2="322" stroke="rgba(29,78,216,0.35)" strokeWidth="1.8" />
-                <line x1="37" y1="331" x2="110" y2="331" stroke="rgba(29,78,216,0.22)" strokeWidth="1.2" />
-                <line x1="44" y1="339" x2="122" y2="339" stroke="rgba(29,78,216,0.28)" strokeWidth="1.2" />
-                <line x1="44" y1="347" x2="96" y2="347" stroke="rgba(29,78,216,0.2)" strokeWidth="1.2" />
-                <line x1="37" y1="355" x2="114" y2="355" stroke="rgba(29,78,216,0.22)" strokeWidth="1.2" />
-                <rect x="37" y="359" width="7" height="8" rx="1" fill="rgba(29,78,216,0.35)" />
-                <text x="96" y="381" textAnchor="middle"
-                  style={{ fontSize: "8.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.82)", fontWeight: "600" }}>
-                  State Management
-                </text>
-                <text x="96" y="391" textAnchor="middle"
-                  style={{ fontSize: "8.5px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.65)" }}>
-                  (Redux)
-                </text>
-              </motion.g>
-
-              {/* ── REACT LOGO ── */}
-              <motion.g transform="translate(352, 62)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.2, duration: 0.5 }}>
-                <circle cx="0" cy="0" r="14" fill="rgba(29,78,216,0.1)" stroke="rgba(29,78,216,0.18)" strokeWidth="1" />
-                <ellipse cx="0" cy="0" rx="44" ry="16" fill="none" stroke="rgba(29,78,216,0.7)" strokeWidth="2.2" />
-                <ellipse cx="0" cy="0" rx="44" ry="16" fill="none" stroke="rgba(29,78,216,0.7)" strokeWidth="2.2" transform="rotate(60)" />
-                <ellipse cx="0" cy="0" rx="44" ry="16" fill="none" stroke="rgba(29,78,216,0.7)" strokeWidth="2.2" transform="rotate(120)" />
-                <circle cx="0" cy="0" r="7" fill="rgba(29,78,216,0.85)" />
-              </motion.g>
-
-              {/* ── TYPESCRIPT BADGE ── */}
-              <motion.g transform="translate(456, 62)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.3, duration: 0.5 }}>
-                <rect x="0" y="0" width="56" height="56" rx="5" fill="rgba(29,78,216,0.9)" />
-                <text x="28" y="38" textAnchor="middle"
-                  style={{ fontSize: "22px", fontFamily: "Arial, sans-serif", fill: "white", fontWeight: "bold" }}>TS</text>
-              </motion.g>
-
-              {/* ── NEXT.JS BADGE ── */}
-              <motion.g transform="translate(338, 148)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.4, duration: 0.4 }}>
-                <rect x="0" y="0" width="80" height="30" rx="4" fill="rgba(8,8,8,0.82)" />
-                <text x="40" y="21" textAnchor="middle"
-                  style={{ fontSize: "13px", fontFamily: "Arial, sans-serif", fill: "white", fontWeight: "bold", letterSpacing: "0.5px" }}>NEXT.js</text>
-              </motion.g>
-
-              {/* ── DOCKER BADGE ── */}
-              <motion.g transform="translate(406, 178)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 0.4 }}>
-                <rect x="0" y="0" width="74" height="54" rx="4"
-                  fill="rgba(29,78,216,0.07)" stroke="rgba(29,78,216,0.28)" strokeWidth="1.5" />
-                <rect x="8" y="8" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
-                <rect x="23" y="8" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
-                <rect x="38" y="8" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
-                <rect x="8" y="21" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
-                <rect x="23" y="21" width="13" height="11" rx="1" fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.2" />
-                <path d="M 6 38 Q 37 28 68 36"
-                  fill="none" stroke="rgba(29,78,216,0.5)" strokeWidth="1.5" strokeLinecap="round" />
-                <text x="37" y="50" textAnchor="middle"
-                  style={{ fontSize: "9px", fontFamily: "Arial, sans-serif", fill: "rgba(29,78,216,0.75)", fontWeight: "bold", letterSpacing: "1px" }}>docker</text>
-              </motion.g>
-
-              {/* ── SKILL HEXAGONS ── */}
-              {[
-                { cx: 365, cy: 278, label: "GraphQL", score: "9/x" },
-                { cx: 420, cy: 258, label: "Experience", score: "9/x" },
-                { cx: 362, cy: 328, label: "TDD", score: "8/x" },
-                { cx: 418, cy: 308, label: "Con", score: "8/x" },
-                { cx: 474, cy: 288, label: "CI/CD", score: "9/x" },
-              ].map(({ cx, cy, label, score }, i) => {
-                const r = 28;
-                const pts = Array.from({ length: 6 }, (_, k) => {
-                  const a = (Math.PI / 3) * k - Math.PI / 6;
-                  return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
-                }).join(" ");
-                return (
-                  <motion.g key={label}
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                    transition={{ delay: 2.45 + i * 0.08, duration: 0.4 }}>
-                    <polygon points={pts}
-                      fill="rgba(248,244,236,0.93)" stroke="rgba(29,78,216,0.38)" strokeWidth="1.5" />
-                    <text x={cx} y={cy - 6} textAnchor="middle"
-                      style={{ fontSize: "7px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.85)", fontWeight: "700" }}>
-                      {label}
-                    </text>
-                    <text x={cx} y={cy + 4} textAnchor="middle"
-                      style={{ fontSize: "6px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.6)" }}>
-                      Experience
-                    </text>
-                    <text x={cx} y={cy + 15} textAnchor="middle"
-                      style={{ fontSize: "9px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.82)", fontWeight: "bold" }}>
-                      {score}
-                    </text>
-                  </motion.g>
-                );
-              })}
-
-              {/* ── AVAILABLE FOR HIRE badge ── */}
-              <motion.g transform="translate(248, 170)"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.6, duration: 0.4 }}>
-                <rect x="0" y="0" width="96" height="22" rx="3"
-                  fill="rgba(29,78,216,0.06)" stroke="rgba(29,78,216,0.28)" strokeWidth="1" strokeDasharray="3 2" />
-                <circle cx="11" cy="11" r="3.5" fill="rgba(34,197,94,0.75)" />
-                <text x="54" y="15" textAnchor="middle"
-                  style={{ fontSize: "9px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.78)", fontWeight: "600" }}>
-                  Available for hire!
-                </text>
-              </motion.g>
-
-              {/* ── HAND EXPERIENCE RATING annotation ── */}
-              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.1 }}>
-                <path d="M 462 248 C 470 242 474 234 471 224"
-                  fill="none" stroke="rgba(29,78,216,0.3)" strokeWidth="1" strokeLinecap="round" />
-                <path d="M 467 226 L 471 224 L 473 228"
-                  fill="none" stroke="rgba(29,78,216,0.3)" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
-                <text x="475" y="238"
-                  style={{ fontSize: "7px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.45)" }}>Hand experience</text>
-                <text x="475" y="248"
-                  style={{ fontSize: "7px", fontFamily: "var(--font-hand)", fill: "rgba(29,78,216,0.45)" }}>rating</text>
-              </motion.g>
-
-              {/* ── TO GET REP annotation ── */}
-              <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.2 }}>
-                <text x="178" y="410"
-                  style={{ fontSize: "7px", fontFamily: "Courier New, monospace", fill: "rgba(29,78,216,0.28)", fontStyle: "italic" }}>
-                  {"// To get rep."}
-                </text>
-                <path d="M 181 405 L 181 399 L 192 391"
-                  fill="none" stroke="rgba(29,78,216,0.22)" strokeWidth="1" strokeLinecap="round" />
-              </motion.g>
-            </svg>
-          </motion.div>
-        </div>
+        {/* RIGHT — 3D glassmorphism cards */}
+        <HeroCards />
       </div>
 
       {/* Scroll hint */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 3 }}
+        transition={{ delay: 2.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
       >
         <span className="font-hand text-xs text-graphite-pale" style={{ fontFamily: "var(--font-hand)" }}>scroll</span>
@@ -726,8 +737,6 @@ function CTAStrip() {
   return (
     <section ref={ref} className="bg-ink-blue py-16 px-6 md:px-12 lg:px-20">
       <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_auto] gap-12 items-center">
-
-        {/* Left */}
         <div>
           <motion.p
             initial={{ opacity: 0 }}
@@ -780,7 +789,6 @@ function CTAStrip() {
           </motion.div>
         </div>
 
-        {/* Right — decorative envelope SVG (desktop only) */}
         <div className="hidden lg:block" aria-hidden="true">
           <motion.svg
             viewBox="0 0 200 160" width="200" height="160"

@@ -71,7 +71,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
-      <body className="antialiased notebook-bg paper-grain min-h-screen">
+      <body className="antialiased graph-bg paper-grain min-h-screen">
         {children}
       </body>
     </html>

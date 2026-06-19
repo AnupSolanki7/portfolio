@@ -118,7 +118,7 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-sm"
         style={{
-          backgroundColor: "#EFF6FF",
+          backgroundColor: "#F7F2E8",
           backgroundImage: `
             repeating-linear-gradient(rgba(59,130,246,0.08) 0px, rgba(59,130,246,0.08) 1px, transparent 1px, transparent 22px),
             repeating-linear-gradient(90deg, rgba(59,130,246,0.08) 0px, rgba(59,130,246,0.08) 1px, transparent 1px, transparent 22px)
@@ -225,7 +225,6 @@ export default function ProjectsPage() {
       <main>
         {/* HERO */}
         <section className="relative min-h-[70vh] flex flex-col justify-center px-6 md:px-12 lg:px-20 py-20 border-b border-ink-blue/10 overflow-hidden">
-          <div className="absolute left-16 top-0 bottom-0 w-px bg-margin-red/20" aria-hidden="true" />
           <div className="relative z-10 max-w-6xl mx-auto w-full grid lg:grid-cols-[1fr_0.9fr] lg:gap-20 gap-0 items-center pb-12">
             <div>
               <InkReveal delay={0.1}>
@@ -385,7 +384,7 @@ export default function ProjectsPage() {
                     className="relative rounded-sm border border-ink-light/30 overflow-hidden cursor-pointer group"
                     style={{
                       rotate: ([-0.5, 0.4, -0.3, 0.5, -0.4, 0.3][i] ?? 0) + "deg",
-                      backgroundColor: "#EFF6FF",
+                      backgroundColor: "#F7F2E8",
                       backgroundImage: `
                         repeating-linear-gradient(rgba(59,130,246,0.08) 0px, rgba(59,130,246,0.08) 1px, transparent 1px, transparent 22px),
                         repeating-linear-gradient(90deg, rgba(59,130,246,0.08) 0px, rgba(59,130,246,0.08) 1px, transparent 1px, transparent 22px)

@@ -93,18 +93,9 @@ const Header: React.FC = () => {
                     : "text-graphite hover:text-ink-blue"
                 }`}
               >
-                {/* Number annotation */}
-                <span
-                  className="font-hand text-xs text-graphite-pale absolute -top-0.5 left-2 opacity-60 group-hover:opacity-80 transition-opacity"
-                  style={{ fontFamily: "var(--font-hand)", fontSize: "10px" }}
-                >
-                  {item.number}
-                </span>
-
                 <span className="relative">
                   {item.label}
 
-                  {/* Active underline — drawn ink style */}
                   {isActive(item.path) && (
                     <motion.span
                       layoutId="nav-underline"
@@ -114,7 +105,6 @@ const Header: React.FC = () => {
                     />
                   )}
 
-                  {/* Hover underline */}
                   {!isActive(item.path) && (
                     <span className="absolute -bottom-0.5 left-0 right-0 h-[1.5px] bg-ink-blue/0 group-hover:bg-ink-blue/40 transition-all duration-200 rounded-full" />
                   )}
@@ -125,18 +115,13 @@ const Header: React.FC = () => {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            {/* Available badge */}
-            <span className="hidden sm:flex items-center gap-1.5 text-xs font-sans text-graphite-light">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Available
-            </span>
-
-            {/* Let's Talk button */}
+            {/* Available + Let's Talk combined button */}
             <Link
               href="/contact"
-              className="hidden sm:inline-flex sketch-btn text-sm px-4 py-1.5"
+              className="hidden sm:inline-flex items-center gap-2 border border-ink-blue/30 rounded-full px-4 py-1.5 text-sm font-sans text-graphite hover:bg-ink-blue/5 transition-colors duration-200"
             >
-              Let&apos;s Talk
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Available • Let&apos;s Talk
             </Link>
 
             {/* Mobile hamburger */}

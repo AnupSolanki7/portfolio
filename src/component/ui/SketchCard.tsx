@@ -102,7 +102,7 @@ export function BlueprintCard({ children, className = "", delay = 0 }: Blueprint
       }}
       className={`relative rounded-sm border border-ink-light/30 overflow-hidden transition-shadow ${className}`}
       style={{
-        backgroundColor: "#EFF6FF",
+        backgroundColor: "#F7F2E8",
         backgroundImage: `
           repeating-linear-gradient(
             rgba(59,130,246,0.09) 0px, rgba(59,130,246,0.09) 1px,

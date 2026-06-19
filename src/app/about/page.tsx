@@ -57,8 +57,6 @@ export default function AboutPage() {
       <main>
         {/* HERO */}
         <section className="relative min-h-[70vh] flex flex-col justify-center px-6 md:px-12 lg:px-20 py-20 border-b border-ink-blue/10 overflow-hidden">
-          <div className="absolute left-16 top-0 bottom-0 w-px bg-margin-red/20" aria-hidden="true" />
-
           <div className="relative z-10 max-w-6xl mx-auto w-full grid lg:grid-cols-[1fr_0.9fr] lg:gap-20 gap-0 items-center pb-12">
             <div>
               <InkReveal delay={0.1}>
